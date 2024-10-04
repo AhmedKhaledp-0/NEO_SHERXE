@@ -121,7 +121,24 @@ nav a:hover {
   color: #fff;
   padding-top: 10px;
 }
+
+.footer {
+  display: flex;
+  justify-content: center;
+  background-color: #1d1d1d;
+  color: #fff;
+}
 .OverlayText {
   font-size: 24px;
   font-weight: 400;
+}
+
+.objectElement {
+  transition: scale 400ms;
+}
+.objectElement:hover {
+  scale: 1.5;
+}
+.fit {
+  width: fit-content;
 }
