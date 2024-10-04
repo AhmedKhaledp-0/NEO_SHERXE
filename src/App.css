@@ -1,42 +1,127 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+body {
+  margin: 0;
+  padding: 0;
+}
+.app {
+  font-family: Arial, sans-serif;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.container {
+  width: 1440px;
+  align-self: center;
+}
+
+nav {
+  background-color: #000000;
+  color: white;
+  padding: 10px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+nav li {
+  margin: 10px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  padding: 8px 10px;
+  position: relative;
+  font-weight: bold;
+}
+
+nav a.active {
+  background-color: #d47612;
+  border-radius: 8px;
+}
+nav a:hover {
+  background-color: #fa9e3d;
+  border-radius: 8px;
+}
+.orangeButtan {
+  background-color: #d47612;
+  border-radius: 18px;
+  padding: 10px;
+  width: 200px;
+  font-weight: 1000;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
+.orangeButtan:hover {
+  background-color: #fa9e3d;
+}
+
+/* nav a.active::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  background-color: #fff;
+  border-radius: 50%;
+} */
+
+.page {
+  padding: 20px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 600px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
   }
-  to {
-    transform: rotate(360deg);
+
+  nav li {
+    margin: 5px 0;
   }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.LandingPage {
+  width: 100%;
 }
 
-.card {
-  padding: 2em;
+.HeroSection {
+  background-image: url(./assets/LandingImage.png);
+  height: 800px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
-
-.read-the-docs {
-  color: #888;
+.OverView {
+  display: flex;
+  justify-content: center;
+  background-color: #181920;
+  color: #fff;
+  padding-top: 10px;
+}
+.OverlayText {
+  font-size: 24px;
+  font-weight: 400;
 }

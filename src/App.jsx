@@ -1,35 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// App.js
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  NavLink,
+  Routes,
+} from "react-router-dom";
+import "./App.css";
+import Home from "./components/Home";
+import Live from "./components/Live";
+import Planets from "./components/Planets";
+import About from "./components/About";
+import Qna from "./components/Qna";
+import {
+  HStack,
+  Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
+} from "@chakra-ui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import logo from "./assets/logo.png";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="app">
+        <nav>
+          <div className="container">
+            <HStack w="100%" justifyContent="space-between">
+              <Image src={logo} h="80px" />
+              <ul>
+                <li>{/* <image src={}></image> */}</li>
+                <li>
+                  <NavLink to="/" end>
+                    Home
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/live">Live</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/planets">Planets</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/about">About</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/qna">Q&A</NavLink>
+                </li>
+              </ul>
+
+              <InputGroup w="300px" borderRadius="8px">
+                <InputLeftElement pointerEvents="none">
+                  <FontAwesomeIcon icon={faSearch} />
+                </InputLeftElement>
+                <Input type="text" placeholder="Search" />
+              </InputGroup>
+            </HStack>
+          </div>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/live" element={<Live />} />
+          <Route path="/planets" element={<Planets />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/qna" element={<Qna />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;
