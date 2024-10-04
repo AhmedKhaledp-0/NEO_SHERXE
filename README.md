@@ -2,5 +2,5 @@
 
 ### Tasks to do
 
-- [ ] Program the orrery and implimint it ( start workin at 6:30 Am)
+- [x] Program the orrery and implimint it ( start workin at 6:30 Am)
 - [ ] programe the Risk level parameters and implimint it

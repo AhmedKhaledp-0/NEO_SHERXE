@@ -22,6 +22,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import logo from "./assets/logo.png";
+import Orrery from "./components/Orrery";
 
 function App() {
   return (
@@ -64,7 +65,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/live" element={<Live />} />
+          <Route path="/live" element={<Orrery />} />
           <Route path="/planets" element={<Planets />} />
           <Route path="/about" element={<About />} />
           <Route path="/qna" element={<Qna />} />
