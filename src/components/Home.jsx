@@ -16,7 +16,7 @@ import body1 from "../assets/body1.png";
 import body2 from "../assets/body2.png";
 import body3 from "../assets/body3.png";
 import body4 from "../assets/body4.png";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const bodyinfos = [
   {
@@ -31,6 +31,14 @@ const bodyinfos = [
   { image: body4, title: "1998 OR2 asteroid" },
 ];
 export default function Home() {
+  const navigate = useNavigate();
+
+  const handleLiveClick = () => {
+    navigate("/live");
+  };
+  const handleRiskClick = () => {
+    navigate("/riskLevel");
+  };
   return (
     <div className="LandingPage">
       <div className="HeroSection">
@@ -41,11 +49,18 @@ export default function Home() {
                 Solar System Exploration
               </Heading>
               <Text> Journey Among Planets and Stars</Text>
-              <button className="orangeButtan">
-                <span>
-                  Go To Live
+              <button className="orangeButtan" onClick={handleLiveClick}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <div style={{ paddingRight: "10px" }}> Go To Live</div>
                   <FontAwesomeIcon icon={faSun} color="#fff" />
-                </span>
+                </div>
                 <FontAwesomeIcon icon={faArrowRight} />
               </button>
             </VStack>
@@ -83,6 +98,7 @@ export default function Home() {
               <button
                 className="orangeButtan"
                 style={{ padding: "10px  20px ", alignSelf: "flex-end" }}
+                onClick={handleRiskClick}
               >
                 <span>Explore</span>
                 <FontAwesomeIcon icon={faArrowRight} />
@@ -102,7 +118,7 @@ export default function Home() {
             </VStack>
           </HStack>
           <VStack justifyContent="center" paddingBottom="88px">
-            <Heading as="h2" size="2xl">
+            {/* <Heading as="h2" size="2xl">
               Famous celestial bodies that may pose a threat to Earth
             </Heading>
             <HStack w="100%">
@@ -134,7 +150,7 @@ export default function Home() {
                   </HStack>
                 </VStack>
               ))}
-            </HStack>
+            </HStack> */}
           </VStack>
         </div>
       </div>
@@ -159,10 +175,10 @@ export default function Home() {
                     Live
                   </Text>
                 </NavLink>
-                <NavLink to="/planets">
+                <NavLink to="/riskLevel">
                   {" "}
                   <Text fontWeight="black" fontSize="2xl">
-                    Planets{" "}
+                    Risk level{" "}
                   </Text>
                 </NavLink>
               </VStack>

@@ -18,11 +18,13 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Spacer,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import logo from "./assets/logo.png";
 import Orrery from "./components/Orrery";
+import RiskLevel from "./components/RiskLevel";
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
           <div className="container">
             <HStack w="100%" justifyContent="space-between">
               <Image src={logo} h="80px" />
+              <Spacer />
               <ul>
                 <li>{/* <image src={}></image> */}</li>
                 <li>
@@ -43,7 +46,7 @@ function App() {
                   <NavLink to="/live">Live</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/planets">Planets</NavLink>
+                  <NavLink to="/riskLevel">Risk level</NavLink>
                 </li>
                 <li>
                   <NavLink to="/about">About</NavLink>
@@ -53,12 +56,13 @@ function App() {
                 </li>
               </ul>
 
-              <InputGroup w="300px" borderRadius="8px">
+              {/* <InputGroup w="300px" borderRadius="8px">
                 <InputLeftElement pointerEvents="none">
                   <FontAwesomeIcon icon={faSearch} />
                 </InputLeftElement>
                 <Input type="text" placeholder="Search" />
-              </InputGroup>
+              </InputGroup> */}
+              <Spacer />
             </HStack>
           </div>
         </nav>
@@ -66,7 +70,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/live" element={<Orrery />} />
-          <Route path="/planets" element={<Planets />} />
+          <Route path="/riskLevel" element={<RiskLevel />} />
           <Route path="/about" element={<About />} />
           <Route path="/qna" element={<Qna />} />
         </Routes>
