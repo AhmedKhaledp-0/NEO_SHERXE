@@ -63,7 +63,8 @@ nav a:hover {
   border-radius: 8px;
 }
 .orangeButtan {
-  background-color: #d47612;
+  background-color: #d47612 !important;
+  color: #fff !important;
   border-radius: 18px;
   padding: 10px;
   width: 200px;
@@ -75,7 +76,7 @@ nav a:hover {
   align-items: center;
 }
 .orangeButtan:hover {
-  background-color: #fa9e3d;
+  background-color: #fa9e3d !important;
 }
 
 /* nav a.active::after {
@@ -203,4 +204,45 @@ nav a:hover {
   width: 500px;
   z-index: 9999999999999999;
   background-color: #282c34;
+}
+/* Add these styles to your App.css file */
+
+.desktop-menu {
+  display: flex;
+  list-style-type: none;
+}
+
+.desktop-menu li {
+  margin-left: 20px;
+}
+
+.mobile-menu {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  background-color: #f8f9fa;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 10px 0;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none;
+  }
 }

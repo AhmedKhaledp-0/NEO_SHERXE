@@ -8,7 +8,28 @@ import combinedCelestialData from "../utilities/CombinedCelestialData";
 import AnimatedLayers from "./Layers";
 import PlanetInfoPanel from "./PlanetInfoPanel";
 import Orbit from "./Orbit";
-import { Button, HStack, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Heading,
+  Text,
+  VStack,
+  Box,
+  HStack,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  Input,
+  Flex,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 
@@ -290,6 +311,7 @@ function Orrery() {
   const [planetPositions, setPlanetPositions] = useState({});
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [resetCameraFlag, setResetCameraFlag] = useState(false);
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const handlePlanetSelect = (planet) => {
     setSelectedPlanet(planet);
@@ -431,36 +453,59 @@ function Orrery() {
   const updatePlanetimsition = (planetId, position) => {
     setPlanetPositions((prev) => ({ ...prev, [planetId]: position }));
   };
+
   return (
     <div>
-      <div className="TimeController">
-        <div>
-          <HStack>
-            <input
-              type="range"
-              min="0.1"
-              max="1000"
-              step="0.1"
+      <Box
+        className="TimeController"
+        position="fixed"
+        bottom={["70px", "10px"]}
+        left="0"
+        right="0"
+        zIndex={99999999}
+        px={4}
+      >
+        <Flex
+          direction={isMobile ? "column" : "row"}
+          align="center"
+          justify="center"
+          p={2}
+          borderRadius="md"
+        >
+          <Flex align="center" mb={isMobile ? 2 : 0} mr={isMobile ? 0 : 4}>
+            <Slider
+              min={0.1}
+              max={1000}
+              step={0.1}
               value={speed}
               onChange={handleSpeedChange}
-            />
-            <Text color="#fff">Speed: {speed}x</Text>
-            <input
+              w={["150px", "200px"]}
+              mr={2}
+            >
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+            </Slider>
+            <Text color="#fff" fontSize="sm" whiteSpace="nowrap">
+              Speed: {speed}x
+            </Text>
+          </Flex>
+          <Flex align="center">
+            <Input
               type="datetime-local"
               value={time.toISOString().slice(0, 16)}
               onChange={handleDateChange}
+              size="sm"
+              color="#fff"
+              mr={2}
             />
-            <Button onClick={togglePause} w="50px" h="50px">
-              {paused ? (
-                <FontAwesomeIcon icon={faPlay} />
-              ) : (
-                <FontAwesomeIcon icon={faPause} />
-              )}{" "}
+            <Button onClick={togglePause} size="sm">
+              <FontAwesomeIcon icon={paused ? faPlay : faPause} />
             </Button>
-          </HStack>
-        </div>
-        <div></div>
-      </div>
+          </Flex>
+        </Flex>
+      </Box>
       <Canvas
         style={{ height: "100vh", width: "100vw", padding: "0", margin: "0" }}
       >
