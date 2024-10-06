@@ -109,6 +109,7 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
         color="white"
         m="20px"
         p="20px"
+        maxW="100vw"
         spacing={2}
       >
         <Button onClick={onClose} colorScheme="red" alignSelf="flex-end">

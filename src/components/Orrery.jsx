@@ -473,7 +473,7 @@ function Orrery() {
           borderRadius="md"
         >
           <Flex align="center" mb={isMobile ? 2 : 0} mr={isMobile ? 0 : 4}>
-            <Slider
+            {/* <Slider
               min={0.1}
               max={1000}
               step={0.1}
@@ -486,7 +486,15 @@ function Orrery() {
                 <SliderFilledTrack />
               </SliderTrack>
               <SliderThumb />
-            </Slider>
+            </Slider> */}
+            <input
+              type="range"
+              min="0.1"
+              max="1000"
+              step="0.1"
+              value={speed}
+              onChange={handleSpeedChange}
+            />
             <Text color="#fff" fontSize="sm" whiteSpace="nowrap">
               Speed: {speed}x
             </Text>
