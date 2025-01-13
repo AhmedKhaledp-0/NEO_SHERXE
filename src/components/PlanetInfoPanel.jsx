@@ -11,7 +11,7 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
   };
 
   return (
-    <div className="fixed top-20 right-4 z-[1000] w-96 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-lg shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+    <div className="fixed inset-x-0 top-20 mx-auto z-[1000] w-[95%] md:w-96 md:right-4 md:left-auto bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-lg shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-6">
         <div className="flex justify-between items-start mb-4">

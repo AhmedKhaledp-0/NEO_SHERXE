@@ -1,8 +1,8 @@
-# NEO SHERXE - Near-Earth Object Visualization Platform
+# NEO SPHERXE - Near-Earth Object Visualization Platform
 
 ## Project Overview
 
-NEO SHERXE is an interactive web application developed for the NASA Space Apps 2024 Cairo Hackathon. The platform provides real-time visualization and tracking of Near-Earth Objects (NEOs), including asteroids and potentially hazardous objects, using NASA's data resources and APIs.
+NEO SPHERXE is an interactive web application developed for the NASA Space Apps 2024 Cairo Hackathon. The platform provides real-time visualization and tracking of Near-Earth Objects (NEOs), including asteroids and potentially hazardous objects, using NASA's data resources and APIs.
 
 ## Key Features
 
@@ -42,8 +42,8 @@ NEO SHERXE is an interactive web application developed for the NASA Space Apps 2
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/NEO_SHERXE.git
-   cd NEO_SHERXE
+   git clone https://github.com/your-username/NEO_SPHERXE.git
+   cd NEO_SPHERXE
    ```
 
 2. **Install Dependencies:**
@@ -84,7 +84,7 @@ NEO SHERXE is an interactive web application developed for the NASA Space Apps 2
 ## Project Structure
 
 ```
-NEO_SHERXE/
+NEO_SPHERXE/
 ├── src/
 │   ├── components/     # React components
 │   ├── hooks/         # Custom React hooks
@@ -133,6 +133,7 @@ M &: \text{Mean anomaly}
    $r = a(1-e\cos(E))$
 
 4. **Cartesian Coordinates**:
+
    $$\begin{align*}
    x &= r[\cos(\Omega)\cos(\omega + \nu) - \sin(\Omega)\sin(\omega + \nu)\cos(i)]\\
    y &= r[\sin(\Omega)\cos(\omega + \nu) + \cos(\Omega)\sin(\omega + \nu)\cos(i)]\\
