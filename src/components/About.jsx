@@ -1,28 +1,47 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faAsterisk, faMeteor, faRocket } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faArrowRight, 
+  faAsterisk, 
+  faMeteor, 
+  faRocket, 
+  faExclamationTriangle,
+  faGlobe,
+  faUserAstronaut,
+  faDatabase 
+} from "@fortawesome/free-solid-svg-icons";
 import TeamMemberCards from "./TeamMemberCards";
 
 const points = [
   {
     id: 1,
+    icon: faExclamationTriangle,
+    title: "Earth's Close Encounters",
     text: "How often do you hear about an asteroid that is so close to the Earth that it may hit the Earth ??",
   },
   {
     id: 2,
+    icon: faGlobe,
+    title: "Space Agency Monitoring",
     text: "These asteroids and comets are regularly monitored by space agencies using advanced astronomical tools to predict their paths and assess any potential danger. However, for the general public, understanding or tracking these celestial bodies can seem out of reach due to the complex technology involved.",
   },
   {
     id: 3,
-    text: "So what about creating an interactive orrery web app that enables people to explore, learn, and keep an eye on   NEOs .",
+    icon: faUserAstronaut,
+    title: "Interactive Experience",
+    text: "So what about creating an interactive orrery web app that enables people to explore, learn, and keep an eye on NEOs.",
   },
   {
     id: 4,
-    text: "Welcome! Let me introduce you to NEO spherex , your personal gateway to tracking and exploring Near-Earth Objects in real-time.",
+    icon: faRocket,
+    title: "Welcome to NEO Spherex",
+    text: "Welcome! Let me introduce you to NEO spherex, your personal gateway to tracking and exploring Near-Earth Objects in real-time.",
   },
   {
     id: 5,
+    icon: faDatabase,
+    title: "Powered by NASA",
     text: "We use the NASA resources and APIs to create an interactive web app designed to provide users with real-time access to information about Near-Earth Objects (NEOs), including asteroids and comets that orbit near our plane and their risk level.",
   },
 ];
@@ -79,20 +98,26 @@ export default function About() {
           </div>
 
           {/* Key Points Section */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold mb-8 text-light-text dark:text-dark-text">
+          <div className="space-y-8">
+            <h2 className="text-3xl font-bold mb-12 text-center text-light-text dark:text-dark-text">
               Our Mission
+              <div className="w-24 h-1 bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent mx-auto mt-4"></div>
             </h2>
             {points.map((point) => (
               <div key={point.id} className="card group hover:border-light-primary dark:hover:border-dark-primary">
                 <div className="flex items-start gap-4">
                   <FontAwesomeIcon 
-                    icon={faAsterisk} 
+                    icon={point.icon} 
                     className="text-light-primary dark:text-dark-primary mt-1" 
                   />
-                  <p className="text-lg text-light-text/80 dark:text-dark-text/80">
-                    {point.text}
-                  </p>
+                  <div>
+                    <h3 className="text-xl font-semibold text-light-text dark:text-dark-text">
+                      {point.title}
+                    </h3>
+                    <p className="text-lg text-light-text/80 dark:text-dark-text/80">
+                      {point.text}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

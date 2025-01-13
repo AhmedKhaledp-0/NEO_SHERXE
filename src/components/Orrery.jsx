@@ -326,7 +326,7 @@ function Orrery() {
   const [celestialBodiesData, setCelestialBodiesData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(new Date()); // Changed to current time
   const [speed, setSpeed] = useState(1); // Changed default speed to 1
   const [paused, setPaused] = useState(false);
   const [showDwarfPlanets, setShowDwarfPlanets] = useState(true);
@@ -372,8 +372,8 @@ function Orrery() {
 
     const updateTime = (currentTime) => {
       const deltaTime = currentTime - lastUpdateTime.current;
-      // Convert speed to milliseconds per frame (60 FPS target)
-      const timeIncrement = (deltaTime * speed * 86400) / 60; // 86400 seconds in a day
+      // Update time with real-time seconds (speed multiplier affects this)
+      const timeIncrement = deltaTime * speed; // Remove the 86400 multiplier to match real time
       
       setTime(prevTime => new Date(prevTime.getTime() + timeIncrement));
       lastUpdateTime.current = currentTime;
@@ -588,11 +588,11 @@ function Orrery() {
               <input
                 type="range"
                 min="0.1"
-                max="100"
-                step="0.1"
+                max="900000" // Increased from 100 to 1000
+                step="90" // Changed from 0.1 to 1 for better control at higher speeds
                 value={speed}
                 onChange={handleSpeedChange}
-                className="w-32 md:w-48"
+                className="w-48 md:w-64" // Increased width
               />
               <span className="text-sm text-light-text dark:text-dark-text whitespace-nowrap">
                 {speed === 1 ? '1x (Real-time)' : `${speed}x`}

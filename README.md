@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-NEO SPHERXE is an interactive web application developed for the NASA Space Apps 2024 Cairo Hackathon. The platform provides real-time visualization and tracking of Near-Earth Objects (NEOs), including asteroids and potentially hazardous objects, using NASA's data resources and APIs.
+NEO SPHERXE is an interactive web application inspired by the NASA Space Apps Challenge. The platform provides real-time visualization and tracking of Near-Earth Objects (NEOs), including asteroids and potentially hazardous objects, using NASA's data resources and APIs.
 
 ## Key Features
 
