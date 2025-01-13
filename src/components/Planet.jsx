@@ -4,6 +4,19 @@ import * as THREE from "three";
 import { Html, useGLTF } from "@react-three/drei";
 import { Detailed } from "@react-three/drei";
 
+// Update scale values to be more visible
+const planetConfig = {
+  "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6", scale: 1 },
+  "Venus Barycenter (299)": { size: 3, color: "#ffd85c", scale: 1 },
+  "Earth-Moon Barycenter (3)": { size: 3, color: "#4f7cee", scale: 1 },
+  "Mars Barycenter (4)": { size: 2.5, color: "#ff6b3e", scale: 1 },
+  "Jupiter Barycenter (5)": { size: 8, color: "#f3d3a3", scale: 1 },
+  "Saturn Barycenter (6)": { size: 7, color: "#f7d98c", scale: 1 },
+  "Uranus Barycenter (7)": { size: 5, color: "#b3e5e5", scale: 1 },
+  "Neptune Barycenter (8)": { size: 5, color: "#4b70dd", scale: 1 },
+  "Pluto Barycenter (9)": { size: 1, color: "#c4b5a6", scale: 1 },
+};
+
 function Planet({
   planetId,
   position,
@@ -26,6 +39,8 @@ function Planet({
   const AuToM = 1.496e11;
   const [currentPosition, setCurrentPosition] = useState(new THREE.Vector3());
   const isMainPlanet = id >= 1 && id <= 9;
+  const [hovered, setHovered] = useState(false);
+  const config = planetConfig[planetId] || { size: 0.1, color: "#ffffff", scale: 1 };
 
   const { scene } = isMainPlanet
     ? useGLTF(`/models/${planetId.split(" ")[0].toLowerCase()}.glb`)
@@ -63,6 +78,34 @@ function Planet({
     return { highDetail, mediumDetail, lowDetail };
   }, []);
 
+  // Create geometries with different levels of detail
+  const geometries = useMemo(() => ({
+    high: new THREE.SphereGeometry(config.size, 64, 32), // Increased detail
+    medium: new THREE.SphereGeometry(config.size, 32, 16),
+    low: new THREE.SphereGeometry(config.size, 16, 12)
+  }), [config.size]);
+
+  // Create materials with improved visual effects
+  const materials = useMemo(() => ({
+    standard: new THREE.MeshStandardMaterial({
+      color: config.color,
+      roughness: 0.7,
+      metalness: 0.3,
+      side: THREE.DoubleSide, // Make visible from both sides
+      transparent: true,
+      opacity: 1,
+    }),
+    hover: new THREE.MeshStandardMaterial({
+      color: config.color,
+      roughness: 0.5,
+      metalness: 0.5,
+      emissive: new THREE.Color(config.color).multiplyScalar(0.2),
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 1,
+    })
+  }), [config.color]);
+
   useFrame(() => {
     const { e, a, i, Ω, ω, n } = constants;
 
@@ -72,7 +115,7 @@ function Planet({
     if (M < 0) M += 2 * Math.PI;
 
     let E = M;
-    for (let j = 0; j < 10; j++) {
+    for (let j = 0; j < 5; j++) {
       E = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
     }
 
@@ -92,15 +135,26 @@ function Planet({
     const newPosition = new THREE.Vector3(x * 200, y * 200, z * 200);
     meshRef.current.position.copy(newPosition);
     setCurrentPosition(newPosition);
+
+    const scale = config.scale * (hovered ? 1.1 : 1);
+    meshRef.current.scale.setScalar(scale);
   });
   useEffect(() => {
     if (onPositionUpdate) {
       onPositionUpdate(planetId, currentPosition);
     }
   }, [currentPosition, planetId, onPositionUpdate]);
-  const handleClick = (event) => {
+  const handlePlanetClick = (event) => {
     event.stopPropagation();
-    onPlanetClick(planetId, currentPosition);
+    if (meshRef.current && onPlanetClick) {
+      onPlanetClick(planetId, meshRef.current.position.clone());
+    }
+  };
+  const handleTagClick = (event) => {
+    event.stopPropagation();
+    if (meshRef.current && onPlanetClick) {
+      onPlanetClick(planetId, meshRef.current.position.clone());
+    }
   };
   const planetColors = {
     "Mercury Barycenter (199)": "gold",
@@ -125,33 +179,60 @@ function Planet({
     "Pluto Barycenter (9)": 2376,
   };
   return (
-    <group ref={meshRef}>
+    <group 
+      ref={meshRef}
+      onClick={handlePlanetClick}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+    >
       {isMainPlanet ? (
-        <Detailed distances={[150, 300, 400]}>
-          <primitive
-            object={scene}
-            scale={planetDiameters[planetId] / 1000000}
-            onClick={handleClick}
+        <Detailed distances={[0, 100, 200, 500]}>
+          {scene ? (
+            <primitive
+              object={scene}
+              scale={[config.size/500, config.size/500, config.size/500]}
+              material={materials.standard}
+            />
+          ) : (
+            <mesh
+              geometry={geometries.high}
+              material={hovered ? materials.hover : materials.standard}
+            />
+          )}
+          <mesh 
+            geometry={geometries.medium}
+            material={hovered ? materials.hover : materials.standard}
           />
-          <mesh
-            scale={2}
-            geometry={planetGeometry.mediumDetail}
-            onClick={handleClick}
-          >
-            <meshStandardMaterial color={planetColors[planetId] || "white"} />
-          </mesh>
-          <mesh
-            scale={2}
-            geometry={planetGeometry.lowDetail}
-            onClick={handleClick}
-          >
-            <meshStandardMaterial color={planetColors[planetId] || "white"} />
-          </mesh>
+          <mesh 
+            geometry={geometries.low}
+            material={materials.standard}
+          />
         </Detailed>
-      ) : null}
+      ) : (
+        <mesh
+          geometry={geometries.low}
+          material={materials.standard}
+          scale={config.size * 0.2}
+        />
+      )}
       {showTags && (
-        <Html>
-          <div className="planetTag">{planetId.split("Barycenter")[0]}</div>
+        <Html
+          className="select-none"
+          position={[0, config.size * 1.5, 0]}
+          center
+          style={{
+            opacity: hovered ? 1 : 0.8,
+            transition: 'transform 0.2s, opacity 0.2s',
+            transform: `scale(${hovered ? 1.1 : 1})`,
+            pointerEvents: 'auto'
+          }}
+        >
+          <div 
+            className="px-2 py-1 rounded bg-black/50 text-white text-xs whitespace-nowrap backdrop-blur-sm hover:bg-black/70"
+            onClick={handleTagClick}
+          >
+            {planetId.split("Barycenter")[0]}
+          </div>
         </Html>
       )}
     </group>

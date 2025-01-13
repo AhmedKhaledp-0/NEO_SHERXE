@@ -1,7 +1,55 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLayerGroup, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faLayerGroup, 
+  faTimes, 
+  faGlobeAmericas,
+  faStarOfLife,
+  faAsterisk,
+  faExclamationTriangle,
+  faTag,
+  faDrawPolygon,
+  faCircle
+} from "@fortawesome/free-solid-svg-icons";
+
+const LayerButton = ({ active, onClick, icon, label, count }) => (
+  <motion.div
+    className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all"
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+    onClick={onClick}
+  >
+    <div className={`flex items-center justify-between flex-1 ${active ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-600 dark:text-gray-400'}`}>
+      <div className="flex items-center gap-3">
+        <FontAwesomeIcon icon={icon} className={`text-lg ${active ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500'}`} />
+        <span className="font-medium">{label}</span>
+      </div>
+      {count && (
+        <span className="text-xs px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700">
+          {count}
+        </span>
+      )}
+    </div>
+    <div className="relative">
+      <div className={`w-4 h-4 rounded border-2 transition-colors ${
+        active 
+          ? 'border-indigo-600 dark:border-indigo-400 bg-indigo-600 dark:bg-indigo-400' 
+          : 'border-gray-300 dark:border-gray-600'
+      }`}>
+        {active && (
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <div className="w-2 h-2 bg-white rounded-sm" />
+          </motion.div>
+        )}
+      </div>
+    </div>
+  </motion.div>
+);
 
 const AnimatedLayers = ({
   showDwarfPlanets,
@@ -21,145 +69,148 @@ const AnimatedLayers = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const toggleOpen = () => setIsOpen(!isOpen);
-
-  const containerVariants = {
-    closed: {
-      width: 40,
-      height: 40,
-      zIndex: 999999999,
-      transition: {
-        duration: 0.3,
-        type: "spring",
-        stiffness: 500,
-        damping: 30,
-      },
-    },
-    open: {
-      width: 300,
-      height: 300,
-      transition: {
-        duration: 0.3,
-        type: "spring",
-        stiffness: 500,
-        damping: 30,
-      },
-    },
-  };
-
-  const contentVariants = {
-    closed: { opacity: 0 },
-    open: { opacity: 1, transition: { delay: 0.2 } },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1 } }),
-  };
-
   const layers = [
     {
-      label: "Dwarf Planets",
-      state: showDwarfPlanets,
-      setState: setShowDwarfPlanets,
+      label: "Major Planets",
+      icon: faGlobeAmericas,
+      active: true,
+      disabled: true,
+      count: 8
     },
-    { label: "PHAs", state: showPHAs, setState: setShowPHAs },
-    { label: "NEAs", state: showNEAs, setState: setShowNEAs },
-    { label: "PHAsEX", state: showPHAsEX, setState: setShowPHAsEX },
-    { label: "NEAsEX", state: showNEAsEX, setState: setShowNEAsEX },
-    { label: "Tags", state: showTags, setState: setShowTags },
-    { label: "Orbits", state: showOrbits, setState: setShowOrbits },
+    {
+      label: "Dwarf Planets",
+      icon: faCircle,
+      active: showDwarfPlanets,
+      toggle: setShowDwarfPlanets,
+      count: 5
+    },
+    {
+      label: "Potentially Hazardous",
+      icon: faExclamationTriangle,
+      active: showPHAs,
+      toggle: setShowPHAs,
+      count: 3000
+    },
+    {
+      label: "Near Earth Asteroids",
+      icon: faAsterisk,
+      active: showNEAs,
+      toggle: setShowNEAs,
+      count: 3000
+    },
+    {
+      label: "Extended PHAs",
+      icon: faStarOfLife,
+      active: showPHAsEX,
+      toggle: setShowPHAsEX,
+      count: 20
+    },
+    {
+      label: "Extended NEAs",
+      icon: faStarOfLife,
+      active: showNEAsEX,
+      toggle: setShowNEAsEX,
+      count: 20
+    },
+  ];
+
+  const visualOptions = [
+    {
+      label: "Object Labels",
+      icon: faTag,
+      active: showTags,
+      toggle: setShowTags
+    },
+    {
+      label: "Orbit Paths",
+      icon: faDrawPolygon,
+      active: showOrbits,
+      toggle: setShowOrbits
+    }
   ];
 
   return (
     <motion.div
-      style={{
-        position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        backgroundColor: "white",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        borderRadius: "10px",
-        display: "flex",
-        flexDirection: "column",
-        padding: "10px",
-        overflow: "hidden",
-        cursor: "pointer",
-      }}
-      variants={containerVariants}
+      className="fixed bottom-20 right-4 z-[800]"
       initial="closed"
       animate={isOpen ? "open" : "closed"}
-      onClick={toggleOpen}
     >
-      <AnimatePresence>
-        {isOpen ? (
-          <motion.div
-            variants={contentVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ marginTop: "30px" }}>
-              {layers.map((layer, index) => (
-                <motion.div
-                  key={layer.label}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "10px",
-                  }}
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  custom={index}
-                >
-                  <input
-                    type="checkbox"
-                    checked={layer.state}
-                    onChange={() => layer.setState(!layer.state)}
-                    style={{ marginRight: "10px" }}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <span style={{ color: "#333" }}>{layer.label}</span>
-                </motion.div>
-              ))}
-            </div>
+      <motion.div
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+        variants={{
+          open: { width: 320, height: 'auto', transition: { duration: 0.2 } },
+          closed: { width: 48, height: 48, transition: { duration: 0.2 } }
+        }}
+      >
+        <AnimatePresence>
+          {isOpen ? (
             <motion.div
-              style={{
-                position: "absolute",
-                bottom: "20px",
-                right: "20px",
-                cursor: "pointer",
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsOpen(false);
-              }}
+              className="p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <FontAwesomeIcon icon={faTimes} color="gray" size="lg" />
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                  Celestial Objects
+                </h3>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setIsOpen(false)}
+                  className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <FontAwesomeIcon icon={faTimes} className="text-gray-500" />
+                </motion.button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  {layers.map((layer) => (
+                    <LayerButton
+                      key={layer.label}
+                      active={layer.active}
+                      onClick={() => !layer.disabled && layer.toggle?.(!layer.active)}
+                      icon={layer.icon}
+                      label={layer.label}
+                      count={layer.count}
+                    />
+                  ))}
+                </div>
+
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                  <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                    Visual Options
+                  </h4>
+                  <div className="space-y-2">
+                    {visualOptions.map((option) => (
+                      <LayerButton
+                        key={option.label}
+                        active={option.active}
+                        onClick={() => option.toggle?.(!option.active)}
+                        icon={option.icon}
+                        label={option.label}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </motion.div>
-          </motion.div>
-        ) : (
-          <motion.div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <FontAwesomeIcon icon={faLayerGroup} color="gray" size="lg" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+          ) : (
+            <motion.button
+              className="w-full h-full flex items-center justify-center"
+              onClick={() => setIsOpen(true)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FontAwesomeIcon 
+                icon={faLayerGroup} 
+                className="text-xl text-gray-600 dark:text-gray-400" 
+              />
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.div>
   );
 };

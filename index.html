@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./src/assets/logo.png" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NEO Spherex - Solar System Exploration</title>
     <meta
@@ -26,6 +26,7 @@
       property="og:description"
       content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery."
     />
+    <meta property="og:image" content="https://neo-sherxe.vercel.app/og.jpg" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary" />
@@ -38,9 +39,47 @@
       property="twitter:description"
       content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery."
     />
+    <meta property="twitter:image" content="https://neo-sherxe.vercel.app/og.jpg" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://neo-sherxe.vercel.app/" />
+
+    <!-- PWA Icons -->
+    <meta name="application-name" content="NEO Spherex" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="NEO Spherex" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/logo.svg" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/logo.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.svg" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/logo.svg" />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#f3f4f6" id="theme-color" />
+    <script>
+      // Update theme color based on app theme
+      const updateThemeColor = () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        document.getElementById('theme-color').content = isDark ? '#111827' : '#f3f4f6';
+      };
+      
+      // Initial theme check
+      updateThemeColor();
+      
+      // Watch for theme changes
+      const observer = new MutationObserver(updateThemeColor);
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>

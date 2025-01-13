@@ -1,17 +1,9 @@
-import {
-  Heading,
-  HStack,
-  ListItem,
-  OrderedList,
-  Text,
-  UnorderedList,
-  VStack,
-} from "@chakra-ui/react";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight, faAsterisk, faMeteor, faRocket } from "@fortawesome/free-solid-svg-icons";
 import TeamMemberCards from "./TeamMemberCards";
+
 const points = [
   {
     id: 1,
@@ -63,62 +55,91 @@ const features = [
     text: " Output the data of object to an excel and enable to download it ",
   },
 ];
+
 export default function About() {
   const navigate = useNavigate();
 
-  const handleExploreClick = () => {
-    navigate("/live");
-  };
   return (
-    <div className="topcomponent">
-      <div className="container">
-        <VStack mt="160px" alignItems="flex-start" gap="10px">
-          <Heading as="h1" size="xl">
-            Neo Sherxe is a team dedicated to exploring space, focusing on
-            potential threats to Earth like asteroids and other celestial
-            bodies.
-          </Heading>
-          <UnorderedList styleType="'- '">
+    <div className="min-h-screen bg-light-background dark:bg-dark-background">
+      {/* Hero Section */}
+      <div className="container mx-auto px-4 py-24">
+        <div className="max-w-5xl mx-auto space-y-16">
+          {/* Title Section */}
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent">
+              Exploring Space, Protecting Earth
+            </h1>
+            <div className="card max-w-3xl mx-auto">
+              <p className="text-xl text-light-text/80 dark:text-dark-text/80">
+                Neo Sherxe is a team dedicated to exploring space, focusing on
+                potential threats to Earth like asteroids and other celestial
+                bodies.
+              </p>
+            </div>
+          </div>
+
+          {/* Key Points Section */}
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold mb-8 text-light-text dark:text-dark-text">
+              Our Mission
+            </h2>
             {points.map((point) => (
-              <ListItem>
-                <Text key={point.id} fontWeight="extrabold" fontSize="xl">
-                  {point.text}
-                </Text>
-              </ListItem>
+              <div key={point.id} className="card group hover:border-light-primary dark:hover:border-dark-primary">
+                <div className="flex items-start gap-4">
+                  <FontAwesomeIcon 
+                    icon={faAsterisk} 
+                    className="text-light-primary dark:text-dark-primary mt-1" 
+                  />
+                  <p className="text-lg text-light-text/80 dark:text-dark-text/80">
+                    {point.text}
+                  </p>
+                </div>
+              </div>
             ))}
-          </UnorderedList>
-          <Heading as="h2" size="xl">
-            The orrery features:
-          </Heading>
-          <OrderedList>
-            {features.map((feature) => (
-              <ListItem>
-                <Text key={feature.id} fontWeight="extrabold" fontSize="xl">
-                  {feature.text}
-                </Text>
-              </ListItem>
-            ))}
-          </OrderedList>
-          <button
-            onClick={handleExploreClick}
-            className="orangeButtan"
-            style={{
-              width: "100%",
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <HStack>
-              <Text>Explore Now</Text>
+          </div>
+
+          {/* Features Section */}
+          <div>
+            <h2 className="text-3xl font-bold mb-8 text-light-text dark:text-dark-text">
+              Key Features
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {features.map((feature) => (
+                <div key={feature.id} className="card group">
+                  <div className="flex items-start gap-4">
+                    <FontAwesomeIcon 
+                      icon={faMeteor} 
+                      className="text-light-primary dark:text-dark-primary mt-1" 
+                    />
+                    <p className="text-light-text/80 dark:text-dark-text/80">
+                      {feature.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center">
+            <button
+              onClick={() => navigate('/live')}
+              className="btn-primary inline-flex items-center justify-center gap-3"
+            >
+              <FontAwesomeIcon icon={faRocket} />
+              <span>Start Exploring</span>
               <FontAwesomeIcon icon={faArrowRight} />
-            </HStack>
-          </button>
-          <Heading as="h2" size="xl" mt={8}>
-            Our Team
-          </Heading>
-          <TeamMemberCards />
-        </VStack>
+            </button>
+          </div>
+
+          {/* Team Section */}
+          <div>
+            <h2 className="text-3xl font-bold mb-12 text-center text-light-text dark:text-dark-text">
+              Meet Our Team
+            </h2>
+            <TeamMemberCards />
+          </div>
+        </div>
       </div>
     </div>
   );

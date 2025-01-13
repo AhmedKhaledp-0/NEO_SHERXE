@@ -1,37 +1,37 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import React, { Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera, AdaptiveDpr, AdaptiveEvents } from "@react-three/drei";
 import * as THREE from "three";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+  faPause, 
+  faPlay, 
+  faSpinner,
+  faExclamationTriangle 
+} from "@fortawesome/free-solid-svg-icons";
 import Planet from "./Planet";
 import combinedCelestialData from "../utilities/CombinedCelestialData";
 import AnimatedLayers from "./Layers";
 import PlanetInfoPanel from "./PlanetInfoPanel";
 import Orbit from "./Orbit";
-import {
-  Button,
-  Heading,
-  Text,
-  VStack,
-  Box,
-  HStack,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  Input,
-  Flex,
-  useBreakpointValue,
-} from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { StarField } from './StarField';
+
+// Add theme colors for the scene
+const sceneColors = {
+  light: {
+    background: '#fff',
+    sun: '#ffff00',
+    ambientLight: 0.3,
+    pointLight: 3,
+  },
+  dark: {
+    background: '#000000',
+    sun: '#ffd700',
+    ambientLight: 0.2,
+    pointLight: 4,
+  }
+};
 
 function Scene({
   visibleBodies,
@@ -40,6 +40,7 @@ function Scene({
   showOrbits,
   onPlanetSelect,
   resetCamera,
+  isDark
 }) {
   const { camera, gl } = useThree();
   const frustumRef = useRef(new THREE.Frustum());
@@ -50,48 +51,111 @@ function Scene({
   const [cameraTarget, setCameraTarget] = useState(new THREE.Vector3(0, 0, 0));
   const [isCameraLocked, setIsCameraLocked] = useState(false);
 
+  const colors = isDark ? sceneColors.dark : sceneColors.light;
+
   const handlePlanetClick = (planetId, position) => {
+    console.log('Click detected:', planetId); // Debug log
     const planet = visibleBodies.find((body) => body.planet === planetId);
-    setSelectedPlanet(planet);
-    onPlanetSelect(planet);
-    moveCameraToObject(position);
+    if (planet && position) {
+      console.log('Moving to planet:', planet.planet); // Debug log
+      setSelectedPlanet(planet);
+      onPlanetSelect(planet);
+      moveCameraToObject(position);
+    }
   };
 
-  const moveCameraToObject = (position) => {
-    const sunPosition = new THREE.Vector3(0, 0, 0);
-    const sunToPlanet = new THREE.Vector3().subVectors(position, sunPosition);
+  const moveCameraToObject = useCallback((position) => {
+    if (!position) return;
 
-    // Calculate a perpendicular vector for camera positioning
-    const perpendicularVector = new THREE.Vector3(
-      -sunToPlanet.z,
-      0,
-      sunToPlanet.x
-    ).normalize();
+    const startPosition = camera.position.clone();
+    const startTarget = controlsRef.current ? controlsRef.current.target.clone() : new THREE.Vector3();
 
-    // Calculate the new camera position
-    const newCameraPosition = new THREE.Vector3().addVectors(
-      position,
-      perpendicularVector.multiplyScalar(sunToPlanet.length() * 5)
+    // Calculate closer camera position based on object distance
+    const distanceToObject = position.length();
+    const cameraDistance = Math.min(Math.max(distanceToObject * 0.3, 20), 200); // Reduced distances
+    const angle = Math.PI / 6; // 30 degrees - lower angle for closer view
+    
+    const newCameraPosition = new THREE.Vector3(
+      position.x + Math.cos(angle) * cameraDistance,
+      position.y + Math.sin(angle) * cameraDistance,
+      position.z + cameraDistance * 0.3 // Reduced height offset
     );
 
-    camera.position.copy(newCameraPosition);
-    setCameraTarget(position);
-    setIsCameraLocked(true);
-    if (controlsRef.current) {
-      controlsRef.current.target.copy(position);
-      controlsRef.current.update();
+    // Faster animation
+    const duration = 1000; // 1 second
+    const startTime = Date.now();
+
+    function updateCamera() {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Smoother easing function
+      const easing = progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      camera.position.lerpVectors(startPosition, newCameraPosition, easing);
+      
+      if (controlsRef.current) {
+        const currentTarget = controlsRef.current.target;
+        currentTarget.lerpVectors(startTarget, position, easing);
+        controlsRef.current.update();
+      }
+
+      camera.lookAt(position);
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCamera);
+      }
     }
-  };
+
+    updateCamera();
+    setIsCameraLocked(true);
+    setCameraTarget(position);
+  }, [camera]);
 
   const resetCameraView = useCallback(() => {
-    setSelectedPlanet(null);
-    camera.position.set(0, -900, 500);
-    setCameraTarget(new THREE.Vector3(0, 0, 0));
-    setIsCameraLocked(false);
-    if (controlsRef.current) {
-      controlsRef.current.target.set(0, 0, 0);
-      controlsRef.current.update();
+    const startPosition = camera.position.clone();
+    const startTarget = controlsRef.current ? controlsRef.current.target.clone() : new THREE.Vector3();
+    const defaultPosition = new THREE.Vector3(0, -900, 500);
+    const defaultTarget = new THREE.Vector3(0, 0, 0);
+    
+    // Animation settings
+    const duration = 1500; // 1.5 seconds
+    const startTime = Date.now();
+
+    function updateCamera() {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Smooth easing function
+      const easing = progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      // Update camera position
+      camera.position.lerpVectors(startPosition, defaultPosition, easing);
+      
+      // Update controls target
+      if (controlsRef.current) {
+        const currentTarget = controlsRef.current.target;
+        currentTarget.lerpVectors(startTarget, defaultTarget, easing);
+        controlsRef.current.update();
+      }
+
+      // Look at the center
+      camera.lookAt(defaultTarget);
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCamera);
+      } else {
+        setIsCameraLocked(false);
+      }
     }
+
+    updateCamera();
+    setSelectedPlanet(null);
+    setCameraTarget(defaultTarget);
   }, [camera]);
 
   useEffect(() => {
@@ -99,50 +163,6 @@ function Scene({
       resetCameraView();
     }
   }, [resetCamera, resetCameraView]);
-
-  useFrame(() => {
-    if (isCameraLocked && selectedPlanet) {
-      const planetPosition = planetPositions[selectedPlanet.planet];
-      if (planetPosition) {
-        const sunPosition = new THREE.Vector3(0, 0, 0);
-        const sunToPlanet = new THREE.Vector3().subVectors(
-          planetPosition,
-          sunPosition
-        );
-        const perpendicularVector = new THREE.Vector3(
-          -sunToPlanet.z,
-          0,
-          sunToPlanet.x
-        ).normalize();
-        const distanceToSun = sunToPlanet.length();
-
-        // Determine the distance multiplier based on the distance to the sun
-        let distanceMultiplier;
-        if (distanceToSun < 100) {
-          distanceMultiplier = 0.6;
-        } else if (distanceToSun < 400) {
-          distanceMultiplier = 0.3;
-        } else {
-          distanceMultiplier = 0.2;
-        }
-        const newCameraPosition = new THREE.Vector3().addVectors(
-          planetPosition,
-          perpendicularVector.multiplyScalar(
-            sunToPlanet.length() * distanceMultiplier
-          )
-        );
-
-        camera.position.lerp(newCameraPosition, 0.1);
-        camera.lookAt(planetPosition);
-        setCameraTarget(planetPosition);
-
-        if (controlsRef.current) {
-          controlsRef.current.target.copy(planetPosition);
-          controlsRef.current.update();
-        }
-      }
-    }
-  });
 
   useFrame(() => {
     camera.updateMatrixWorld();
@@ -200,18 +220,23 @@ function Scene({
   };
   return (
     <>
+      <StarField count={3000} isDark={isDark} />
+      
+      {/* Adjust fog to start further away */}
+      <fog attach="fog" args={[isDark ? '#000000' : '#0a0f1c', 3000, 5000]} />
+      
       <OrbitControls ref={controlsRef} args={[camera, gl.domElement]} />
 
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={colors.ambientLight} />
       <pointLight
         position={[0, 0, 0]}
-        intensity={5}
+        intensity={colors.pointLight}
         distance={100000}
         decay={0}
       />
       <mesh position={[0, 0, 0]}>
         <sphereGeometry args={[2, 32, 32]} />
-        <meshBasicMaterial color="#ffff00" />
+        <meshBasicMaterial color={colors.sun} />
       </mesh>
       {visibleBodies.map((body) => (
         <React.Fragment key={body.planet}>
@@ -232,7 +257,7 @@ function Scene({
             onPositionUpdate={updatePlanetPosition}
             onPlanetClick={handlePlanetClick}
           />
-          {showOrbits && body.type === "majorBody" && (
+          {showOrbits && (body.type === "majorBody" || body.type === "dwarfPlanet") && (
             <Orbit
               planetId={body.planet}
               argument_of_perifocus={body.w}
@@ -242,7 +267,11 @@ function Scene({
               semi_major_axis={body.a}
               orbitType="normal"
               color={orbitColors[body.planet] || "white"}
-              onOrbitClick={handlePlanetClick}
+              onOrbitClick={(id, pos) => {
+                console.log('Orbit clicked:', id); // Debug log
+                handlePlanetClick(id, pos);
+              }}
+              currentPosition={planetPositions[body.planet]}
             />
           )}
           {showOrbits && body.type === "dwarfPlanet" && (
@@ -298,7 +327,7 @@ function Orrery() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [time, setTime] = useState(new Date());
-  const [speed, setSpeed] = useState(10);
+  const [speed, setSpeed] = useState(1); // Changed default speed to 1
   const [paused, setPaused] = useState(false);
   const [showDwarfPlanets, setShowDwarfPlanets] = useState(true);
   const [showPHAs, setShowPHAs] = useState(false);
@@ -311,9 +340,17 @@ function Orrery() {
   const [planetPositions, setPlanetPositions] = useState({});
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [resetCameraFlag, setResetCameraFlag] = useState(false);
-  const isMobile = useBreakpointValue({ base: true, md: false });
+  const [isDark, setIsDark] = useState(false);
+
+  const lastUpdateTime = useRef(performance.now());
+  const frameId = useRef();
 
   const handlePlanetSelect = (planet) => {
+    if (!planet) {
+      console.warn('No planet data received');
+      return;
+    }
+    console.log('Selected planet:', planet);
     setSelectedPlanet(planet);
   };
 
@@ -328,17 +365,31 @@ function Orrery() {
   }, [resetCameraFlag]);
 
   useEffect(() => {
-    let intervalId;
-    if (!paused) {
-      intervalId = setInterval(() => {
-        setTime((prevTime) => new Date(prevTime.getTime() + 8640000 * speed));
-      }, 1000);
+    if (paused) {
+      cancelAnimationFrame(frameId.current);
+      return;
     }
-    return () => clearInterval(intervalId);
+
+    const updateTime = (currentTime) => {
+      const deltaTime = currentTime - lastUpdateTime.current;
+      // Convert speed to milliseconds per frame (60 FPS target)
+      const timeIncrement = (deltaTime * speed * 86400) / 60; // 86400 seconds in a day
+      
+      setTime(prevTime => new Date(prevTime.getTime() + timeIncrement));
+      lastUpdateTime.current = currentTime;
+      frameId.current = requestAnimationFrame(updateTime);
+    };
+
+    frameId.current = requestAnimationFrame(updateTime);
+
+    return () => {
+      cancelAnimationFrame(frameId.current);
+    };
   }, [speed, paused]);
 
   const handleSpeedChange = (event) => {
-    setSpeed(parseFloat(event.target.value));
+    const newSpeed = parseFloat(event.target.value);
+    setSpeed(newSpeed);
   };
 
   const handleDateChange = (event) => {
@@ -434,11 +485,35 @@ function Orrery() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-light-background/80 dark:bg-dark-background/80 backdrop-blur-sm">
+        <div className="text-center space-y-4">
+          <FontAwesomeIcon 
+            icon={faSpinner} 
+            className="text-4xl text-light-primary dark:text-dark-primary animate-spin" 
+          />
+          <p className="text-light-text/70 dark:text-dark-text/70">
+            Loading solar system...
+          </p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="card max-w-md mx-auto text-center space-y-4">
+          <FontAwesomeIcon 
+            icon={faExclamationTriangle} 
+            className="text-4xl text-light-danger dark:text-dark-danger" 
+          />
+          <p className="text-light-text/70 dark:text-dark-text/70">
+            {error}
+          </p>
+        </div>
+      </div>
+    );
   }
   const visibleBodies = celestialBodiesData.filter(
     (body) =>
@@ -455,102 +530,122 @@ function Orrery() {
   };
 
   return (
-    <div>
-      <Box
-        className="TimeController"
-        position="fixed"
-        bottom={["70px", "10px"]}
-        left="0"
-        right="0"
-        zIndex={99999999}
-        px={4}
-      >
-        <Flex
-          direction={isMobile ? "column" : "row"}
-          align="center"
-          justify="center"
-          p={2}
-          borderRadius="md"
+    <div className="relative w-full h-screen bg-light-background dark:bg-dark-background">
+      {/* Move Canvas to higher z-index */}
+      <div className="absolute inset-0 z-10">
+        <Canvas
+          dpr={[1, 2]} // Adaptive device pixel ratio
+          frameloop="always" // Ensure constant frame updates
+          performance={{
+            current: 1,
+            min: 0.5,
+            max: 1,
+            debounce: 200
+          }}
+          camera={{
+            fov: 45,
+            near: 0.1,
+            far: 100000000, // Increased far plane
+            position: [0, -900, 500]
+          }}
+          gl={{
+            antialias: true,
+            alpha: false,
+            stencil: false,
+            depth: true,
+            logarithmicDepthBuffer: true, // Enable logarithmic depth buffer
+          }}
+          style={{
+            background: isDark ? '#030712' : '#0a0f1c' // Slightly different dark blues for each theme
+          }}
         >
-          <Flex align="center" mb={isMobile ? 2 : 0} mr={isMobile ? 0 : 4}>
-            {/* <Slider
-              min={0.1}
-              max={1000}
-              step={0.1}
-              value={speed}
-              onChange={handleSpeedChange}
-              w={["150px", "200px"]}
-              mr={2}
-            >
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb />
-            </Slider> */}
-            <input
-              type="range"
-              min="0.1"
-              max="1000"
-              step="0.1"
-              value={speed}
-              onChange={handleSpeedChange}
+          <AdaptiveDpr pixelated />
+          <AdaptiveEvents />
+          <Suspense fallback={null}>
+            <Scene
+              visibleBodies={visibleBodies}
+              time={time}
+              showTags={showTags}
+              showOrbits={showOrbits}
+              onPlanetSelect={handlePlanetSelect}
+              resetCamera={resetCameraFlag}
+              isDark={isDark}
             />
-            <Text color="#fff" fontSize="sm" whiteSpace="nowrap">
-              Speed: {speed}x
-            </Text>
-          </Flex>
-          <Flex align="center">
-            <Input
-              type="datetime-local"
-              value={time.toISOString().slice(0, 16)}
-              onChange={handleDateChange}
-              size="sm"
-              color="#fff"
-              mr={2}
+          </Suspense>
+        </Canvas>
+      </div>
+
+      {/* UI Overlay Container */}
+      <div className="pointer-events-none absolute inset-0 z-20">
+        {/* Time Controller - Add pointer-events-auto */}
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 pointer-events-auto">
+          <div className="glass-card p-4 flex flex-col md:flex-row items-center gap-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-lg">
+            <div className="flex items-center gap-4">
+              <input
+                type="range"
+                min="0.1"
+                max="100"
+                step="0.1"
+                value={speed}
+                onChange={handleSpeedChange}
+                className="w-32 md:w-48"
+              />
+              <span className="text-sm text-light-text dark:text-dark-text whitespace-nowrap">
+                {speed === 1 ? '1x (Real-time)' : `${speed}x`}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <input
+                type="datetime-local"
+                value={time.toISOString().slice(0, 16)}
+                onChange={handleDateChange}
+                className="bg-transparent border border-light-primary/20 dark:border-dark-primary/20 rounded px-2 py-1 text-sm"
+              />
+              <button 
+                onClick={togglePause}
+                className="btn-primary p-2"
+              >
+                <FontAwesomeIcon icon={paused ? faPlay : faPause} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Controls Overlay - Add pointer-events-auto */}
+        <div className="pointer-events-auto">
+          <AnimatedLayers
+            // Remove any existing position classes as they're now in the component
+            showDwarfPlanets={showDwarfPlanets}
+            setShowDwarfPlanets={setShowDwarfPlanets}
+            showPHAs={showPHAs}
+            setShowPHAs={setShowPHAs}
+            showNEAs={showNEAs}
+            setShowNEAs={setShowNEAs}
+            showPHAsEX={showPHAsEX}
+            setShowPHAsEX={setShowPHAsEX}
+            showNEAsEX={showNEAsEX}
+            setShowNEAsEX={setShowNEAsEX}
+            showTags={showTags}
+            setShowTags={setShowTags}
+            showOrbits={showOrbits}
+            setShowOrbits={setShowOrbits}
+          />
+        </div>
+
+        {/* Planet Info Panel - Add pointer-events-auto */}
+        {selectedPlanet && (
+          <div className="pointer-events-auto">
+            <PlanetInfoPanel 
+              planet={selectedPlanet} 
+              onClose={() => {
+                setSelectedPlanet(null);
+                handleResetCamera();
+              }}
             />
-            <Button onClick={togglePause} size="sm">
-              <FontAwesomeIcon icon={paused ? faPlay : faPause} />
-            </Button>
-          </Flex>
-        </Flex>
-      </Box>
-      <Canvas
-        style={{ height: "100vh", width: "100vw", padding: "0", margin: "0" }}
-      >
-        <color attach="background" args={["#101010"]} />
-        <PerspectiveCamera
-          makeDefault
-          position={[0, -900, 500]}
-          near={0.1}
-          far={1000000}
-        />
-        <OrbitControls />
-        <Scene
-          visibleBodies={visibleBodies}
-          time={time}
-          showTags={showTags}
-          showOrbits={showOrbits}
-          onPlanetSelect={handlePlanetSelect}
-          resetCamera={resetCameraFlag}
-        />
-      </Canvas>
-      <AnimatedLayers
-        showDwarfPlanets={showDwarfPlanets}
-        setShowDwarfPlanets={setShowDwarfPlanets}
-        showPHAs={showPHAs}
-        setShowPHAs={setShowPHAs}
-        showNEAs={showNEAs}
-        setShowNEAs={setShowNEAs}
-        showPHAsEX={showPHAsEX}
-        setShowPHAsEX={setShowPHAsEX}
-        showNEAsEX={showNEAsEX}
-        setShowNEAsEX={setShowNEAsEX}
-        showTags={showTags}
-        setShowTags={setShowTags}
-        showOrbits={showOrbits}
-        setShowOrbits={setShowOrbits}
-      />
-      <PlanetInfoPanel planet={selectedPlanet} onClose={handleResetCamera} />{" "}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

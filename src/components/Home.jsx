@@ -1,174 +1,125 @@
 import React from "react";
-import {
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Image,
-  Text,
-  VStack,
-  Box,
-  SimpleGrid,
-  useBreakpointValue,
-} from "@chakra-ui/react";
-import { faArrowRight, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import risk from "../assets/risk.png";
-import logo from "../assets/logo.png";
-import body1 from "../assets/body1.png";
-import body2 from "../assets/body2.png";
-import body3 from "../assets/body3.png";
-import body4 from "../assets/body4.png";
-
-const bodyinfos = [
-  { image: body1, title: "Apophis asteroid" },
-  { image: body2, title: "2010 RF12 asteroid" },
-  { image: body3, title: "Mir Defunct satellite" },
-  { image: body4, title: "1998 OR2 asteroid" },
-];
+import { faArrowRight, faRocket, faGlobe, faSatellite } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 export default function Home() {
   const navigate = useNavigate();
-  const isMobile = useBreakpointValue({ base: true, md: false });
-
-  const handleLiveClick = () => navigate("/live");
-  const handleRiskClick = () => navigate("/riskLevel");
 
   return (
-    <Box className="LandingPage">
-      <Box className="HeroSection" minHeight="100vh">
-        <Flex
-          className="container"
-          direction="column"
-          align="center"
-          justify="center"
-          minHeight="100vh"
-          p={4}
-        >
-          <VStack
-            color="#fff"
-            maxWidth="500px"
-            alignItems={["center", "center", "flex-start", "flex-start"]}
-            spacing={6}
-            textAlign={["center", "left"]}
-          >
-            <Heading as="h1" size={["2xl", "4xl"]} noOfLines={2} w="100%">
-              Solar System Exploration
-            </Heading>
-            <Text fontSize={["md", "lg"]}>Journey Among Planets and Stars</Text>
-            <Button
-              className="orangeButtan"
-              onClick={handleLiveClick}
-              rightIcon={<FontAwesomeIcon icon={faArrowRight} />}
-            >
-              <Flex align="center">
-                <Text mr={2}>Go To Live</Text>
-                <FontAwesomeIcon icon={faSun} />
-              </Flex>
-            </Button>
-          </VStack>
-        </Flex>
-      </Box>
-
-      <Box className="OverView" py={12}>
-        <Flex className="container" direction="column" px={4}>
-          <VStack alignItems="flex-start" spacing={8} mb={12}>
-            <Heading as="h2" size={["2xl", "3xl"]}>
-              Solar System Overview
-            </Heading>
-            <Text className="OverlayText">
-              The solar system has one star, eight planets, five officially
-              named dwarf planets, hundreds of moons, thousands of comets, and
-              more than a million asteroids.
-            </Text>
-            <Text className="OverlayText">
-              Our solar system is located in the Milky Way, a barred spiral
-              galaxy with two major arms, and two minor arms. Our Sun is in a
-              small, partial arm of the Milky Way called the Orion Arm, or Orion
-              Spur, between the Sagittarius and Perseus arms.
-            </Text>
-            <Text className="OverlayText">
-              We call it the solar system because it is made up of our star, the
-              Sun, and everything bound to it by gravity.
-            </Text>
-          </VStack>
-
-          <Flex
-            direction={["column", "column", "row"]}
-            gap="30px"
-            w="100%"
-            mb={12}
-          >
-            <Image src={risk} maxW={["100%", "100%", "35%"]} mb={[4, 4, 0]} />
-            <VStack
-              w={["100%", "100%", "65%"]}
-              alignItems="flex-start"
-              spacing={4}
-            >
-              <Button
-                className="orangeButtan"
-                alignSelf="flex-end"
-                onClick={handleRiskClick}
-                rightIcon={<FontAwesomeIcon icon={faArrowRight} />}
+    <div className="min-h-screen bg-light-background dark:bg-dark-background">
+      {/* Hero Section */}
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-light-primary/5 dark:from-dark-primary/5 to-transparent"></div>
+          {/* Add animated stars background here if needed */}
+        </div>
+        
+        <div className="container mx-auto px-4 z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-7xl md:text-8xl font-bold mb-8">
+              <span className="bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent">
+                NEO SPHERXE
+              </span>
+            </h1>
+            <p className="text-2xl md:text-3xl text-light-text/70 dark:text-dark-text/70 mb-12 max-w-2xl mx-auto">
+              Explore Near-Earth Objects and track celestial bodies in real-time
+            </p>
+            <div className="flex flex-col md:flex-row gap-6 justify-center">
+              <button 
+                onClick={() => navigate('/live')}
+                className="btn-primary flex items-center justify-center gap-3"
               >
-                Explore
-              </Button>
-              <Heading as="h2" size={["xl", "2xl", "3xl"]}>
-                Color hazard scale
-              </Heading>
-              <Text className="OverlayText">
-                The closer we get to Earth, the higher the level of danger
-                becomes, with the color gradually turning red to indicate the
-                increasing threat. On the other hand, the farther we move away
-                from Earth, we enter the safe zone, represented by the green
-                color.
-              </Text>
-            </VStack>
-          </Flex>
-        </Flex>
-      </Box>
+                <FontAwesomeIcon icon={faRocket} className="text-xl" />
+                <span>Launch Explorer</span>
+              </button>
+              <button 
+                onClick={() => navigate('/riskLevel')}
+                className="btn-primary bg-light-secondary dark:bg-dark-secondary flex items-center justify-center gap-3"
+              >
+                <FontAwesomeIcon icon={faSatellite} className="text-xl" />
+                <span>Check Risk Levels</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Box className="footer" bg="gray.800" color="white" py={12}>
-        <Flex className="container" direction="column" px={4}>
-          <VStack alignItems="flex-start" spacing={8} mb={12}>
-            <Image src={logo} w={["200px", "300px"]} />
-            <SimpleGrid columns={[1, 2, 4]} spacing={8} w="100%">
-              <VStack alignItems="flex-start" spacing={4}>
-                <Heading as="h3" size="lg">
-                  Explore the Universe, Witness Beauty in Every Moment
-                </Heading>
-              </VStack>
-              <VStack alignItems="flex-start" spacing={4}>
-                <NavLink to="/live">
-                  <Text fontWeight="bold" fontSize="xl">
-                    Live
-                  </Text>
-                </NavLink>
-                <NavLink to="/riskLevel">
-                  <Text fontWeight="bold" fontSize="xl">
-                    Risk level
-                  </Text>
-                </NavLink>
-              </VStack>
-              <VStack alignItems="flex-start" spacing={4}>
-                <NavLink to="/about">
-                  <Text fontWeight="bold" fontSize="xl">
-                    About
-                  </Text>
-                </NavLink>
-              </VStack>
-              <VStack alignItems="flex-start" spacing={4}>
-                <NavLink to="/qna">
-                  <Text fontWeight="bold" fontSize="xl">
-                    Q&A
-                  </Text>
-                </NavLink>
-              </VStack>
-            </SimpleGrid>
-          </VStack>
-        </Flex>
-      </Box>
-    </Box>
+      {/* Features Section */}
+      <div className="py-24 bg-light-surface/50 dark:bg-dark-surface/50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="card text-center">
+              <FontAwesomeIcon icon={faRocket} className="text-4xl text-light-primary dark:text-dark-primary mb-6" />
+              <h3 className="text-xl font-bold mb-4">Real-time Tracking</h3>
+              <p className="text-light-text/70 dark:text-dark-text/70">
+                Monitor near-Earth objects as they move through our solar system
+              </p>
+            </div>
+            <div className="card text-center">
+              <FontAwesomeIcon icon={faGlobe} className="text-4xl text-light-primary dark:text-dark-primary mb-6" />
+              <h3 className="text-xl font-bold mb-4">Global Coverage</h3>
+              <p className="text-light-text/70 dark:text-dark-text/70">
+                Comprehensive data from multiple space agencies and observatories
+              </p>
+            </div>
+            <div className="card text-center">
+              <FontAwesomeIcon icon={faSatellite} className="text-4xl text-light-primary dark:text-dark-primary mb-6" />
+              <h3 className="text-xl font-bold mb-4">Risk Assessment</h3>
+              <p className="text-light-text/70 dark:text-dark-text/70">
+                Advanced analysis of potential impact risks and trajectories
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="py-12 bg-light-surface/30 dark:bg-dark-surface/30">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold">
+                <span className="bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent">
+                  NEO SPHERXE
+                </span>
+              </h3>
+              <p className="text-light-text/70 dark:text-dark-text/70">
+                Exploring the cosmos, one object at a time
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold">Quick Links</h4>
+              <div className="flex flex-col space-y-2">
+                <Link to="/live" className="hover:text-light-primary dark:hover:text-dark-primary transition-colors">Live Tracking</Link>
+                <Link to="/riskLevel" className="hover:text-light-primary dark:hover:text-dark-primary transition-colors">Risk Levels</Link>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold">Learn More</h4>
+              <div className="flex flex-col space-y-2">
+                <Link to="/about" className="hover:text-light-primary dark:hover:text-dark-primary transition-colors">About Us</Link>
+                <Link to="/qna" className="hover:text-light-primary dark:hover:text-dark-primary transition-colors">FAQ</Link>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold">Connect</h4>
+              <div className="flex flex-col space-y-2">
+                <a 
+                  href="https://github.com/AhmedKhaledp-0/NEO_SHERXE/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                >
+                  <FontAwesomeIcon icon={faGithub} className="text-xl" />
+                  <span>GitHub</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
