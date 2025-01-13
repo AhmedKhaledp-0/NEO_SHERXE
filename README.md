@@ -90,7 +90,6 @@ NEO_SPHERXE/
 │   ├── hooks/         # Custom React hooks
 │   ├── utilities/     # Helper functions
 │   ├── assets/        # Static resources
-│   └── styles/        # CSS and styling files
 ├── public/            # Public assets
 └── ...
 ```
@@ -134,11 +133,12 @@ M &: \text{Mean anomaly}
 
 4. **Cartesian Coordinates**:
 
-   $$\begin{align*}
+$$\begin{align*}
    x &= r[\cos(\Omega)\cos(\omega + \nu) - \sin(\Omega)\sin(\omega + \nu)\cos(i)]\\
    y &= r[\sin(\Omega)\cos(\omega + \nu) + \cos(\Omega)\sin(\omega + \nu)\cos(i)]\\
    z &= r\sin(\omega + \nu)\sin(i)
    \end{align*}$$
+
 
 ### Risk Assessment Parameters
 
