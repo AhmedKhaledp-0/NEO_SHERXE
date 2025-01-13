@@ -14,6 +14,8 @@
       content="solar system, space exploration, NEO, Near-Earth Objects, asteroids, comets, planets, interactive orrery"
     />
     <meta name="author" content="NEO Spherex Team" />
+    <meta name="description" content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery." />
+    <meta property="og:site_name" content="NEO Spherex">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -29,7 +31,10 @@
     <meta property="og:image" content="https://neo-sherxe.vercel.app/og.jpg" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="https://neo-sherxe.vercel.app/og.jpg" />
+    <meta
+      property="twitter:card"
+      content="https://neo-sherxe.vercel.app/tw.jpg"
+    />
     <meta property="twitter:url" content="https://neo-sherxe.vercel.app/" />
     <meta
       property="twitter:title"
@@ -39,7 +44,10 @@
       property="twitter:description"
       content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery."
     />
-    <meta property="twitter:image" content="https://neo-sherxe.vercel.app/og.jpg" />
+    <meta
+      property="twitter:image"
+      content="https://neo-sherxe.vercel.app/tw.jpg"
+    />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://neo-sherxe.vercel.app/" />
@@ -66,18 +74,20 @@
     <script>
       // Update theme color based on app theme
       const updateThemeColor = () => {
-        const isDark = document.documentElement.classList.contains('dark');
-        document.getElementById('theme-color').content = isDark ? '#080B1A' : '#E8ECF7';
+        const isDark = document.documentElement.classList.contains("dark");
+        document.getElementById("theme-color").content = isDark
+          ? "#080B1A"
+          : "#E8ECF7";
       };
-      
+
       // Initial theme check
       updateThemeColor();
-      
+
       // Watch for theme changes
       const observer = new MutationObserver(updateThemeColor);
       observer.observe(document.documentElement, {
         attributes: true,
-        attributeFilter: ['class']
+        attributeFilter: ["class"],
       });
     </script>
   </head>
