@@ -5,13 +5,9 @@
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NEO Spherex - Solar System Exploration</title>
-    <meta
-      name="description"
-      content="Explore the solar system and track Near-Earth Objects in real-time with NEO Spherex. Journey among planets and stars, and learn about potential celestial threats to Earth."
+    <meta name="description" content="Explore the solar system and track Near-Earth Objects in real-time with NEO Spherex. Journey among planets and stars, and learn about potential celestial threats to Earth."
     />
-    <meta
-      name="keywords"
-      content="solar system, space exploration, NEO, Near-Earth Objects, asteroids, comets, planets, interactive orrery"
+    <meta name="keywords" content="solar system, space exploration, NEO, Near-Earth Objects, asteroids, comets, planets, interactive orrery"
     />
     <meta name="author" content="NEO Spherex Team" />
     <meta name="description" content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery." />
@@ -20,34 +16,16 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://neo-sherxe.vercel.app/" />
-    <meta
-      property="og:title"
-      content="NEO Spherex - Solar System Exploration"
-    />
-    <meta
-      property="og:description"
-      content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery."
-    />
+    <meta property="og:title" content="NEO Spherex - Solar System Exploration"/>
+    <meta property="og:description" content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery."/>
     <meta property="og:image" content="https://neo-sherxe.vercel.app/og.jpg" />
 
     <!-- Twitter -->
-    <meta
-      property="twitter:card"
-      content="https://neo-sherxe.vercel.app/tw.jpg"
-    />
+    <meta name="twitter:card" content="summary_large_image"/>
     <meta property="twitter:url" content="https://neo-sherxe.vercel.app/" />
-    <meta
-      property="twitter:title"
-      content="NEO Spherex - Solar System Exploration"
-    />
-    <meta
-      property="twitter:description"
-      content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery."
-    />
-    <meta
-      property="twitter:image"
-      content="https://neo-sherxe.vercel.app/tw.jpg"
-    />
+    <meta property="twitter:title" content="NEO Spherex - Solar System Exploration"/>
+    <meta property="twitter:description" content="Explore the solar system and track Near-Earth Objects in real-time. Journey among planets and stars with our interactive orrery."/>
+    <meta property="twitter:image" content="https://neo-sherxe.vercel.app/tw.jpg"/>
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://neo-sherxe.vercel.app/" />
@@ -71,28 +49,30 @@
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#f3f4f6" id="theme-color" />
-    <script>
-      // Update theme color based on app theme
-      const updateThemeColor = () => {
-        const isDark = document.documentElement.classList.contains("dark");
-        document.getElementById("theme-color").content = isDark
-          ? "#080B1A"
-          : "#E8ECF7";
-      };
-
-      // Initial theme check
-      updateThemeColor();
-
-      // Watch for theme changes
-      const observer = new MutationObserver(updateThemeColor);
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"],
-      });
-    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Update theme color based on app theme
+        const updateThemeColor = () => {
+          const isDark = document.documentElement.classList.contains("dark");
+          document.getElementById("theme-color").content = isDark
+            ? "#080B1A"
+            : "#E8ECF7";
+        };
+
+        // Initial theme check
+        updateThemeColor();
+
+        // Watch for theme changes
+        const observer = new MutationObserver(updateThemeColor);
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["class"],
+        });
+      });
+    </script>
   </body>
 </html>
