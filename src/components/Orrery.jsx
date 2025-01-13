@@ -530,8 +530,8 @@ function Orrery() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-light-background dark:bg-dark-background">
-      {/* Move Canvas to higher z-index */}
+    <div className="relative w-full h-[100vh-80px] bg-light-background dark:bg-dark-background mt-0">
+      {/* Full height canvas container with no margin */}
       <div className="absolute inset-0 z-10">
         <Canvas
           dpr={[1, 2]} // Adaptive device pixel ratio
@@ -556,7 +556,11 @@ function Orrery() {
             logarithmicDepthBuffer: true, // Enable logarithmic depth buffer
           }}
           style={{
-            background: isDark ? '#030712' : '#0a0f1c' // Slightly different dark blues for each theme
+            background: isDark ? '#030712' : '#0a0f1c',
+            height: '100vh', // Ensure full viewport height
+            position: 'fixed', // Fix position to viewport
+            top: 0, // Align to top
+            left: 0, // Align to left
           }}
         >
           <AdaptiveDpr pixelated />
@@ -575,10 +579,10 @@ function Orrery() {
         </Canvas>
       </div>
 
-      {/* UI Overlay Container */}
-      <div className="pointer-events-none absolute inset-0 z-20">
-        {/* Time Controller - Add pointer-events-auto */}
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 pointer-events-auto">
+      {/* Adjust UI overlay container to account for navbar */}
+      <div className="pointer-events-none fixed inset-0 z-20">
+        {/* Time Controller - move up slightly to avoid bottom edge */}
+        <div className="fixed bottom-12 left-1/2 transform -translate-x-1/2 pointer-events-auto">
           <div className="glass-card p-4 flex flex-col md:flex-row items-center gap-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-lg">
             <div className="flex items-center gap-4">
               <input
@@ -612,7 +616,7 @@ function Orrery() {
           </div>
         </div>
 
-        {/* Controls Overlay - Add pointer-events-auto */}
+        {/* Other UI elements */}
         <div className="pointer-events-auto">
           <AnimatedLayers
             // Remove any existing position classes as they're now in the component
