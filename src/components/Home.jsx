@@ -1,6 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faRocket, faGlobe, faSatellite } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faRocket,
+  faGlobe,
+  faSatellite,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
@@ -15,7 +20,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-light-primary/5 dark:from-dark-primary/5 to-transparent"></div>
           {/* Add animated stars background here if needed */}
         </div>
-        
+
         <div className="container mx-auto px-4 z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-7xl md:text-8xl font-bold mb-8">
@@ -27,16 +32,16 @@ export default function Home() {
               Explore Near-Earth Objects and track celestial bodies in real-time
             </p>
             <div className="flex flex-col md:flex-row gap-6 justify-center">
-              <button 
-                onClick={() => navigate('/live')}
-                className="btn-primary flex items-center justify-center gap-3"
+              <button
+                onClick={() => navigate("/live")}
+                className="btn-primary flex items-center justify-center py-2 px-4 gap-3"
               >
                 <FontAwesomeIcon icon={faRocket} className="text-xl" />
                 <span>Launch Explorer</span>
               </button>
-              <button 
-                onClick={() => navigate('/riskLevel')}
-                className="btn-primary bg-light-secondary dark:bg-dark-secondary flex items-center justify-center gap-3"
+              <button
+                onClick={() => navigate("/riskLevel")}
+                className="btn-primary py-2 px-4 bg-light-secondary dark:bg-dark-secondary flex items-center justify-center gap-3"
               >
                 <FontAwesomeIcon icon={faSatellite} className="text-xl" />
                 <span>Check Risk Levels</span>
@@ -51,21 +56,31 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="card text-center">
-              <FontAwesomeIcon icon={faRocket} className="text-4xl text-light-primary dark:text-dark-primary mb-6" />
+              <FontAwesomeIcon
+                icon={faRocket}
+                className="text-4xl text-light-primary dark:text-dark-primary mb-6"
+              />
               <h3 className="text-xl font-bold mb-4">Real-time Tracking</h3>
               <p className="text-light-text/70 dark:text-dark-text/70">
                 Monitor near-Earth objects as they move through our solar system
               </p>
             </div>
             <div className="card text-center">
-              <FontAwesomeIcon icon={faGlobe} className="text-4xl text-light-primary dark:text-dark-primary mb-6" />
+              <FontAwesomeIcon
+                icon={faGlobe}
+                className="text-4xl text-light-primary dark:text-dark-primary mb-6"
+              />
               <h3 className="text-xl font-bold mb-4">Global Coverage</h3>
               <p className="text-light-text/70 dark:text-dark-text/70">
-                Comprehensive data from multiple space agencies and observatories
+                Comprehensive data from multiple space agencies and
+                observatories
               </p>
             </div>
             <div className="card text-center">
-              <FontAwesomeIcon icon={faSatellite} className="text-4xl text-light-primary dark:text-dark-primary mb-6" />
+              <FontAwesomeIcon
+                icon={faSatellite}
+                className="text-4xl text-light-primary dark:text-dark-primary mb-6"
+              />
               <h3 className="text-xl font-bold mb-4">Risk Assessment</h3>
               <p className="text-light-text/70 dark:text-dark-text/70">
                 Advanced analysis of potential impact risks and trajectories
@@ -92,23 +107,43 @@ export default function Home() {
             <div className="space-y-4">
               <h4 className="text-lg font-semibold">Quick Links</h4>
               <div className="flex flex-col space-y-2">
-                <Link to="/live" className="hover:text-light-primary dark:hover:text-dark-primary transition-colors">Live Tracking</Link>
-                <Link to="/riskLevel" className="hover:text-light-primary dark:hover:text-dark-primary transition-colors">Risk Levels</Link>
+                <Link
+                  to="/live"
+                  className="hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                >
+                  Live Tracking
+                </Link>
+                <Link
+                  to="/riskLevel"
+                  className="hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                >
+                  Risk Levels
+                </Link>
               </div>
             </div>
             <div className="space-y-4">
               <h4 className="text-lg font-semibold">Learn More</h4>
               <div className="flex flex-col space-y-2">
-                <Link to="/about" className="hover:text-light-primary dark:hover:text-dark-primary transition-colors">About Us</Link>
-                <Link to="/qna" className="hover:text-light-primary dark:hover:text-dark-primary transition-colors">FAQ</Link>
+                <Link
+                  to="/about"
+                  className="hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                >
+                  About Us
+                </Link>
+                <Link
+                  to="/qna"
+                  className="hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                >
+                  FAQ
+                </Link>
               </div>
             </div>
             <div className="space-y-4">
               <h4 className="text-lg font-semibold">Connect</h4>
               <div className="flex flex-col space-y-2">
-                <a 
-                  href="https://github.com/AhmedKhaledp-0/NEO_SHERXE/" 
-                  target="_blank" 
+                <a
+                  href="https://github.com/AhmedKhaledp-0/NEO_SHERXE/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:text-light-primary dark:hover:text-dark-primary transition-colors"
                 >
