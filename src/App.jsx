@@ -23,6 +23,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Orrery from "./components/Orrery";
 import RiskLevel from "./components/RiskLevel";
+import DataPreloader from "./components/DataPreloader";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -247,6 +248,7 @@ function App() {
         </nav>
 
         <main className="pt-16">
+          <DataPreloader />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/live" element={<Orrery />} />

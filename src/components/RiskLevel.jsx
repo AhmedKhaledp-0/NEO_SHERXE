@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationTriangle, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExclamationTriangle,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
+import { useQuery } from "@tanstack/react-query";
+import { fetchRiskData } from "../utilities/preloader";
 
 const getRiskColor = (riskLevel) => {
   switch (riskLevel.toLowerCase()) {
@@ -17,70 +22,30 @@ const getRiskColor = (riskLevel) => {
   }
 };
 
-const getRiskPriority = (riskLevel) => {
-  switch (riskLevel.toLowerCase()) {
-    case 'critical': return 1;
-    case 'high': return 2;
-    case 'medium': return 3;
-    case 'low': return 4;
-    default: return 5;
-  }
-};
-
 export default function RiskLevel() {
-  const [objects, setObjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data: objects = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["riskData"],
+    queryFn: fetchRiskData,
+    staleTime: 1000 * 60 * 60, // 1 hour stale time
+    cacheTime: 1000 * 60 * 60 * 24, // 24 hours cache time
+    refetchOnWindowFocus: false,
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const today = new Date().toISOString().split("T")[0];
-        const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
-          .toISOString()
-          .split("T")[0];
-        const response = await fetch(
-          `https://risk-level-sknw.vercel.app/api/phas/${today}/${tomorrow}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await response.json();
-        const filteredData = data
-          .filter((obj) =>
-            ["low", "medium", "high", "critical"].includes(
-              obj.risk_level.toLowerCase()
-            )
-          )
-          .sort((a, b) => {
-            // Sort by risk priority
-            const priorityDiff = getRiskPriority(a.risk_level) - getRiskPriority(b.risk_level);
-            // If same priority, sort by approach date
-            if (priorityDiff === 0) {
-              return new Date(a.close_approach_date) - new Date(b.close_approach_date);
-            }
-            return priorityDiff;
-          });
-        setObjects(filteredData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-light-background dark:bg-dark-background flex items-center justify-center">
         <div className="text-center space-y-4">
-          <FontAwesomeIcon 
-            icon={faSpinner} 
-            className="text-4xl text-light-primary dark:text-dark-primary animate-spin" 
+          <FontAwesomeIcon
+            icon={faSpinner}
+            className="text-4xl text-light-primary dark:text-dark-primary animate-spin"
           />
-          <p className="text-light-text/70 dark:text-dark-text/70">Loading data...</p>
+          <p className="text-light-text/70 dark:text-dark-text/70">
+            Loading data...
+          </p>
         </div>
       </div>
     );
@@ -90,12 +55,12 @@ export default function RiskLevel() {
     return (
       <div className="min-h-screen bg-light-background dark:bg-dark-background flex items-center justify-center">
         <div className="card max-w-lg mx-auto text-center space-y-4">
-          <FontAwesomeIcon 
-            icon={faExclamationTriangle} 
-            className="text-4xl text-light-danger dark:text-dark-danger" 
+          <FontAwesomeIcon
+            icon={faExclamationTriangle}
+            className="text-4xl text-light-danger dark:text-dark-danger"
           />
           <p className="text-light-text/70 dark:text-dark-text/70">
-            Error: {error}
+            Error: {error.message}
           </p>
         </div>
       </div>
@@ -112,16 +77,19 @@ export default function RiskLevel() {
               Near-Earth Objects Risk Assessment
             </h1>
             <p className="text-xl text-light-text/70 dark:text-dark-text/70 max-w-3xl mx-auto">
-              Monitoring and analyzing potential risks from celestial bodies approaching Earth
+              Monitoring and analyzing potential risks from celestial bodies
+              approaching Earth
             </p>
           </div>
 
           {/* Risk Level Legend */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {['Low', 'Medium', 'High', 'Critical'].map((level) => (
-              <div 
+            {["Low", "Medium", "High", "Critical"].map((level) => (
+              <div
                 key={level}
-                className={`px-4 py-2 rounded-full text-sm font-medium ${getRiskColor(level)}`}
+                className={`px-4 py-2 rounded-full text-sm font-medium ${getRiskColor(
+                  level
+                )}`}
               >
                 {level}
               </div>
@@ -134,38 +102,70 @@ export default function RiskLevel() {
               <table className="min-w-full divide-y divide-light-primary/10 dark:divide-dark-primary/10">
                 <thead className="bg-light-primary/5 dark:bg-dark-primary/5">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">Name</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">Approach Date</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">Diameter (km)</th>
-                    <th className="hidden md:table-cell px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">Velocity (km/h)</th>
-                    <th className="hidden lg:table-cell px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">Miss Distance (km)</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">Risk Level</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">
+                      Name
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">
+                      Approach Date
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">
+                      Diameter (km)
+                    </th>
+                    <th className="hidden md:table-cell px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">
+                      Velocity (km/h)
+                    </th>
+                    <th className="hidden lg:table-cell px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">
+                      Miss Distance (km)
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-light-text dark:text-dark-text">
+                      Risk Level
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-light-primary/10 dark:divide-dark-primary/10">
-                  {objects.map((obj) => (
-                    <tr 
-                      key={obj.id}
-                      className="hover:bg-light-primary/5 dark:hover:bg-dark-primary/5 transition-colors"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{obj.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{obj.close_approach_date}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        {obj.diameter_km_min.toFixed(2)} - {obj.diameter_km_max.toFixed(2)}
-                      </td>
-                      <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm">
-                        {obj.relative_velocity_kph.toFixed(2)}
-                      </td>
-                      <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm">
-                        {obj.miss_distance_km.toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getRiskColor(obj.risk_level)}`}>
-                          {obj.risk_level.toUpperCase()}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {objects.map(
+                    ({
+                      id,
+                      name,
+                      close_approach_date,
+                      diameter_km_max,
+                      diameter_km_min,
+                      relative_velocity_kph,
+                      miss_distance_km,
+                      risk_level,
+                    }) => (
+                      <tr
+                        key={id}
+                        className="hover:bg-light-primary/5 dark:hover:bg-dark-primary/5 transition-colors"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {close_approach_date}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {diameter_km_min.toFixed(2)} -{" "}
+                          {diameter_km_max.toFixed(2)}
+                        </td>
+                        <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm">
+                          {relative_velocity_kph.toFixed(2)}
+                        </td>
+                        <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm">
+                          {miss_distance_km.toFixed(2)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getRiskColor(
+                              risk_level
+                            )}`}
+                          >
+                            {risk_level.toUpperCase()}
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
