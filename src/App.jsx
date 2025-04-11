@@ -85,6 +85,7 @@ function App() {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setIsDark(!isDark)}
+                  aria-label="theme toggle"
                   className="p-2 w-6 h-6 aspect-square flex justify-center items-center rounded-full hover:bg-light-primary/10 dark:hover:bg-dark-primary/10 z-50 relative"
                 >
                   <FontAwesomeIcon
@@ -148,14 +149,15 @@ function App() {
                 {/* Navigation Links - Full height with better spacing */}
                 <div className="flex-1 flex flex-col justify-center py-16">
                   <div className="px-6 space-y-6">
-                    <NavLink 
-                      to="/" 
-                      end 
+                    <NavLink
+                      to="/"
+                      end
                       className={({ isActive }) =>
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
-                         ${isActive ? 
-                           'bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary' : 
-                           'hover:bg-light-primary/10 dark:hover:bg-dark-primary/10'
+                         ${
+                           isActive
+                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
+                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -166,13 +168,14 @@ function App() {
                       <span className="text-lg font-medium">Home</span>
                     </NavLink>
 
-                    <NavLink 
+                    <NavLink
                       to="/live"
                       className={({ isActive }) =>
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
-                         ${isActive ? 
-                           'bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary' : 
-                           'hover:bg-light-primary/10 dark:hover:bg-dark-primary/10'
+                         ${
+                           isActive
+                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
+                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -183,13 +186,14 @@ function App() {
                       <span className="text-lg font-medium">Live View</span>
                     </NavLink>
 
-                    <NavLink 
+                    <NavLink
                       to="/riskLevel"
                       className={({ isActive }) =>
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
-                         ${isActive ? 
-                           'bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary' : 
-                           'hover:bg-light-primary/10 dark:hover:bg-dark-primary/10'
+                         ${
+                           isActive
+                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
+                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -200,13 +204,14 @@ function App() {
                       <span className="text-lg font-medium">Risk Level</span>
                     </NavLink>
 
-                    <NavLink 
+                    <NavLink
                       to="/about"
                       className={({ isActive }) =>
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
-                         ${isActive ? 
-                           'bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary' : 
-                           'hover:bg-light-primary/10 dark:hover:bg-dark-primary/10'
+                         ${
+                           isActive
+                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
+                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -217,13 +222,14 @@ function App() {
                       <span className="text-lg font-medium">About</span>
                     </NavLink>
 
-                    <NavLink 
+                    <NavLink
                       to="/qna"
                       className={({ isActive }) =>
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
-                         ${isActive ? 
-                           'bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary' : 
-                           'hover:bg-light-primary/10 dark:hover:bg-dark-primary/10'
+                         ${
+                           isActive
+                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
+                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -243,8 +249,7 @@ function App() {
         <main className="pt-16">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/live" element={<Orrery />} />{" "}
-            {/* Updated this line */}
+            <Route path="/live" element={<Orrery />} />
             <Route path="/riskLevel" element={<RiskLevel />} />
             <Route path="/about" element={<About />} />
             <Route path="/qna" element={<Qna />} />

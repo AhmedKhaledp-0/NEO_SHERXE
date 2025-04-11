@@ -1,16 +1,16 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faLayerGroup, 
-  faTimes, 
+import {
+  faLayerGroup,
+  faTimes,
   faGlobeAmericas,
   faStarOfLife,
   faAsterisk,
   faExclamationTriangle,
   faTag,
   faDrawPolygon,
-  faCircle
+  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 const LayerButton = ({ active, onClick, icon, label, count }) => (
@@ -20,9 +20,22 @@ const LayerButton = ({ active, onClick, icon, label, count }) => (
     whileTap={{ scale: 0.98 }}
     onClick={onClick}
   >
-    <div className={`flex items-center justify-between flex-1 ${active ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-600 dark:text-gray-400'}`}>
+    <div
+      className={`flex items-center justify-between flex-1 ${
+        active
+          ? "text-indigo-600 dark:text-indigo-400"
+          : "text-gray-600 dark:text-gray-400"
+      }`}
+    >
       <div className="flex items-center gap-3">
-        <FontAwesomeIcon icon={icon} className={`text-lg ${active ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500'}`} />
+        <FontAwesomeIcon
+          icon={icon}
+          className={`text-lg ${
+            active
+              ? "text-indigo-600 dark:text-indigo-400"
+              : "text-gray-400 dark:text-gray-500"
+          }`}
+        />
         <span className="font-medium">{label}</span>
       </div>
       {count && (
@@ -32,11 +45,13 @@ const LayerButton = ({ active, onClick, icon, label, count }) => (
       )}
     </div>
     <div className="relative">
-      <div className={`w-4 h-4 rounded border-2 transition-colors ${
-        active 
-          ? 'border-indigo-600 dark:border-indigo-400 bg-indigo-600 dark:bg-indigo-400' 
-          : 'border-gray-300 dark:border-gray-600'
-      }`}>
+      <div
+        className={`w-4 h-4 rounded border-2 transition-colors ${
+          active
+            ? "border-indigo-600 dark:border-indigo-400 bg-indigo-600 dark:bg-indigo-400"
+            : "border-gray-300 dark:border-gray-600"
+        }`}
+      >
         {active && (
           <motion.div
             initial={{ scale: 0 }}
@@ -75,42 +90,42 @@ const AnimatedLayers = ({
       icon: faGlobeAmericas,
       active: true,
       disabled: true,
-      count: 8
+      count: 8,
     },
     {
       label: "Dwarf Planets",
       icon: faCircle,
       active: showDwarfPlanets,
       toggle: setShowDwarfPlanets,
-      count: 5
+      count: 5,
     },
     {
       label: "Potentially Hazardous",
       icon: faExclamationTriangle,
       active: showPHAs,
       toggle: setShowPHAs,
-      count: 3000
+      count: 3000,
     },
     {
       label: "Near Earth Asteroids",
       icon: faAsterisk,
       active: showNEAs,
       toggle: setShowNEAs,
-      count: 3000
+      count: 3000,
     },
     {
       label: "Extended PHAs",
       icon: faStarOfLife,
       active: showPHAsEX,
       toggle: setShowPHAsEX,
-      count: 20
+      count: 20,
     },
     {
       label: "Extended NEAs",
       icon: faStarOfLife,
       active: showNEAsEX,
       toggle: setShowNEAsEX,
-      count: 20
+      count: 20,
     },
   ];
 
@@ -119,27 +134,28 @@ const AnimatedLayers = ({
       label: "Object Labels",
       icon: faTag,
       active: showTags,
-      toggle: setShowTags
+      toggle: setShowTags,
     },
     {
       label: "Orbit Paths",
       icon: faDrawPolygon,
       active: showOrbits,
-      toggle: setShowOrbits
-    }
+      toggle: setShowOrbits,
+    },
   ];
 
   return (
     <motion.div
       className="fixed bottom-20 right-4 z-[800]"
       initial="closed"
+      aria-label="layer toggle open"
       animate={isOpen ? "open" : "closed"}
     >
       <motion.div
         className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
         variants={{
-          open: { width: 320, height: 'auto', transition: { duration: 0.2 } },
-          closed: { width: 48, height: 48, transition: { duration: 0.2 } }
+          open: { width: 320, height: "auto", transition: { duration: 0.2 } },
+          closed: { width: 48, height: 48, transition: { duration: 0.2 } },
         }}
       >
         <AnimatePresence>
@@ -170,7 +186,9 @@ const AnimatedLayers = ({
                     <LayerButton
                       key={layer.label}
                       active={layer.active}
-                      onClick={() => !layer.disabled && layer.toggle?.(!layer.active)}
+                      onClick={() =>
+                        !layer.disabled && layer.toggle?.(!layer.active)
+                      }
                       icon={layer.icon}
                       label={layer.label}
                       count={layer.count}
@@ -199,13 +217,14 @@ const AnimatedLayers = ({
           ) : (
             <motion.button
               className="w-full h-full flex items-center justify-center"
+              aria-label="panel toggle button"
               onClick={() => setIsOpen(true)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
-              <FontAwesomeIcon 
-                icon={faLayerGroup} 
-                className="text-xl text-gray-600 dark:text-gray-400" 
+              <FontAwesomeIcon
+                icon={faLayerGroup}
+                className="text-xl text-gray-600 dark:text-gray-400"
               />
             </motion.button>
           )}

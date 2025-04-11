@@ -1,10 +1,9 @@
-import React, { useRef, useEffect, useState, useMemo } from "react";
+import React, { useRef, useEffect, useState, useMemo, Suspense } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Html, useGLTF } from "@react-three/drei";
 import { Detailed } from "@react-three/drei";
 
-// Update scale values to be more visible
 const planetConfig = {
   "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6", scale: 1 },
   "Venus Barycenter (299)": { size: 3, color: "#ffd85c", scale: 1 },
@@ -15,6 +14,20 @@ const planetConfig = {
   "Uranus Barycenter (7)": { size: 5, color: "#b3e5e5", scale: 1 },
   "Neptune Barycenter (8)": { size: 5, color: "#4b70dd", scale: 1 },
   "Pluto Barycenter (9)": { size: 1, color: "#c4b5a6", scale: 1 },
+};
+
+const PlanetModel = ({ planetId, size, material }) => {
+  const { scene } = useGLTF(
+    `/models/${planetId.split(" ")[0].toLowerCase()}.glb`
+  );
+
+  return (
+    <primitive
+      object={scene}
+      scale={[size / 500, size / 500, size / 500]}
+      material={material}
+    />
+  );
 };
 
 function Planet({
@@ -40,11 +53,12 @@ function Planet({
   const [currentPosition, setCurrentPosition] = useState(new THREE.Vector3());
   const isMainPlanet = id >= 1 && id <= 9;
   const [hovered, setHovered] = useState(false);
-  const config = planetConfig[planetId] || { size: 0.1, color: "#ffffff", scale: 1 };
+  const config = planetConfig[planetId] || {
+    size: 0.1,
+    color: "#ffffff",
+    scale: 1,
+  };
 
-  const { scene } = isMainPlanet
-    ? useGLTF(`/models/${planetId.split(" ")[0].toLowerCase()}.glb`)
-    : { scene: null };
   function calculateOrbitalPeriod(semiMajorAxis) {
     const G = 6.6743e-11; // Gravitational constant in m^3 kg^-1 s^-2
     const M = 1.989e30; // Mass of the Sun in kg
@@ -71,40 +85,38 @@ function Planet({
     longitude_of_ascending_node,
     argument_of_perifocus,
   ]);
-  const planetGeometry = useMemo(() => {
-    const highDetail = new THREE.SphereGeometry(1, 32, 32);
-    const mediumDetail = new THREE.SphereGeometry(1, 16, 16);
-    const lowDetail = new THREE.SphereGeometry(1, 3, 3);
-    return { highDetail, mediumDetail, lowDetail };
-  }, []);
 
-  // Create geometries with different levels of detail
-  const geometries = useMemo(() => ({
-    high: new THREE.SphereGeometry(config.size, 64, 32), // Increased detail
-    medium: new THREE.SphereGeometry(config.size, 32, 16),
-    low: new THREE.SphereGeometry(config.size, 16, 12)
-  }), [config.size]);
-
-  // Create materials with improved visual effects
-  const materials = useMemo(() => ({
-    standard: new THREE.MeshStandardMaterial({
-      color: config.color,
-      roughness: 0.7,
-      metalness: 0.3,
-      side: THREE.DoubleSide, // Make visible from both sides
-      transparent: true,
-      opacity: 1,
+  const geometries = useMemo(
+    () => ({
+      high: new THREE.SphereGeometry(config.size, 64, 32),
+      medium: new THREE.SphereGeometry(config.size, 32, 16),
+      low: new THREE.SphereGeometry(config.size, 16, 12),
     }),
-    hover: new THREE.MeshStandardMaterial({
-      color: config.color,
-      roughness: 0.5,
-      metalness: 0.5,
-      emissive: new THREE.Color(config.color).multiplyScalar(0.2),
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 1,
-    })
-  }), [config.color]);
+    [config.size]
+  );
+
+  const materials = useMemo(
+    () => ({
+      standard: new THREE.MeshStandardMaterial({
+        color: config.color,
+        roughness: 0.7,
+        metalness: 0.3,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 1,
+      }),
+      hover: new THREE.MeshStandardMaterial({
+        color: config.color,
+        roughness: 0.5,
+        metalness: 0.5,
+        emissive: new THREE.Color(config.color).multiplyScalar(0.2),
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 1,
+      }),
+    }),
+    [config.color]
+  );
 
   useFrame(() => {
     const { e, a, i, Ω, ω, n } = constants;
@@ -179,7 +191,7 @@ function Planet({
     "Pluto Barycenter (9)": 2376,
   };
   return (
-    <group 
+    <group
       ref={meshRef}
       onClick={handlePlanetClick}
       onPointerOver={() => setHovered(true)}
@@ -187,26 +199,25 @@ function Planet({
     >
       {isMainPlanet ? (
         <Detailed distances={[0, 100, 200, 500]}>
-          {scene ? (
-            <primitive
-              object={scene}
-              scale={[config.size/500, config.size/500, config.size/500]}
+          <Suspense
+            fallback={
+              <mesh
+                geometry={geometries.medium}
+                material={hovered ? materials.hover : materials.standard}
+              />
+            }
+          >
+            <PlanetModel
+              planetId={planetId}
+              size={config.size}
               material={materials.standard}
             />
-          ) : (
-            <mesh
-              geometry={geometries.high}
-              material={hovered ? materials.hover : materials.standard}
-            />
-          )}
-          <mesh 
+          </Suspense>
+          <mesh
             geometry={geometries.medium}
             material={hovered ? materials.hover : materials.standard}
           />
-          <mesh 
-            geometry={geometries.low}
-            material={materials.standard}
-          />
+          <mesh geometry={geometries.low} material={materials.standard} />
         </Detailed>
       ) : (
         <mesh
@@ -222,17 +233,17 @@ function Planet({
           center
           style={{
             opacity: hovered ? 1 : 0.8,
-            transition: 'transform 0.2s, opacity 0.2s',
+            transition: "transform 0.2s, opacity 0.2s",
             transform: `scale(${hovered ? 1.1 : 1})`,
-            pointerEvents: 'auto'
+            pointerEvents: "auto",
           }}
         >
-          <div 
-            className="px-2 py-1 rounded bg-black/50 text-white text-xs whitespace-nowrap backdrop-blur-sm hover:bg-black/70"
+          <span
+            className="px-2 py-1  bg-black/50 text-white text-xs whitespace-nowrap backdrop-blur-sm hover:bg-black/70"
             onClick={handleTagClick}
           >
             {planetId.split("Barycenter")[0]}
-          </div>
+          </span>
         </Html>
       )}
     </group>
