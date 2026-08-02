@@ -1,6 +1,5 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import * as THREE from "three";
-import { Line } from "@react-three/drei";
 
 function toRadians(degrees) {
   return degrees * (Math.PI / 180);
@@ -23,6 +22,7 @@ function Orbit({
   const argument_of_perifocusRad = toRadians(argument_of_perifocus);
   const inclinationRad = toRadians(inclination);
   const longitude_of_ascending_nodeRad = toRadians(longitude_of_ascending_node);
+  const scaleFactor = 200;
 
   const points = useMemo(() => {
     // Early validation
@@ -82,15 +82,45 @@ function Orbit({
   }, [
     semi_major_axis,
     eccentricity,
+    argument_of_perifocus,
+    inclination,
+    longitude_of_ascending_node,
     longitude_of_ascending_nodeRad,
     argument_of_perifocusRad,
     inclinationRad,
     planetId
   ]);
 
+  const orbitStyle = useMemo(() => {
+    const baseOpacity = orbitType === "normal" ? 0.5 : 0.3;
+    return {
+      opacity: hovered ? baseOpacity * 1.5 : baseOpacity,
+      lineWidth: hovered ? 2 : 1,
+    };
+  }, [orbitType, hovered]);
+
+  const currentIndex = useMemo(() => {
+    if (!currentPosition) return 0;
+    const currentVec = new THREE.Vector3(
+      currentPosition.x,
+      currentPosition.y,
+      currentPosition.z
+    ).divideScalar(scaleFactor);
+    return points.findIndex((p) => p.distanceTo(currentVec) < 0.1) || 0;
+  }, [currentPosition, points, scaleFactor]);
+
+  const tailLength = 100;
+  const tailPoints = useMemo(() => {
+    const tail = [];
+    for (let i = 0; i < tailLength; i++) {
+      const index = (currentIndex - i + points.length) % points.length;
+      tail.push(points[index]);
+    }
+    return tail.reverse();
+  }, [currentIndex, points, tailLength]);
+
   if (points.length < 4) return null;
 
-  const scaleFactor = 200;
   const handleClick = (event) => {
     event.stopPropagation();
     // Always use the current position of the planet for orbit clicks
@@ -107,26 +137,7 @@ function Orbit({
     }
   };
 
-  const handlePointer = (event, isOver) => {
-    if (!event) return;
-    event.stopPropagation();
-    setHovered(isOver);
-  };
-
-  // Add raycast distance for better click detection
-  const raycastDistance = useMemo(() => {
-    return semi_major_axis * 200 * 0.1; // 10% of orbit size
-  }, [semi_major_axis]);
-
-  const orbitStyle = useMemo(() => {
-    const baseOpacity = orbitType === "normal" ? 0.5 : 0.3;
-    return {
-      opacity: hovered ? baseOpacity * 1.5 : baseOpacity,
-      lineWidth: hovered ? 2 : 1,
-    };
-  }, [orbitType, hovered]);
-
-  const renderOrbit = (points, colors = null) => {
+  const renderOrbit = (points) => {
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(points.length * 3);
     
@@ -178,44 +189,7 @@ function Orbit({
   }
 
   if (orbitType === "tail") {
-    const currentIndex = useMemo(() => {
-      if (!currentPosition) return 0;
-      const currentVec = new THREE.Vector3(
-        currentPosition.x,
-        currentPosition.y,
-        currentPosition.z
-      ).divideScalar(scaleFactor);
-      return points.findIndex((p) => p.distanceTo(currentVec) < 0.1) || 0;
-    }, [currentPosition, points, scaleFactor]);
-
-    const tailLength = 100;
-    const tailPoints = useMemo(() => {
-      const tail = [];
-      for (let i = 0; i < tailLength; i++) {
-        const index = (currentIndex - i + points.length) % points.length;
-        tail.push(points[index]);
-      }
-      return tail.reverse();
-    }, [currentIndex, points, tailLength]);
-
-    const flattenedPoints = tailPoints.flatMap((p) => [
-      p.x * scaleFactor,
-      p.y * scaleFactor,
-      p.z * scaleFactor,
-    ]);
-
-    const colors = useMemo(() => {
-      return tailPoints.map((_, index) => {
-        const progress = index / (tailLength - 1);
-        const grayValue = 0.2 + 0.4 * progress;
-        const alpha = 1.0 - 0.8 * progress;
-        return new THREE.Color(grayValue, grayValue, grayValue).multiplyScalar(
-          alpha
-        );
-      });
-    }, [tailPoints, tailLength]);
-
-    return renderOrbit(tailPoints, colors);
+    return renderOrbit(tailPoints);
   }
 
   return null;

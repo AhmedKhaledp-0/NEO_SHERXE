@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Live() {
-  const [isFullscreen, setIsFullscreen] = React.useState(false);
+  const [, setIsFullscreen] = React.useState(false);
   const [showInfo, setShowInfo] = React.useState(true);
 
   const toggleFullscreen = () => {

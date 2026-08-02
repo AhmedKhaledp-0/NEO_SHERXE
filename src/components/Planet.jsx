@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo, Suspense } from "react";
+import { useRef, useEffect, useState, useMemo, Suspense } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Html, useGLTF } from "@react-three/drei";
@@ -32,21 +32,17 @@ const PlanetModel = ({ planetId, size, material }) => {
 
 function Planet({
   planetId,
-  position,
-  velocity,
   eccentricity,
   semi_major_axis,
   inclination,
   longitude_of_ascending_node,
   argument_of_perifocus,
-  mean_anomaly,
   time,
   epoch,
   showTags,
   id,
   onPositionUpdate,
   onPlanetClick,
-  onOrbitClick,
 }) {
   const meshRef = useRef();
   const AuToM = 1.496e11;
@@ -84,6 +80,7 @@ function Planet({
     inclination,
     longitude_of_ascending_node,
     argument_of_perifocus,
+    T,
   ]);
 
   const geometries = useMemo(
@@ -167,28 +164,6 @@ function Planet({
     if (meshRef.current && onPlanetClick) {
       onPlanetClick(planetId, meshRef.current.position.clone());
     }
-  };
-  const planetColors = {
-    "Mercury Barycenter (199)": "gold",
-    "Venus Barycenter (299)": "yellow",
-    "Earth-Moon Barycenter (3)": "blue",
-    "Mars Barycenter (4)": "red",
-    "Jupiter Barycenter (5)": "orange",
-    "Saturn Barycenter (6)": "khaki",
-    "Uranus Barycenter (7)": "aqua",
-    "Neptune Barycenter (8)": "purple",
-    "Pluto Barycenter (9)": "beige",
-  };
-  const planetDiameters = {
-    "Mercury Barycenter (199)": 4879, // Diameter in kilometers
-    "Venus Barycenter (299)": 12104,
-    "Earth-Moon Barycenter (3)": 12742,
-    "Mars Barycenter (4)": 6779,
-    "Jupiter Barycenter (5)": 139820,
-    "Saturn Barycenter (6)": 116460,
-    "Uranus Barycenter (7)": 50724,
-    "Neptune Barycenter (8)": 49244,
-    "Pluto Barycenter (9)": 2376,
   };
   return (
     <group

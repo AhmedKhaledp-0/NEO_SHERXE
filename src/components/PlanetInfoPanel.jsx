@@ -1,10 +1,10 @@
 import { faClose, faInfoCircle, faChartLine, faGlobe, faStar, faRuler } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const PlanetInfoPanel = ({ planet, onClose }) => {
-  if (!planet) return null;
   const [activeTab, setActiveTab] = useState(0);
+  if (!planet) return null;
 
   const formatValue = (value, decimals = 3, unit = '') => {
     return typeof value === 'number' ? `${value.toFixed(decimals)}${unit}` : 'N/A';

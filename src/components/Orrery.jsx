@@ -1,9 +1,7 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import React, { Suspense } from "react";
+import { Fragment, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   OrbitControls,
-  PerspectiveCamera,
   AdaptiveDpr,
   AdaptiveEvents,
 } from "@react-three/drei";
@@ -51,10 +49,6 @@ function Scene({
   const frustumRef = useRef(new THREE.Frustum());
   const projScreenMatrixRef = useRef(new THREE.Matrix4());
   const controlsRef = useRef();
-  const [selectedPlanet, setSelectedPlanet] = useState(null);
-  const [cameraTarget, setCameraTarget] = useState(new THREE.Vector3(0, 0, 0));
-  const [isCameraLocked, setIsCameraLocked] = useState(false);
-
   const colors = isDark ? sceneColors.dark : sceneColors.light;
 
   const handlePlanetClick = (planetId, position) => {
@@ -62,7 +56,6 @@ function Scene({
     const planet = visibleBodies.find((body) => body.planet === planetId);
     if (planet && position) {
       console.log("Moving to planet:", planet.planet); // Debug log
-      setSelectedPlanet(planet);
       onPlanetSelect(planet);
       moveCameraToObject(position);
     }
@@ -121,8 +114,6 @@ function Scene({
       }
 
       updateCamera();
-      setIsCameraLocked(true);
-      setCameraTarget(position);
     },
     [camera]
   );
@@ -164,14 +155,10 @@ function Scene({
 
       if (progress < 1) {
         requestAnimationFrame(updateCamera);
-      } else {
-        setIsCameraLocked(false);
       }
     }
 
     updateCamera();
-    setSelectedPlanet(null);
-    setCameraTarget(defaultTarget);
   }, [camera]);
 
   useEffect(() => {
@@ -328,10 +315,9 @@ function Orrery() {
 
   const [showTags, setShowTags] = useState(true);
   const [showOrbits, setShowOrbits] = useState(true);
-  const [planetPositions, setPlanetPositions] = useState({});
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [resetCameraFlag, setResetCameraFlag] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark] = useState(false);
 
   const lastUpdateTime = useRef(performance.now());
   const frameId = useRef();
@@ -392,29 +378,6 @@ function Orrery() {
   const togglePause = () => {
     setPaused((prev) => !prev);
   };
-  const toggleDwarfPlanets = () => {
-    setShowDwarfPlanets((prev) => !prev);
-  };
-  const togglePHAs = () => {
-    setShowPHAs((prev) => !prev);
-  };
-  const toggleNEAs = () => {
-    setShowNEAs((prev) => !prev);
-  };
-  const toggleTags = () => {
-    setShowTags((prev) => !prev);
-  };
-  const toggleOrbits = () => {
-    setshowOrbits((prev) => !prev);
-  };
-
-  const toggleTPHAsEX = () => {
-    setShowPHAsEX((prev) => !prev);
-  };
-
-  const toggleNEAsEX = () => {
-    setShowNEAsEX((prev) => !prev);
-  };
 
   useEffect(() => {
     try {
@@ -466,7 +429,7 @@ function Orrery() {
       ];
 
       setCelestialBodiesData(processedData);
-    } catch (error) {
+    } catch {
       setError(
         "Failed to process celestial body data. Please try again later."
       );
@@ -513,10 +476,6 @@ function Orrery() {
       (body.type === "PHAEX" && showPHAsEX) ||
       (body.type === "NEAEX" && showNEAsEX)
   );
-
-  const updatePlanetimsition = (planetId, position) => {
-    setPlanetPositions((prev) => ({ ...prev, [planetId]: position }));
-  };
 
   return (
     <div className="relative w-full h-[100vh-80px] bg-light-background dark:bg-dark-background mt-0">
