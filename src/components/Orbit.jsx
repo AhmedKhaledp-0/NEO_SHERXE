@@ -1,9 +1,13 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { AU_SCALE } from "../utilities/kepler";
 
 function toRadians(degrees) {
   return degrees * (Math.PI / 180);
 }
+
+const TAIL_LENGTH = 100;
 
 function Orbit({
   planetId,
@@ -12,44 +16,50 @@ function Orbit({
   inclination,
   longitude_of_ascending_node,
   semi_major_axis,
-  currentPosition,
   orbitType,
   color,
+  positionsRef,
   onOrbitClick,
 }) {
   const [hovered, setHovered] = useState(false);
+  const tailLineRef = useRef();
+  const tempVec = useMemo(() => new THREE.Vector3(), []);
 
   const argument_of_perifocusRad = toRadians(argument_of_perifocus);
   const inclinationRad = toRadians(inclination);
   const longitude_of_ascending_nodeRad = toRadians(longitude_of_ascending_node);
-  const scaleFactor = 200;
 
   const points = useMemo(() => {
-    // Early validation
-    if (!isFinite(semi_major_axis) || !isFinite(eccentricity) || 
-        !isFinite(inclination) || !isFinite(argument_of_perifocus) || 
-        !isFinite(longitude_of_ascending_node)) {
+    if (
+      !isFinite(semi_major_axis) ||
+      !isFinite(eccentricity) ||
+      !isFinite(inclination) ||
+      !isFinite(argument_of_perifocus) ||
+      !isFinite(longitude_of_ascending_node)
+    ) {
       return [];
     }
 
-    // Prevent unrealistic orbits
     if (semi_major_axis <= 0 || eccentricity >= 1 || eccentricity < 0) {
       return [];
     }
 
     const basePoints = 360;
-    const numPoints = Math.min(Math.ceil(basePoints * (1 + eccentricity * 2)), 720); // Limit max points
+    const numPoints = Math.min(
+      Math.ceil(basePoints * (1 + eccentricity * 2)),
+      720
+    );
     const orbitPoints = [];
 
     try {
       for (let i = 0; i <= numPoints; i++) {
         const angle = (i / numPoints) * Math.PI * 2;
         const denominator = 1 + eccentricity * Math.cos(angle);
-        
+
         if (Math.abs(denominator) < 0.000001) continue;
-        
+
         const r = (semi_major_axis * (1 - eccentricity ** 2)) / denominator;
-        
+
         if (!isFinite(r) || r <= 0) continue;
 
         const cos_Omega = Math.cos(longitude_of_ascending_nodeRad);
@@ -67,7 +77,6 @@ function Orbit({
         }
       }
 
-      // Ensure minimum points and close the loop
       if (orbitPoints.length >= 3) {
         orbitPoints.push(orbitPoints[0].clone());
       } else {
@@ -75,8 +84,7 @@ function Orbit({
       }
 
       return orbitPoints;
-    } catch (error) {
-      console.warn(`Error calculating orbit for ${planetId}:`, error);
+    } catch {
       return [];
     }
   }, [
@@ -88,111 +96,121 @@ function Orbit({
     longitude_of_ascending_nodeRad,
     argument_of_perifocusRad,
     inclinationRad,
-    planetId
   ]);
 
-  const orbitStyle = useMemo(() => {
-    const baseOpacity = orbitType === "normal" ? 0.5 : 0.3;
-    return {
-      opacity: hovered ? baseOpacity * 1.5 : baseOpacity,
-      lineWidth: hovered ? 2 : 1,
-    };
-  }, [orbitType, hovered]);
-
-  const currentIndex = useMemo(() => {
-    if (!currentPosition) return 0;
-    const currentVec = new THREE.Vector3(
-      currentPosition.x,
-      currentPosition.y,
-      currentPosition.z
-    ).divideScalar(scaleFactor);
-    return points.findIndex((p) => p.distanceTo(currentVec) < 0.1) || 0;
-  }, [currentPosition, points, scaleFactor]);
-
-  const tailLength = 100;
-  const tailPoints = useMemo(() => {
-    const tail = [];
-    for (let i = 0; i < tailLength; i++) {
-      const index = (currentIndex - i + points.length) % points.length;
-      tail.push(points[index]);
+  const { lineGeometry, tubeGeometry, tailGeometry } = useMemo(() => {
+    const linePositions = new Float32Array(points.length * 3);
+    for (let i = 0; i < points.length; i++) {
+      linePositions[i * 3] = points[i].x * AU_SCALE;
+      linePositions[i * 3 + 1] = points[i].y * AU_SCALE;
+      linePositions[i * 3 + 2] = points[i].z * AU_SCALE;
     }
-    return tail.reverse();
-  }, [currentIndex, points, tailLength]);
+    const lineGeometry = new THREE.BufferGeometry();
+    lineGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(linePositions, 3)
+    );
+
+    let tubeGeometry = null;
+    if (orbitType === "normal") {
+      const curve = new THREE.CatmullRomCurve3(
+        points.map((p) => p.clone().multiplyScalar(AU_SCALE))
+      );
+      tubeGeometry = new THREE.TubeGeometry(
+        curve,
+        Math.min(points.length, 256),
+        0.5,
+        4,
+        false
+      );
+    }
+
+    let tailGeometry = null;
+    if (orbitType === "tail") {
+      const tailPositions = new Float32Array(TAIL_LENGTH * 3);
+      tailGeometry = new THREE.BufferGeometry();
+      tailGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(tailPositions, 3)
+      );
+      tailGeometry.setDrawRange(0, TAIL_LENGTH);
+    }
+
+    return { lineGeometry, tubeGeometry, tailGeometry };
+  }, [points, orbitType]);
+
+  useFrame(() => {
+    if (orbitType !== "tail") return;
+    const line = tailLineRef.current;
+    const pos = positionsRef && positionsRef.current[planetId];
+    if (!line || !pos) return;
+
+    let best = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < points.length; i++) {
+      tempVec.subVectors(points[i], pos);
+      const d = tempVec.lengthSq();
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    }
+
+    const attr = line.geometry.attributes.position;
+    for (let k = 0; k < TAIL_LENGTH; k++) {
+      const idx = (best - (TAIL_LENGTH - 1 - k) + points.length) % points.length;
+      const p = points[idx];
+      attr.setXYZ(k, p.x * AU_SCALE, p.y * AU_SCALE, p.z * AU_SCALE);
+    }
+    attr.needsUpdate = true;
+  });
 
   if (points.length < 4) return null;
 
+  const baseOpacity = orbitType === "normal" ? 0.5 : 0.3;
+
   const handleClick = (event) => {
     event.stopPropagation();
-    // Always use the current position of the planet for orbit clicks
-    if (currentPosition) {
-      onOrbitClick(planetId, currentPosition.clone());
+    const pos = positionsRef && positionsRef.current[planetId];
+    if (pos) {
+      onOrbitClick(planetId, pos.clone().multiplyScalar(AU_SCALE));
     } else {
-      // If no current position, use the first point of the orbit
-      const firstPoint = new THREE.Vector3(
-        points[0].x * scaleFactor,
-        points[0].y * scaleFactor,
-        points[0].z * scaleFactor
-      );
-      onOrbitClick(planetId, firstPoint);
+      onOrbitClick(planetId, points[0].clone().multiplyScalar(AU_SCALE));
     }
   };
 
-  const renderOrbit = (points) => {
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(points.length * 3);
-    
-    points.forEach((point, i) => {
-      positions[i * 3] = point.x * scaleFactor;
-      positions[i * 3 + 1] = point.y * scaleFactor;
-      positions[i * 3 + 2] = point.z * scaleFactor;
-    });
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    
-    // Create a tube geometry for better click detection
-    const tubeGeometry = new THREE.TubeGeometry(
-      new THREE.CatmullRomCurve3(points.map(p => 
-        new THREE.Vector3(p.x * scaleFactor, p.y * scaleFactor, p.z * scaleFactor)
-      )),
-      points.length,
-      0.5, // radius
-      8, // radiusSegments
-      false // closed
-    );
-
-    return (
-      <group>
+  return (
+    <group>
+      {tubeGeometry && (
         <mesh
           geometry={tubeGeometry}
           onClick={handleClick}
           onPointerOver={() => setHovered(true)}
           onPointerOut={() => setHovered(false)}
-          visible={false} // invisible but clickable
+          visible={false}
         >
           <meshBasicMaterial transparent opacity={0.001} />
         </mesh>
-        <line geometry={geometry}>
+      )}
+      <line geometry={lineGeometry}>
+        <lineBasicMaterial
+          color={color}
+          opacity={hovered ? baseOpacity * 1.5 : baseOpacity}
+          transparent={true}
+          depthTest={true}
+        />
+      </line>
+      {orbitType === "tail" && (
+        <line ref={tailLineRef} geometry={tailGeometry}>
           <lineBasicMaterial
             color={color}
-            opacity={orbitStyle.opacity}
+            opacity={hovered ? 0.6 : 0.45}
             transparent={true}
-            linewidth={orbitStyle.lineWidth}
-            depthTest={true}
           />
         </line>
-      </group>
-    );
-  };
-
-  if (orbitType === "normal") {
-    return renderOrbit(points);
-  }
-
-  if (orbitType === "tail") {
-    return renderOrbit(tailPoints);
-  }
-
-  return null;
+      )}
+    </group>
+  );
 }
 
-export default Orbit;
+export default React.memo(Orbit);

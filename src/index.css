@@ -1,6 +1,51 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-light-primary: #7B3FF3;
+  --color-light-secondary: #4CC9F0;
+  --color-light-background: #E8ECF7;
+  --color-light-surface: #FFFFFF;
+  --color-light-text: #2D3748;
+  --color-light-accent: #FF61D3;
+  --color-light-success: #00CF8A;
+  --color-light-warning: #FFB84D;
+  --color-light-danger: #FF5367;
+
+  --color-dark-primary: #9D4EDD;
+  --color-dark-secondary: #2A9DF4;
+  --color-dark-background: #080B1A;
+  --color-dark-surface: #141E3C;
+  --color-dark-text: #E2E8F0;
+  --color-dark-accent: #FF38BC;
+  --color-dark-success: #00B377;
+  --color-dark-warning: #FF9F1C;
+  --color-dark-danger: #E63946;
+
+  --spacing-18: 4.5rem;
+  --spacing-88: 22rem;
+
+  --backdrop-blur-lg: 16px;
+
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}
 
 :root {
   --color-primary: #7B3FF3;
@@ -31,4 +76,80 @@ body {
   min-height: 100vh;
   background-color: var(--color-background);
   color: var(--color-text);
+}
+
+@layer components {
+  .glass-card {
+    backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+
+  .nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .nav-link:hover {
+    color: #7B3FF3;
+    background-color: transparent;
+  }
+
+  .nav-link.active {
+    color: #7B3FF3;
+    background-color: transparent;
+  }
+
+  .nav-link.active:after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background-color: currentColor;
+    border-radius: 2px;
+  }
+
+  .card {
+    background-color: var(--color-surface);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+  }
+
+  .card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.95);
+  }
+
+  .prose ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose li {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }

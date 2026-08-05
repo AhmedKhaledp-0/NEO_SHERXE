@@ -1,24 +1,35 @@
-import { useRef, useEffect, useState, useMemo, Suspense } from "react";
+import React, { useRef, useMemo, useState, Suspense } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Html, useGLTF } from "@react-three/drei";
 import { Detailed } from "@react-three/drei";
+import { precomputeConstants, getBodyPosition, AU_SCALE } from "../utilities/kepler";
 
 const planetConfig = {
-  "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6", scale: 1 },
-  "Venus Barycenter (299)": { size: 3, color: "#ffd85c", scale: 1 },
-  "Earth-Moon Barycenter (3)": { size: 3, color: "#4f7cee", scale: 1 },
-  "Mars Barycenter (4)": { size: 2.5, color: "#ff6b3e", scale: 1 },
-  "Jupiter Barycenter (5)": { size: 8, color: "#f3d3a3", scale: 1 },
-  "Saturn Barycenter (6)": { size: 7, color: "#f7d98c", scale: 1 },
-  "Uranus Barycenter (7)": { size: 5, color: "#b3e5e5", scale: 1 },
-  "Neptune Barycenter (8)": { size: 5, color: "#4b70dd", scale: 1 },
-  "Pluto Barycenter (9)": { size: 1, color: "#c4b5a6", scale: 1 },
+  "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6" },
+  "Venus Barycenter (299)": { size: 3, color: "#ffd85c" },
+  "Earth-Moon Barycenter (3)": { size: 3, color: "#4f7cee" },
+  "Mars Barycenter (4)": { size: 2.5, color: "#ff6b3e" },
+  "Jupiter Barycenter (5)": { size: 8, color: "#f3d3a3" },
+  "Saturn Barycenter (6)": { size: 7, color: "#f7d98c" },
+  "Uranus Barycenter (7)": { size: 5, color: "#b3e5e5" },
+  "Neptune Barycenter (8)": { size: 5, color: "#4b70dd" },
+  "Pluto Barycenter (9)": { size: 1, color: "#c4b5a6" },
+  "136108 Haumea (2003 EL61)": { size: 1.2, color: "#e0d7c3" },
+  "136472 Makemake (2005 FY9)": { size: 1.2, color: "#d9c9a8" },
+  "136199 Eris (2003 UB313)": { size: 1.4, color: "#d6d6d6" },
+};
+
+const typeConfig = {
+  PHAEX: { size: 1.6, color: "#ff8a80" },
+  NEAEX: { size: 1.4, color: "#80d8ff" },
 };
 
 const PlanetModel = ({ planetId, size, material }) => {
   const { scene } = useGLTF(
-    `/models/${planetId.split(" ")[0].toLowerCase()}.glb`
+    `/models/${planetId.split(" ")[0].toLowerCase()}.glb`,
+    false,
+    false
   );
 
   return (
@@ -37,57 +48,47 @@ function Planet({
   inclination,
   longitude_of_ascending_node,
   argument_of_perifocus,
-  time,
-  epoch,
+  mean_motion,
+  type,
   showTags,
   id,
-  onPositionUpdate,
+  positionsRef,
+  timeRef,
   onPlanetClick,
 }) {
   const meshRef = useRef();
-  const AuToM = 1.496e11;
-  const [currentPosition, setCurrentPosition] = useState(new THREE.Vector3());
   const isMainPlanet = id >= 1 && id <= 9;
   const [hovered, setHovered] = useState(false);
-  const config = planetConfig[planetId] || {
-    size: 0.1,
-    color: "#ffffff",
-    scale: 1,
-  };
+  const config =
+    planetConfig[planetId] ||
+    typeConfig[type] ||
+    { size: 0.1, color: "#ffffff" };
 
-  function calculateOrbitalPeriod(semiMajorAxis) {
-    const G = 6.6743e-11; // Gravitational constant in m^3 kg^-1 s^-2
-    const M = 1.989e30; // Mass of the Sun in kg
-    const semiMajorAxisInM = semiMajorAxis * AuToM;
-    const T_seconds = Math.sqrt(
-      (4 * Math.PI * Math.PI * Math.pow(semiMajorAxisInM, 3)) / (G * M)
-    );
-    return T_seconds / (60 * 60 * 24);
-  }
-  const T = calculateOrbitalPeriod(semi_major_axis);
-  const constants = useMemo(() => {
-    return {
-      e: eccentricity,
-      a: semi_major_axis,
-      i: THREE.MathUtils.degToRad(inclination),
-      Ω: THREE.MathUtils.degToRad(longitude_of_ascending_node),
-      ω: THREE.MathUtils.degToRad(argument_of_perifocus),
-      n: (2 * Math.PI) / T,
-    };
-  }, [
-    eccentricity,
-    semi_major_axis,
-    inclination,
-    longitude_of_ascending_node,
-    argument_of_perifocus,
-    T,
-  ]);
+  const constants = useMemo(
+    () =>
+      precomputeConstants({
+        e: eccentricity,
+        a: semi_major_axis,
+        incl: inclination,
+        Omega: longitude_of_ascending_node,
+        w: argument_of_perifocus,
+        n: mean_motion,
+      }),
+    [
+      eccentricity,
+      semi_major_axis,
+      inclination,
+      longitude_of_ascending_node,
+      argument_of_perifocus,
+      mean_motion,
+    ]
+  );
 
   const geometries = useMemo(
     () => ({
-      high: new THREE.SphereGeometry(config.size, 64, 32),
-      medium: new THREE.SphereGeometry(config.size, 32, 16),
-      low: new THREE.SphereGeometry(config.size, 16, 12),
+      high: new THREE.SphereGeometry(config.size, 48, 24),
+      medium: new THREE.SphereGeometry(config.size, 24, 16),
+      low: new THREE.SphereGeometry(config.size, 12, 8),
     }),
     [config.size]
   );
@@ -115,44 +116,23 @@ function Planet({
     [config.color]
   );
 
+  const tempPosition = useMemo(() => new THREE.Vector3(), []);
+
   useFrame(() => {
-    const { e, a, i, Ω, ω, n } = constants;
-
-    const deltaT = (time.getTime() - epoch.getTime()) / (1000 * 60 * 60 * 24); // time difference in days
-    let M = n * deltaT;
-    M = M % (2 * Math.PI);
-    if (M < 0) M += 2 * Math.PI;
-
-    let E = M;
-    for (let j = 0; j < 5; j++) {
-      E = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    getBodyPosition(constants, timeRef.current.getTime(), tempPosition);
+    meshRef.current.position.set(
+      tempPosition.x * AU_SCALE,
+      tempPosition.y * AU_SCALE,
+      tempPosition.z * AU_SCALE
+    );
+    meshRef.current.scale.setScalar(hovered ? 1.1 : 1);
+    if (positionsRef.current) {
+      const slot = positionsRef.current[planetId];
+      if (!slot) positionsRef.current[planetId] = new THREE.Vector3();
+      positionsRef.current[planetId].copy(tempPosition);
     }
-
-    const ν = 2 * Math.atan(Math.sqrt((1 + e) / (1 - e)) * Math.tan(E / 2));
-
-    const r = a * (1 - e * Math.cos(E));
-    const x =
-      r *
-      (Math.cos(Ω) * Math.cos(ω + ν) -
-        Math.sin(Ω) * Math.sin(ω + ν) * Math.cos(i));
-    const y =
-      r *
-      (Math.sin(Ω) * Math.cos(ω + ν) +
-        Math.cos(Ω) * Math.sin(ω + ν) * Math.cos(i));
-    const z = r * (Math.sin(ω + ν) * Math.sin(i));
-
-    const newPosition = new THREE.Vector3(x * 200, y * 200, z * 200);
-    meshRef.current.position.copy(newPosition);
-    setCurrentPosition(newPosition);
-
-    const scale = config.scale * (hovered ? 1.1 : 1);
-    meshRef.current.scale.setScalar(scale);
   });
-  useEffect(() => {
-    if (onPositionUpdate) {
-      onPositionUpdate(planetId, currentPosition);
-    }
-  }, [currentPosition, planetId, onPositionUpdate]);
+
   const handlePlanetClick = (event) => {
     event.stopPropagation();
     if (meshRef.current && onPlanetClick) {
@@ -165,6 +145,7 @@ function Planet({
       onPlanetClick(planetId, meshRef.current.position.clone());
     }
   };
+
   return (
     <group
       ref={meshRef}
@@ -197,7 +178,7 @@ function Planet({
       ) : (
         <mesh
           geometry={geometries.low}
-          material={materials.standard}
+          material={hovered ? materials.hover : materials.standard}
           scale={config.size * 0.2}
         />
       )}
@@ -225,4 +206,6 @@ function Planet({
   );
 }
 
-export default Planet;
+const PlanetMemo = React.memo(Planet);
+
+export default PlanetMemo;

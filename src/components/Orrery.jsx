@@ -1,5 +1,5 @@
-import { Fragment, Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import React, { Fragment, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import {
   OrbitControls,
   AdaptiveDpr,
@@ -14,13 +14,13 @@ import {
   faExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 import Planet from "./Planet";
+import NEOInstances from "./NEOInstances";
 import combinedCelestialData from "../utilities/CombinedCelestialData";
 import AnimatedLayers from "./Layers";
 import PlanetInfoPanel from "./PlanetInfoPanel";
 import Orbit from "./Orbit";
 import { StarField } from "./StarField";
 
-// Add theme colors for the scene
 const sceneColors = {
   light: {
     background: "#fff",
@@ -36,9 +36,21 @@ const sceneColors = {
   },
 };
 
-function Scene({
+const orbitColors = {
+  "Mercury Barycenter (199)": "gold",
+  "Venus Barycenter (299)": "yellow",
+  "Earth-Moon Barycenter (3)": "blue",
+  "Mars Barycenter (4)": "red",
+  "Jupiter Barycenter (5)": "orange",
+  "Saturn Barycenter (6)": "khaki",
+  "Uranus Barycenter (7)": "aqua",
+  "Neptune Barycenter (8)": "purple",
+  "Pluto Barycenter (9)": "beige",
+};
+
+const Scene = React.memo(function Scene({
   visibleBodies,
-  time,
+  timeRef,
   showTags,
   showOrbits,
   onPlanetSelect,
@@ -46,20 +58,9 @@ function Scene({
   isDark,
 }) {
   const { camera, gl } = useThree();
-  const frustumRef = useRef(new THREE.Frustum());
-  const projScreenMatrixRef = useRef(new THREE.Matrix4());
   const controlsRef = useRef();
+  const positionsRef = useRef({});
   const colors = isDark ? sceneColors.dark : sceneColors.light;
-
-  const handlePlanetClick = (planetId, position) => {
-    console.log("Click detected:", planetId); // Debug log
-    const planet = visibleBodies.find((body) => body.planet === planetId);
-    if (planet && position) {
-      console.log("Moving to planet:", planet.planet); // Debug log
-      onPlanetSelect(planet);
-      moveCameraToObject(position);
-    }
-  };
 
   const moveCameraToObject = useCallback(
     (position) => {
@@ -70,29 +71,26 @@ function Scene({
         ? controlsRef.current.target.clone()
         : new THREE.Vector3();
 
-      // Calculate closer camera position based on object distance
       const distanceToObject = position.length();
       const cameraDistance = Math.min(
         Math.max(distanceToObject * 0.3, 20),
         200
-      ); // Reduced distances
-      const angle = Math.PI / 6; // 30 degrees - lower angle for closer view
+      );
+      const angle = Math.PI / 6;
 
       const newCameraPosition = new THREE.Vector3(
         position.x + Math.cos(angle) * cameraDistance,
         position.y + Math.sin(angle) * cameraDistance,
-        position.z + cameraDistance * 0.3 // Reduced height offset
+        position.z + cameraDistance * 0.3
       );
 
-      // Faster animation
-      const duration = 1000; // 1 second
+      const duration = 1000;
       const startTime = Date.now();
 
       function updateCamera() {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
 
-        // Smoother easing function
         const easing =
           progress < 0.5
             ? 4 * progress * progress * progress
@@ -126,31 +124,26 @@ function Scene({
     const defaultPosition = new THREE.Vector3(0, -900, 500);
     const defaultTarget = new THREE.Vector3(0, 0, 0);
 
-    // Animation settings
-    const duration = 1500; // 1.5 seconds
+    const duration = 1500;
     const startTime = Date.now();
 
     function updateCamera() {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
 
-      // Smooth easing function
       const easing =
         progress < 0.5
           ? 4 * progress * progress * progress
           : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
-      // Update camera position
       camera.position.lerpVectors(startPosition, defaultPosition, easing);
 
-      // Update controls target
       if (controlsRef.current) {
         const currentTarget = controlsRef.current.target;
         currentTarget.lerpVectors(startTarget, defaultTarget, easing);
         controlsRef.current.update();
       }
 
-      // Look at the center
       camera.lookAt(defaultTarget);
 
       if (progress < 1) {
@@ -167,65 +160,45 @@ function Scene({
     }
   }, [resetCamera, resetCameraView]);
 
-  useFrame(() => {
-    camera.updateMatrixWorld();
-    projScreenMatrixRef.current.multiplyMatrices(
-      camera.projectionMatrix,
-      camera.matrixWorldInverse
-    );
-    frustumRef.current.setFromProjectionMatrix(projScreenMatrixRef.current);
-  });
+  const handlePlanetClick = useCallback(
+    (planetId, position) => {
+      const planet = visibleBodies.find((body) => body.planet === planetId);
+      if (planet && position) {
+        onPlanetSelect(planet);
+        moveCameraToObject(position);
+      }
+    },
+    [visibleBodies, onPlanetSelect, moveCameraToObject]
+  );
 
-  const [planetPositions, setPlanetPositions] = useState({});
+  const handleNEOSelect = useCallback(
+    (body, position) => {
+      onPlanetSelect(body);
+      moveCameraToObject(position);
+    },
+    [onPlanetSelect, moveCameraToObject]
+  );
 
-  const updatePlanetPosition = (planetId, position) => {
-    setPlanetPositions((prev) => ({ ...prev, [planetId]: position }));
-  };
-
-  const instancedMeshRef = useRef();
-  const [instancedMeshes, setInstancedMeshes] = useState([]);
-
-  useEffect(() => {
-    const smallBodies = visibleBodies.filter(
-      (body) => body.type !== "majorBody"
-    );
-    const instancedMesh = new THREE.InstancedMesh(
-      new THREE.SphereGeometry(0.5, 8, 8),
-      new THREE.MeshStandardMaterial({ color: "green" }),
-      smallBodies.length
-    );
-    setInstancedMeshes([instancedMesh]);
+  const { majorAndDwarf, extended, bulkNEOs } = useMemo(() => {
+    const majorAndDwarf = [];
+    const extended = [];
+    const bulkNEOs = [];
+    for (const body of visibleBodies) {
+      if (body.type === "majorBody" || body.type === "dwarfPlanet") {
+        majorAndDwarf.push(body);
+      } else if (body.type === "PHAEX" || body.type === "NEAEX") {
+        extended.push(body);
+      } else {
+        bulkNEOs.push(body);
+      }
+    }
+    return { majorAndDwarf, extended, bulkNEOs };
   }, [visibleBodies]);
 
-  useFrame(() => {
-    if (instancedMeshRef.current) {
-      visibleBodies.forEach((body, index) => {
-        if (body.type !== "majorBody") {
-          const matrix = new THREE.Matrix4();
-          const position = planetPositions[body.planet] || new THREE.Vector3();
-          matrix.setPosition(position);
-          instancedMeshRef.current.setMatrixAt(index, matrix);
-        }
-      });
-      instancedMeshRef.current.instanceMatrix.needsUpdate = true;
-    }
-  });
-  const orbitColors = {
-    "Mercury Barycenter (199)": "gold",
-    "Venus Barycenter (299)": "yellow",
-    "Earth-Moon Barycenter (3)": "blue",
-    "Mars Barycenter (4)": "red",
-    "Jupiter Barycenter (5)": "orange",
-    "Saturn Barycenter (6)": "khaki",
-    "Uranus Barycenter (7)": "aqua",
-    "Neptune Barycenter (8)": "purple",
-    "Pluto Barycenter (9)": "beige",
-  };
   return (
     <>
       <StarField count={3000} isDark={isDark} />
 
-      {/* Adjust fog to start further away */}
       <fog attach="fog" args={[isDark ? "#000000" : "#0a0f1c", 3000, 5000]} />
 
       <OrbitControls ref={controlsRef} args={[camera, gl.domElement]} />
@@ -241,7 +214,7 @@ function Scene({
         <sphereGeometry args={[2, 32, 32]} />
         <meshBasicMaterial color={colors.sun} />
       </mesh>
-      {visibleBodies.map((body) => (
+      {majorAndDwarf.map((body) => (
         <Fragment key={body.planet}>
           <Planet
             planetId={body.planet}
@@ -252,32 +225,28 @@ function Scene({
             inclination={body.incl}
             longitude_of_ascending_node={body.Omega}
             argument_of_perifocus={body.w}
-            mean_anomaly={body.M}
-            time={time}
-            epoch={new Date("2000-01-01")}
+            mean_motion={body.n}
+            type={body.type}
             showTags={showTags}
             id={body.id}
-            onPositionUpdate={updatePlanetPosition}
+            positionsRef={positionsRef}
+            timeRef={timeRef}
             onPlanetClick={handlePlanetClick}
           />
-          {showOrbits &&
-            (body.type === "majorBody" || body.type === "dwarfPlanet") && (
-              <Orbit
-                planetId={body.planet}
-                argument_of_perifocus={body.w}
-                eccentricity={body.e}
-                inclination={body.incl}
-                longitude_of_ascending_node={body.Omega}
-                semi_major_axis={body.a}
-                orbitType="normal"
-                color={orbitColors[body.planet] || "white"}
-                onOrbitClick={(id, pos) => {
-                  console.log("Orbit clicked:", id); // Debug log
-                  handlePlanetClick(id, pos);
-                }}
-                currentPosition={planetPositions[body.planet]}
-              />
-            )}
+          {showOrbits && (
+            <Orbit
+              planetId={body.planet}
+              argument_of_perifocus={body.w}
+              eccentricity={body.e}
+              inclination={body.incl}
+              longitude_of_ascending_node={body.Omega}
+              semi_major_axis={body.a}
+              orbitType="normal"
+              color={orbitColors[body.planet] || "white"}
+              positionsRef={positionsRef}
+              onOrbitClick={handlePlanetClick}
+            />
+          )}
           {showOrbits && body.type === "dwarfPlanet" && (
             <Orbit
               planetId={body.planet}
@@ -286,19 +255,45 @@ function Scene({
               inclination={body.incl}
               longitude_of_ascending_node={body.Omega}
               semi_major_axis={body.a}
-              currentPosition={planetPositions[body.planet]}
               orbitType="tail"
+              color={orbitColors[body.planet] || "white"}
+              positionsRef={positionsRef}
               onOrbitClick={handlePlanetClick}
             />
           )}
         </Fragment>
       ))}
-      {instancedMeshes.map((mesh, index) => (
-        <primitive key={index} object={mesh} ref={instancedMeshRef} />
+      {extended.map((body) => (
+        <Planet
+          key={body.planet}
+          planetId={body.planet}
+          position={body.position}
+          velocity={body.velocity}
+          eccentricity={body.e}
+          semi_major_axis={body.a}
+          inclination={body.incl}
+          longitude_of_ascending_node={body.Omega}
+          argument_of_perifocus={body.w}
+          mean_motion={body.n}
+          type={body.type}
+          showTags={showTags}
+          id={body.id}
+          positionsRef={positionsRef}
+          timeRef={timeRef}
+          onPlanetClick={handlePlanetClick}
+        />
       ))}
+      {bulkNEOs.length > 0 && (
+        <NEOInstances
+          bodies={bulkNEOs}
+          timeRef={timeRef}
+          positionsRef={positionsRef}
+          onSelect={handleNEOSelect}
+        />
+      )}
     </>
   );
-}
+});
 
 function Orrery() {
   const [celestialBodiesData, setCelestialBodiesData] = useState([]);
@@ -319,22 +314,23 @@ function Orrery() {
   const [resetCameraFlag, setResetCameraFlag] = useState(false);
   const [isDark] = useState(false);
 
+  const simTimeRef = useRef(new Date());
   const lastUpdateTime = useRef(performance.now());
   const frameId = useRef();
 
-  const handlePlanetSelect = (planet) => {
+  const handlePlanetSelect = useCallback((planet) => {
     if (!planet) {
       console.warn("No planet data received");
       return;
     }
-    console.log("Selected planet:", planet);
     setSelectedPlanet(planet);
-  };
+  }, []);
 
-  const handleResetCamera = () => {
+  const handleResetCamera = useCallback(() => {
     setSelectedPlanet(null);
     setResetCameraFlag(true);
-  };
+  }, []);
+
   useEffect(() => {
     if (resetCameraFlag) {
       setResetCameraFlag(false);
@@ -347,13 +343,20 @@ function Orrery() {
       return;
     }
 
+    lastUpdateTime.current = performance.now();
+    let lastUiUpdate = 0;
+
     const updateTime = (currentTime) => {
       const deltaTime = currentTime - lastUpdateTime.current;
-      // Update time with real-time seconds (speed multiplier affects this)
-      const timeIncrement = deltaTime * speed; // Remove the 86400 multiplier to match real time
-
-      setTime((prevTime) => new Date(prevTime.getTime() + timeIncrement));
+      simTimeRef.current = new Date(
+        simTimeRef.current.getTime() + deltaTime * speed
+      );
       lastUpdateTime.current = currentTime;
+
+      if (currentTime - lastUiUpdate > 250) {
+        lastUiUpdate = currentTime;
+        setTime(new Date(simTimeRef.current));
+      }
       frameId.current = requestAnimationFrame(updateTime);
     };
 
@@ -373,8 +376,10 @@ function Orrery() {
     const newDate = event.target.value
       ? new Date(event.target.value)
       : new Date();
+    simTimeRef.current = newDate;
     setTime(newDate);
   };
+
   const togglePause = () => {
     setPaused((prev) => !prev);
   };
@@ -438,6 +443,27 @@ function Orrery() {
     }
   }, []);
 
+  const visibleBodies = useMemo(
+    () =>
+      celestialBodiesData.filter(
+        (body) =>
+          body.type === "majorBody" ||
+          (body.type === "dwarfPlanet" && showDwarfPlanets) ||
+          (body.type === "PHA" && showPHAs) ||
+          (body.type === "NEA" && showNEAs) ||
+          (body.type === "PHAEX" && showPHAsEX) ||
+          (body.type === "NEAEX" && showNEAsEX)
+      ),
+    [
+      celestialBodiesData,
+      showDwarfPlanets,
+      showPHAs,
+      showNEAs,
+      showPHAsEX,
+      showNEAsEX,
+    ]
+  );
+
   if (isLoading) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-light-background/80 dark:bg-dark-background/80 backdrop-blur-sm">
@@ -467,15 +493,6 @@ function Orrery() {
       </div>
     );
   }
-  const visibleBodies = celestialBodiesData.filter(
-    (body) =>
-      body.type === "majorBody" ||
-      (body.type === "dwarfPlanet" && showDwarfPlanets) ||
-      (body.type === "PHA" && showPHAs) ||
-      (body.type === "NEA" && showNEAs) ||
-      (body.type === "PHAEX" && showPHAsEX) ||
-      (body.type === "NEAEX" && showNEAsEX)
-  );
 
   return (
     <div className="relative w-full h-[100vh-80px] bg-light-background dark:bg-dark-background mt-0">
@@ -501,6 +518,7 @@ function Orrery() {
             stencil: false,
             depth: true,
             logarithmicDepthBuffer: true,
+            powerPreference: "high-performance",
           }}
           style={{
             background: isDark ? "#030712" : "#0a0f1c",
@@ -515,7 +533,7 @@ function Orrery() {
           <Suspense fallback={null}>
             <Scene
               visibleBodies={visibleBodies}
-              time={time}
+              timeRef={simTimeRef}
               showTags={showTags}
               showOrbits={showOrbits}
               onPlanetSelect={handlePlanetSelect}
