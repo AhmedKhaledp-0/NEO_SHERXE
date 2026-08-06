@@ -224,14 +224,16 @@ function Orbit({
           <meshBasicMaterial transparent opacity={0.001} />
         </mesh>
       )}
-      <line geometry={lineGeometry}>
-        <lineBasicMaterial
-          color={color}
-          opacity={hovered ? baseOpacity * 1.5 : baseOpacity}
-          transparent={true}
-          depthTest={true}
-        />
-      </line>
+      {!isFeatured && (
+        <line geometry={lineGeometry}>
+          <lineBasicMaterial
+            color={color}
+            opacity={hovered ? baseOpacity * 1.5 : baseOpacity}
+            transparent={true}
+            depthTest={true}
+          />
+        </line>
+      )}
       {isFeatured && (
         <line ref={tailLineRef} geometry={tailGeometry}>
           <lineBasicMaterial vertexColors transparent />
