@@ -11,22 +11,22 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-light-background dark:bg-dark-background">
+    <div className="min-h-screen bg-dark-background">
       {/* Hero Section */}
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-light-primary/5 dark:from-dark-primary/5 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-dark-primary/5 to-transparent"></div>
           {/* Add animated stars background here if needed */}
         </div>
 
         <div className="container mx-auto px-4 z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-7xl md:text-8xl font-bold mb-8">
-              <span className="bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent">
                 NEO SPHERXE
               </span>
             </h1>
-            <p className="text-2xl md:text-3xl text-light-text/70 dark:text-dark-text/70 mb-12 max-w-2xl mx-auto">
+            <p className="text-2xl md:text-3xl text-dark-text/70 mb-12 max-w-2xl mx-auto">
               Explore Near-Earth Objects and track celestial bodies in real-time
             </p>
             <div className="flex flex-col md:flex-row gap-6 justify-center">
@@ -39,7 +39,7 @@ export default function Home() {
               </button>
               <button
                 onClick={() => navigate("/riskLevel")}
-                className="btn-primary py-2 px-4 bg-light-secondary dark:bg-dark-secondary flex items-center justify-center gap-3"
+                className="btn-primary py-2 px-4 bg-dark-secondary flex items-center justify-center gap-3"
               >
                 <FontAwesomeIcon icon={faSatellite} className="text-xl" />
                 <span>Check Risk Levels</span>
@@ -50,26 +50,26 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <div className="py-24 bg-light-surface/50 dark:bg-dark-surface/50">
+      <div className="py-24 bg-dark-surface/50">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="card text-center">
               <FontAwesomeIcon
                 icon={faRocket}
-                className="text-4xl text-light-primary dark:text-dark-primary mb-6"
+                className="text-4xl text-dark-primary mb-6"
               />
               <h3 className="text-xl font-bold mb-4">Real-time Tracking</h3>
-              <p className="text-light-text/70 dark:text-dark-text/70">
+              <p className="text-dark-text/70">
                 Monitor near-Earth objects as they move through our solar system
               </p>
             </div>
             <div className="card text-center">
               <FontAwesomeIcon
                 icon={faGlobe}
-                className="text-4xl text-light-primary dark:text-dark-primary mb-6"
+                className="text-4xl text-dark-primary mb-6"
               />
               <h3 className="text-xl font-bold mb-4">Global Coverage</h3>
-              <p className="text-light-text/70 dark:text-dark-text/70">
+              <p className="text-dark-text/70">
                 Comprehensive data from multiple space agencies and
                 observatories
               </p>
@@ -77,10 +77,10 @@ export default function Home() {
             <div className="card text-center">
               <FontAwesomeIcon
                 icon={faSatellite}
-                className="text-4xl text-light-primary dark:text-dark-primary mb-6"
+                className="text-4xl text-dark-primary mb-6"
               />
               <h3 className="text-xl font-bold mb-4">Risk Assessment</h3>
-              <p className="text-light-text/70 dark:text-dark-text/70">
+              <p className="text-dark-text/70">
                 Advanced analysis of potential impact risks and trajectories
               </p>
             </div>
@@ -89,16 +89,16 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="py-12 bg-light-surface/30 dark:bg-dark-surface/30">
+      <footer className="py-12 bg-dark-surface/30">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="space-y-4">
               <h3 className="text-xl font-bold">
-                <span className="bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent">
                   NEO SPHERXE
                 </span>
               </h3>
-              <p className="text-light-text/70 dark:text-dark-text/70">
+              <p className="text-dark-text/70">
                 Exploring the cosmos, one object at a time
               </p>
             </div>
@@ -107,13 +107,13 @@ export default function Home() {
               <div className="flex flex-col space-y-2">
                 <Link
                   to="/live"
-                  className="hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                  className="hover:text-dark-primary transition-colors"
                 >
                   Live Tracking
                 </Link>
                 <Link
                   to="/riskLevel"
-                  className="hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                  className="hover:text-dark-primary transition-colors"
                 >
                   Risk Levels
                 </Link>
@@ -124,13 +124,13 @@ export default function Home() {
               <div className="flex flex-col space-y-2">
                 <Link
                   to="/about"
-                  className="hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                  className="hover:text-dark-primary transition-colors"
                 >
                   About Us
                 </Link>
                 <Link
                   to="/qna"
-                  className="hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                  className="hover:text-dark-primary transition-colors"
                 >
                   FAQ
                 </Link>
@@ -143,7 +143,7 @@ export default function Home() {
                   href="https://github.com/AhmedKhaledp-0/NEO_SHERXE/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 hover:text-light-primary dark:hover:text-dark-primary transition-colors"
+                  className="flex items-center gap-2 hover:text-dark-primary transition-colors"
                 >
                   <FontAwesomeIcon icon={faGithub} className="text-xl" />
                   <span>GitHub</span>

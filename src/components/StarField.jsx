@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
 
-export function StarField({ count = 25000, isDark = true }) {
+export function StarField({ count = 25000 }) {
   const starField = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
@@ -17,14 +17,14 @@ export function StarField({ count = 25000, isDark = true }) {
       positions[i * 3 + 2] = radius * Math.cos(phi);
 
       // Generate random star colors (white to slightly blue/yellow)
-      const brightness = isDark ? 0.9 + Math.random() * 0.1 : 0.7 + Math.random() * 0.3;
+      const brightness = 0.9 + Math.random() * 0.1;
       colors[i * 3] = brightness * (0.9 + Math.random() * 0.1); // Red
       colors[i * 3 + 1] = brightness; // Green
       colors[i * 3 + 2] = brightness * (1 + Math.random() * 0.1); // Blue (slightly stronger)
     }
 
     return { positions, colors };
-  }, [count, isDark]);
+  }, [count]);
 
   const material = useMemo(() => {
     return new THREE.PointsMaterial({
@@ -32,11 +32,11 @@ export function StarField({ count = 25000, isDark = true }) {
       sizeAttenuation: false, // Disable size attenuation to keep stars visible
       vertexColors: true,
       transparent: true,
-      opacity: isDark ? 1 : 0.8,
+      opacity: 1,
       blending: THREE.AdditiveBlending,
       fog: false
     });
-  }, [isDark]);
+  }, []);
 
   return (
     <points>

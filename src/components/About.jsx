@@ -77,17 +77,17 @@ export default function About() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-light-background dark:bg-dark-background">
+    <div className="min-h-screen bg-dark-background">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-24">
         <div className="max-w-5xl mx-auto space-y-16">
           {/* Title Section */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent">
               Exploring Space, Protecting Earth
             </h1>
             <div className="card max-w-3xl mx-auto">
-              <p className="text-xl text-light-text/80 dark:text-dark-text/80">
+              <p className="text-xl text-dark-text/80">
                 Neo Sherxe is a team dedicated to exploring space, focusing on
                 potential threats to Earth like asteroids and other celestial
                 bodies.
@@ -97,22 +97,22 @@ export default function About() {
 
           {/* Key Points Section */}
           <div className="space-y-8">
-            <h2 className="text-3xl font-bold mb-12 text-center text-light-text dark:text-dark-text">
+            <h2 className="text-3xl font-bold mb-12 text-center text-dark-text">
               Our Mission
-              <div className="w-24 h-1 bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent mx-auto mt-4"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-dark-primary to-dark-accent mx-auto mt-4"></div>
             </h2>
             {points.map((point) => (
-              <div key={point.id} className="card group hover:border-light-primary dark:hover:border-dark-primary">
+              <div key={point.id} className="card group hover:border-dark-primary">
                 <div className="flex items-start gap-4">
                   <FontAwesomeIcon 
                     icon={point.icon} 
-                    className="text-light-primary dark:text-dark-primary mt-1" 
+                    className="text-dark-primary mt-1" 
                   />
                   <div>
-                    <h3 className="text-xl font-semibold text-light-text dark:text-dark-text">
+                    <h3 className="text-xl font-semibold text-dark-text">
                       {point.title}
                     </h3>
-                    <p className="text-lg text-light-text/80 dark:text-dark-text/80">
+                    <p className="text-lg text-dark-text/80">
                       {point.text}
                     </p>
                   </div>
@@ -123,7 +123,7 @@ export default function About() {
 
           {/* Features Section */}
           <div>
-            <h2 className="text-3xl font-bold mb-8 text-light-text dark:text-dark-text">
+            <h2 className="text-3xl font-bold mb-8 text-dark-text">
               Key Features
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -132,9 +132,9 @@ export default function About() {
                   <div className="flex items-start gap-4">
                     <FontAwesomeIcon 
                       icon={faMeteor} 
-                      className="text-light-primary dark:text-dark-primary mt-1" 
+                      className="text-dark-primary mt-1" 
                     />
-                    <p className="text-light-text/80 dark:text-dark-text/80">
+                    <p className="text-dark-text/80">
                       {feature.text}
                     </p>
                   </div>
@@ -157,7 +157,7 @@ export default function About() {
 
           {/* Team Section */}
           <div>
-            <h2 className="text-3xl font-bold mb-12 text-center text-light-text dark:text-dark-text">
+            <h2 className="text-3xl font-bold mb-12 text-center text-dark-text">
               Meet Our Team
             </h2>
             <TeamMemberCards />

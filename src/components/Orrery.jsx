@@ -23,18 +23,10 @@ import Orbit from "./Orbit";
 import { StarField } from "./StarField";
 
 const sceneColors = {
-  light: {
-    background: "#fff",
-    sun: "#ffff00",
-    ambientLight: 0.3,
-    pointLight: 3,
-  },
-  dark: {
-    background: "#000000",
-    sun: "#ffd700",
-    ambientLight: 0.2,
-    pointLight: 4,
-  },
+  background: "#000000",
+  sun: "#ffd700",
+  ambientLight: 0.2,
+  pointLight: 4,
 };
 
 const HOUR_MS = 3600 * 1000;
@@ -122,12 +114,11 @@ const Scene = React.memo(function Scene({
   showOrbits,
   onPlanetSelect,
   resetCamera,
-  isDark,
 }) {
   const { camera, gl } = useThree();
   const controlsRef = useRef();
   const positionsRef = useRef({});
-  const colors = isDark ? sceneColors.dark : sceneColors.light;
+  const colors = sceneColors;
 
   const moveCameraToObject = useCallback(
     (position) => {
@@ -264,9 +255,9 @@ const Scene = React.memo(function Scene({
 
   return (
     <>
-      <StarField count={3000} isDark={isDark} />
+      <StarField count={3000} />
 
-      <fog attach="fog" args={[isDark ? "#000000" : "#0a0f1c", 3000, 5000]} />
+      <fog attach="fog" args={["#000000", 3000, 5000]} />
 
       <OrbitControls ref={controlsRef} args={[camera, gl.domElement]} />
 
@@ -379,7 +370,6 @@ function Orrery() {
   const [showOrbits, setShowOrbits] = useState(true);
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [resetCameraFlag, setResetCameraFlag] = useState(false);
-  const isDark = true;
 
   const [editingDate, setEditingDate] = useState(false);
   const [dateText, setDateText] = useState(() => toReadableDate(new Date()));
@@ -557,13 +547,13 @@ function Orrery() {
 
   if (isLoading) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-light-background/80 dark:bg-dark-background/80 backdrop-blur-sm">
+      <div className="absolute inset-0 flex items-center justify-center bg-dark-background/80 backdrop-blur-sm">
         <div className="text-center space-y-4">
           <FontAwesomeIcon
             icon={faSpinner}
-            className="text-4xl text-light-primary dark:text-dark-primary animate-spin"
+            className="text-4xl text-dark-primary animate-spin"
           />
-          <p className="text-light-text/70 dark:text-dark-text/70">
+          <p className="text-dark-text/70">
             Loading solar system...
           </p>
         </div>
@@ -577,16 +567,16 @@ function Orrery() {
         <div className="card max-w-md mx-auto text-center space-y-4">
           <FontAwesomeIcon
             icon={faExclamationTriangle}
-            className="text-4xl text-light-danger dark:text-dark-danger"
+            className="text-4xl text-dark-danger"
           />
-          <p className="text-light-text/70 dark:text-dark-text/70">{error}</p>
+          <p className="text-dark-text/70">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-[100vh-80px] bg-light-background dark:bg-dark-background mt-0">
+    <div className="relative w-full h-[100vh-80px] bg-dark-background mt-0">
       <div className="absolute inset-0 z-10">
         <Canvas
           dpr={[1, 2]}
@@ -612,7 +602,7 @@ function Orrery() {
             powerPreference: "high-performance",
           }}
           style={{
-            background: isDark ? "#030712" : "#0a0f1c",
+            background: "#030712",
             height: "100vh",
             position: "fixed",
             top: 0,
@@ -629,7 +619,6 @@ function Orrery() {
               showOrbits={showOrbits}
               onPlanetSelect={handlePlanetSelect}
               resetCamera={resetCameraFlag}
-              isDark={isDark}
             />
           </Suspense>
         </Canvas>

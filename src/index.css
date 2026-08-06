@@ -1,18 +1,6 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
-  --color-light-primary: #7B3FF3;
-  --color-light-secondary: #4CC9F0;
-  --color-light-background: #E8ECF7;
-  --color-light-surface: #FFFFFF;
-  --color-light-text: #2D3748;
-  --color-light-accent: #FF61D3;
-  --color-light-success: #00CF8A;
-  --color-light-warning: #FFB84D;
-  --color-light-danger: #FF5367;
-
   --color-dark-primary: #9D4EDD;
   --color-dark-secondary: #2A9DF4;
   --color-dark-background: #080B1A;
@@ -48,22 +36,12 @@
 }
 
 :root {
-  --color-primary: #7B3FF3;
-  --color-secondary: #4CC9F0;
-  --color-background: #E8ECF7;
-  --color-surface: #FFFFFF;
-  --color-text: #2D3748;
-  background-color: #E8ECF7; /* Light mode default */
-}
-
-[data-theme="dark"],
-:root[class~="dark"] {
   --color-primary: #9D4EDD;
   --color-secondary: #2A9DF4;
   --color-background: #080B1A;
   --color-surface: #141E3C;
   --color-text: #E2E8F0;
-  background-color: #080B1A; /* Dark mode default */
+  background-color: #080B1A;
 }
 
 html {

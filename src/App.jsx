@@ -56,11 +56,11 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text">
+      <div className="min-h-screen bg-dark-background text-dark-text">
         <nav className="fixed w-full top-0 z-40 bg-gradient-to-b from-black/70 via-black/30 to-transparent">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
-              <span className="text-xl font-bold bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent z-50 relative">
+              <span className="text-xl font-bold bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent z-50 relative">
                 NEO SPHERXE
               </span>
 
@@ -104,16 +104,14 @@ function App() {
             >
               {/* Backdrop: removed extra translate to reduce jitter */}
               <div
-                className="absolute inset-0 bg-gradient-to-br from-light-background/98 via-light-background/95 to-light-primary/10
-                           dark:from-dark-background/98 dark:via-dark-background/95 dark:to-dark-primary/10
+                className="absolute inset-0 bg-gradient-to-br from-dark-background/98 via-dark-background/95 to-dark-primary/10
                            backdrop-blur-lg"
                 onClick={() => setIsOpen(false)}
               />
 
               {/* Menu Content */}
               <div
-                className={`absolute inset-y-0 left-0 w-full bg-light-background/95 
-                           dark:bg-dark-background/95 flex flex-col
+                className={`absolute inset-y-0 left-0 w-full bg-dark-background/95 flex flex-col
                            transform transition-all duration-300 ease-out h-[100dvh]
                            ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
               >
@@ -127,8 +125,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
-                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
+                               ? "bg-dark-text/90 text-dark-background"
+                               : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -145,8 +143,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
-                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
+                               ? "bg-dark-text/90 text-dark-background"
+                               : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -163,8 +161,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
-                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
+                               ? "bg-dark-text/90 text-dark-background"
+                               : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -181,8 +179,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
-                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
+                               ? "bg-dark-text/90 text-dark-background"
+                               : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -199,8 +197,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
-                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
+                               ? "bg-dark-text/90 text-dark-background"
+                               : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}

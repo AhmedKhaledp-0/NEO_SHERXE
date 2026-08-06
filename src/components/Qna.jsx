@@ -65,15 +65,15 @@ export default function Qna() {
   };
 
   return (
-    <div className="min-h-screen bg-light-background dark:bg-dark-background">
+    <div className="min-h-screen bg-dark-background">
       <div className="container mx-auto px-4 py-24">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent">
               Frequently Asked Questions
             </h1>
-            <p className="text-xl text-light-text/70 dark:text-dark-text/70">
+            <p className="text-xl text-dark-text/70">
               Everything you need to know about NEO SHERXE
             </p>
           </div>
@@ -83,18 +83,18 @@ export default function Qna() {
             {qaData.map((item, index) => (
               <div
                 key={index}
-                className="card hover:border-light-primary/50 dark:hover:border-dark-primary/50 transition-all duration-300"
+                className="card hover:border-dark-primary/50 transition-all duration-300"
               >
                 <button
                   onClick={() => toggleItem(index)}
                   className="w-full flex items-center justify-between p-4 text-left"
                 >
-                  <h3 className="text-xl font-semibold text-light-text dark:text-dark-text">
+                  <h3 className="text-xl font-semibold text-dark-text">
                     {item.question}
                   </h3>
                   <FontAwesomeIcon
                     icon={openItem === index ? faChevronUp : faChevronDown}
-                    className={`transform transition-transform duration-300 text-light-primary dark:text-dark-primary ${
+                    className={`transform transition-transform duration-300 text-dark-primary ${
                       openItem === index ? 'rotate-180' : ''
                     }`}
                   />
@@ -105,7 +105,7 @@ export default function Qna() {
                     openItem === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
-                  <div className="p-4 pt-0 text-light-text/70 dark:text-dark-text/70 prose prose-lg">
+                  <div className="p-4 pt-0 text-dark-text/70 prose prose-lg">
                     {typeof item.answer === 'string' ? (
                       item.answer.split('\n').map((line, i) => (
                         <p key={i} className="mb-4">
