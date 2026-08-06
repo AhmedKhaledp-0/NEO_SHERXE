@@ -11,7 +11,7 @@ const AU_TO_M = 1.496e11;
 function meanMotion(semiMajorAxisAU) {
   const semiMajorInM = semiMajorAxisAU * AU_TO_M;
   const T_seconds = Math.sqrt(
-    (4 * Math.PI * Math.PI * semiMajorInM ** 3) / (G * SUN_MASS)
+    (4 * Math.PI * Math.PI * semiMajorInM ** 3) / (G * SUN_MASS),
   );
   return (2 * Math.PI) / (T_seconds / 86400);
 }
@@ -52,7 +52,7 @@ export function getBodyPosition(constants, timeMs, out) {
   out.set(
     r * (cosOmega * coswv - sinOmega * sinwv * cosi),
     r * (sinOmega * coswv + cosOmega * sinwv * cosi),
-    r * sinwv * Math.sin(i)
+    r * sinwv * Math.sin(i),
   );
 
   return out;

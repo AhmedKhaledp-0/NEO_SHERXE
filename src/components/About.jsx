@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faArrowRight, 
-  faMeteor, 
-  faRocket, 
+import {
+  faArrowRight,
+  faMeteor,
+  faRocket,
   faExclamationTriangle,
   faGlobe,
   faUserAstronaut,
-  faDatabase 
+  faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMemberCards from "./TeamMemberCards";
 
@@ -102,19 +102,20 @@ export default function About() {
               <div className="w-24 h-1 bg-gradient-to-r from-dark-primary to-dark-accent mx-auto mt-4"></div>
             </h2>
             {points.map((point) => (
-              <div key={point.id} className="card group hover:border-dark-primary">
+              <div
+                key={point.id}
+                className="card group hover:border-dark-primary"
+              >
                 <div className="flex items-start gap-4">
-                  <FontAwesomeIcon 
-                    icon={point.icon} 
-                    className="text-dark-primary mt-1" 
+                  <FontAwesomeIcon
+                    icon={point.icon}
+                    className="text-dark-primary mt-1"
                   />
                   <div>
                     <h3 className="text-xl font-semibold text-dark-text">
                       {point.title}
                     </h3>
-                    <p className="text-lg text-dark-text/80">
-                      {point.text}
-                    </p>
+                    <p className="text-lg text-dark-text/80">{point.text}</p>
                   </div>
                 </div>
               </div>
@@ -130,13 +131,11 @@ export default function About() {
               {features.map((feature) => (
                 <div key={feature.id} className="card group">
                   <div className="flex items-start gap-4">
-                    <FontAwesomeIcon 
-                      icon={faMeteor} 
-                      className="text-dark-primary mt-1" 
+                    <FontAwesomeIcon
+                      icon={faMeteor}
+                      className="text-dark-primary mt-1"
                     />
-                    <p className="text-dark-text/80">
-                      {feature.text}
-                    </p>
+                    <p className="text-dark-text/80">{feature.text}</p>
                   </div>
                 </div>
               ))}
@@ -146,7 +145,7 @@ export default function About() {
           {/* CTA Section */}
           <div className="text-center">
             <button
-              onClick={() => navigate('/live')}
+              onClick={() => navigate("/live")}
               className="btn-primary inline-flex items-center justify-center gap-3"
             >
               <FontAwesomeIcon icon={faRocket} />

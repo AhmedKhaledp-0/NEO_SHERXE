@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import * as THREE from 'three';
+import { useEffect } from "react";
+import * as THREE from "three";
 
 export function usePerformance(gl) {
   useEffect(() => {
@@ -10,7 +10,7 @@ export function usePerformance(gl) {
     gl.setSize(window.innerWidth, window.innerHeight);
     gl.shadowMap.enabled = false; // Disable shadows for better performance
     gl.powerPreference = "high-performance";
-    
+
     // Enable texture compression
     gl.capabilities.maxTextureSize = 2048;
     gl.capabilities.isWebGL2 = true;

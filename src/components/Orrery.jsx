@@ -1,10 +1,14 @@
-import React, { Fragment, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  Fragment,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import {
-  OrbitControls,
-  AdaptiveDpr,
-  AdaptiveEvents,
-} from "@react-three/drei";
+import { OrbitControls, AdaptiveDpr, AdaptiveEvents } from "@react-three/drei";
 import * as THREE from "three";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -36,22 +40,10 @@ const MONTH_MS = 30 * DAY_MS;
 
 const TIME_WARP_PRESETS = [
   ["1x", 1],
-  ...[...Array(23)].map((_, i) => [
-    `${i + 1}h/s`,
-    ((i + 1) * HOUR_MS) / 1000,
-  ]),
-  ...[...Array(6)].map((_, i) => [
-    `${i + 1}d/s`,
-    ((i + 1) * DAY_MS) / 1000,
-  ]),
-  ...[...Array(3)].map((_, i) => [
-    `${i + 1}w/s`,
-    ((i + 1) * WEEK_MS) / 1000,
-  ]),
-  ...[...Array(6)].map((_, i) => [
-    `${i + 1}m/s`,
-    ((i + 1) * MONTH_MS) / 1000,
-  ]),
+  ...[...Array(23)].map((_, i) => [`${i + 1}h/s`, ((i + 1) * HOUR_MS) / 1000]),
+  ...[...Array(6)].map((_, i) => [`${i + 1}d/s`, ((i + 1) * DAY_MS) / 1000]),
+  ...[...Array(3)].map((_, i) => [`${i + 1}w/s`, ((i + 1) * WEEK_MS) / 1000]),
+  ...[...Array(6)].map((_, i) => [`${i + 1}m/s`, ((i + 1) * MONTH_MS) / 1000]),
 ];
 
 const SLIDER_MAX = TIME_WARP_PRESETS.length - 1;
@@ -79,7 +71,7 @@ function formatSpeed(speed) {
   const sign = speed < 0 ? "-" : "";
   const magnitude = Math.abs(speed);
   const preset = TIME_WARP_PRESETS.find(
-    ([, m]) => Math.abs(magnitude - m) / m < 0.001
+    ([, m]) => Math.abs(magnitude - m) / m < 0.001,
   );
   if (preset) return `${sign}${preset[0]}`;
   return `${sign}${Math.round(magnitude)}x`;
@@ -132,14 +124,14 @@ const Scene = React.memo(function Scene({
       const distanceToObject = position.length();
       const cameraDistance = Math.min(
         Math.max(distanceToObject * 0.3, 20),
-        200
+        200,
       );
       const angle = Math.PI / 6;
 
       const newCameraPosition = new THREE.Vector3(
         position.x + Math.cos(angle) * cameraDistance,
         position.y + Math.sin(angle) * cameraDistance,
-        position.z + cameraDistance * 0.3
+        position.z + cameraDistance * 0.3,
       );
 
       const duration = 1000;
@@ -171,7 +163,7 @@ const Scene = React.memo(function Scene({
 
       updateCamera();
     },
-    [camera]
+    [camera],
   );
 
   const resetCameraView = useCallback(() => {
@@ -226,7 +218,7 @@ const Scene = React.memo(function Scene({
         moveCameraToObject(position);
       }
     },
-    [visibleBodies, onPlanetSelect, moveCameraToObject]
+    [visibleBodies, onPlanetSelect, moveCameraToObject],
   );
 
   const handleNEOSelect = useCallback(
@@ -234,7 +226,7 @@ const Scene = React.memo(function Scene({
       onPlanetSelect(body);
       moveCameraToObject(position);
     },
-    [onPlanetSelect, moveCameraToObject]
+    [onPlanetSelect, moveCameraToObject],
   );
 
   const { majorAndDwarf, extended, bulkNEOs } = useMemo(() => {
@@ -415,7 +407,7 @@ function Orrery() {
     const updateTime = (currentTime) => {
       const deltaTime = currentTime - lastUpdateTime.current;
       simTimeRef.current = new Date(
-        simTimeRef.current.getTime() + deltaTime * speed
+        simTimeRef.current.getTime() + deltaTime * speed,
       );
       lastUpdateTime.current = currentTime;
 
@@ -517,7 +509,7 @@ function Orrery() {
       setCelestialBodiesData(processedData);
     } catch {
       setError(
-        "Failed to process celestial body data. Please try again later."
+        "Failed to process celestial body data. Please try again later.",
       );
     } finally {
       setIsLoading(false);
@@ -533,7 +525,7 @@ function Orrery() {
           (body.type === "PHA" && showPHAs) ||
           (body.type === "NEA" && showNEAs) ||
           (body.type === "PHAEX" && showPHAsEX) ||
-          (body.type === "NEAEX" && showNEAsEX)
+          (body.type === "NEAEX" && showNEAsEX),
       ),
     [
       celestialBodiesData,
@@ -542,7 +534,7 @@ function Orrery() {
       showNEAs,
       showPHAsEX,
       showNEAsEX,
-    ]
+    ],
   );
 
   if (isLoading) {
@@ -553,9 +545,7 @@ function Orrery() {
             icon={faSpinner}
             className="text-4xl text-dark-primary animate-spin"
           />
-          <p className="text-dark-text/70">
-            Loading solar system...
-          </p>
+          <p className="text-dark-text/70">Loading solar system...</p>
         </div>
       </div>
     );

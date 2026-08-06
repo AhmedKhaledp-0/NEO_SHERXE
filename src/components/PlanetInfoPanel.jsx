@@ -1,4 +1,11 @@
-import { faClose, faInfoCircle, faChartLine, faGlobe, faStar, faRuler } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClose,
+  faInfoCircle,
+  faChartLine,
+  faGlobe,
+  faStar,
+  faRuler,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
@@ -6,8 +13,10 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
   const [activeTab, setActiveTab] = useState(0);
   if (!planet) return null;
 
-  const formatValue = (value, decimals = 3, unit = '') => {
-    return typeof value === 'number' ? `${value.toFixed(decimals)}${unit}` : 'N/A';
+  const formatValue = (value, decimals = 3, unit = "") => {
+    return typeof value === "number"
+      ? `${value.toFixed(decimals)}${unit}`
+      : "N/A";
   };
 
   return (
@@ -18,7 +27,7 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
           <h2 className="text-2xl font-bold text-white">
             {planet.targetname.split(" ")[0]}
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="p-2 text-white hover:bg-white/10 rounded-full border border-white/20 transition-colors"
           >
@@ -26,26 +35,27 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
           </button>
         </div>
         <p className="text-white/70 text-sm">
-          {planet.type || 'Celestial Body'} • ID: {planet.id || 'N/A'}
+          {planet.type || "Celestial Body"} • ID: {planet.id || "N/A"}
         </p>
       </div>
 
       {/* Tabs */}
       <div>
         <div className="flex border-b border-white/20">
-          {['Overview', 'Orbital', 'Position'].map((tab, index) => (
+          {["Overview", "Orbital", "Position"].map((tab, index) => (
             <button
               key={tab}
               onClick={() => setActiveTab(index)}
               className={`flex-1 py-3 px-4 text-sm font-medium transition-colors
-                ${activeTab === index 
-                  ? 'text-white border-b-2 border-white' 
-                  : 'text-white/50 hover:text-white'
+                ${
+                  activeTab === index
+                    ? "text-white border-b-2 border-white"
+                    : "text-white/50 hover:text-white"
                 }`}
             >
-              <FontAwesomeIcon 
-                icon={[faInfoCircle, faChartLine, faGlobe][index]} 
-                className="mr-2" 
+              <FontAwesomeIcon
+                icon={[faInfoCircle, faChartLine, faGlobe][index]}
+                className="mr-2"
               />
               {tab}
             </button>
@@ -60,17 +70,25 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
                 icon={faStar}
                 title="Basic Information"
                 items={[
-                  { label: "Object Type", value: planet.type || 'N/A' },
-                  { label: "Body ID", value: planet.id || 'N/A' },
-                  { label: "Epoch", value: planet.datetime_str || 'N/A' }
+                  { label: "Object Type", value: planet.type || "N/A" },
+                  { label: "Body ID", value: planet.id || "N/A" },
+                  { label: "Epoch", value: planet.datetime_str || "N/A" },
                 ]}
               />
               <DataSection
                 icon={faRuler}
                 title="Physical Properties"
                 items={[
-                  { label: "Distance from Sun", value: formatValue(planet.a, 3, ' AU') },
-                  { label: "Orbital Period", value: planet.P ? formatValue(planet.P, 2, ' years') : 'N/A' }
+                  {
+                    label: "Distance from Sun",
+                    value: formatValue(planet.a, 3, " AU"),
+                  },
+                  {
+                    label: "Orbital Period",
+                    value: planet.P
+                      ? formatValue(planet.P, 2, " years")
+                      : "N/A",
+                  },
                 ]}
               />
             </div>
@@ -81,12 +99,24 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
               icon={faChartLine}
               title="Orbital Elements"
               items={[
-                { label: "Semi-major axis", value: formatValue(planet.a, 4, ' AU') },
+                {
+                  label: "Semi-major axis",
+                  value: formatValue(planet.a, 4, " AU"),
+                },
                 { label: "Eccentricity", value: formatValue(planet.e, 6) },
-                { label: "Inclination", value: formatValue(planet.incl, 2, '°') },
-                { label: "Asc. Node", value: formatValue(planet.Omega, 2, '°') },
-                { label: "Arg. of Perihelion", value: formatValue(planet.w, 2, '°') },
-                { label: "Mean Anomaly", value: formatValue(planet.M, 2, '°') }
+                {
+                  label: "Inclination",
+                  value: formatValue(planet.incl, 2, "°"),
+                },
+                {
+                  label: "Asc. Node",
+                  value: formatValue(planet.Omega, 2, "°"),
+                },
+                {
+                  label: "Arg. of Perihelion",
+                  value: formatValue(planet.w, 2, "°"),
+                },
+                { label: "Mean Anomaly", value: formatValue(planet.M, 2, "°") },
               ]}
             />
           )}
@@ -141,14 +171,14 @@ const VectorDisplay = ({ title, x, y, z, precision = 6 }) => (
     <span className="text-sm font-medium text-white">{title}</span>
     <div className="grid grid-cols-3 gap-2 bg-white/10 p-3 rounded">
       {[
-        { label: 'X', value: x },
-        { label: 'Y', value: y },
-        { label: 'Z', value: z }
+        { label: "X", value: x },
+        { label: "Y", value: y },
+        { label: "Z", value: z },
       ].map(({ label, value }) => (
         <div key={label} className="text-center">
           <span className="text-xs text-white/50">{label}</span>
           <p className="font-medium text-white">
-            {typeof value === 'number' ? value.toFixed(precision) : 'N/A'}
+            {typeof value === "number" ? value.toFixed(precision) : "N/A"}
           </p>
         </div>
       ))}

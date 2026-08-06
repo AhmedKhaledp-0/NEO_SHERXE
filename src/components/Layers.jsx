@@ -41,9 +41,7 @@ const LayerButton = ({ active, onClick, icon, label, count }) => (
     <div className="relative">
       <div
         className={`w-4 h-4 rounded border-2 transition-colors ${
-          active
-            ? "border-white bg-white"
-            : "border-white/20"
+          active ? "border-white bg-white" : "border-white/20"
         }`}
       >
         {active && (
@@ -139,10 +137,7 @@ const AnimatedLayers = ({
   ];
 
   return (
-    <div
-      className="fixed bottom-20 right-4 z-[800]"
-      aria-label="layer toggle"
-    >
+    <div className="fixed bottom-20 right-4 z-[800]" aria-label="layer toggle">
       <div
         className={`relative bg-black/30 backdrop-blur-md shadow-lg border border-white/20 overflow-hidden ${
           isOpen ? "w-80 rounded-2xl" : "w-12 h-12 rounded-full"

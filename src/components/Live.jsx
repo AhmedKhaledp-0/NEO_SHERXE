@@ -1,11 +1,11 @@
 import React from "react";
 import Orrery from "./Orrery";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faInfoCircle, 
-  faDownload, 
+import {
+  faInfoCircle,
+  faDownload,
   faShare,
-  faExpand
+  faExpand,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Live() {
@@ -32,9 +32,10 @@ export default function Live() {
               Interactive Solar System
             </h2>
             <p className="text-sm text-dark-text/70 mb-4">
-              Explore celestial bodies in real-time. Use mouse to rotate, scroll to zoom, and click objects for details.
+              Explore celestial bodies in real-time. Use mouse to rotate, scroll
+              to zoom, and click objects for details.
             </p>
-            <button 
+            <button
               onClick={() => setShowInfo(false)}
               className="text-sm text-dark-primary hover:underline"
             >
@@ -46,25 +47,19 @@ export default function Live() {
 
       {/* Controls */}
       <div className="absolute top-20 right-4 z-30 flex flex-col gap-2">
-        <button 
+        <button
           className="glass-card p-2 hover:bg-dark-primary/10 transition-colors"
           onClick={toggleFullscreen}
           title="Toggle fullscreen"
         >
-          <FontAwesomeIcon 
-            icon={faExpand} 
-            className="text-dark-primary"
-          />
+          <FontAwesomeIcon icon={faExpand} className="text-dark-primary" />
         </button>
-        <button 
+        <button
           className="glass-card p-2 hover:bg-dark-primary/10 transition-colors"
           onClick={() => setShowInfo(!showInfo)}
           title="Toggle info"
         >
-          <FontAwesomeIcon 
-            icon={faInfoCircle} 
-            className="text-dark-primary"
-          />
+          <FontAwesomeIcon icon={faInfoCircle} className="text-dark-primary" />
         </button>
       </div>
 
@@ -76,13 +71,13 @@ export default function Live() {
       {/* Bottom Controls */}
       <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-30">
         <div className="glass-card px-4 py-2 flex items-center gap-4">
-          <button 
+          <button
             className="text-dark-primary hover:opacity-75 transition-opacity"
             title="Share view"
           >
             <FontAwesomeIcon icon={faShare} />
           </button>
-          <button 
+          <button
             className="text-dark-primary hover:opacity-75 transition-opacity"
             title="Download data"
           >

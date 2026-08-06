@@ -21,7 +21,13 @@ const RAYCAST_INTERVAL_MS = 100;
 
 const IDENTITY_MATRIX = new THREE.Matrix4();
 
-function TrackingLabel({ name, constants, timeRef, positionsRef, offset = 0.8 }) {
+function TrackingLabel({
+  name,
+  constants,
+  timeRef,
+  positionsRef,
+  offset = 0.8,
+}) {
   const groupRef = useRef();
   const tempPosition = useMemo(() => new THREE.Vector3(), []);
 
@@ -36,7 +42,7 @@ function TrackingLabel({ name, constants, timeRef, positionsRef, offset = 0.8 })
       groupRef.current.position.set(
         tempPosition.x * AU_SCALE,
         tempPosition.y * AU_SCALE + offset,
-        tempPosition.z * AU_SCALE
+        tempPosition.z * AU_SCALE,
       );
     }
   });
@@ -59,8 +65,8 @@ function TrackingLabel({ name, constants, timeRef, positionsRef, offset = 0.8 })
 }
 
 function NEOInstances({ bodies, timeRef, positionsRef, onSelect }) {
-  const { instancedMesh, constants, names, raycastPositions, count } = useMemo(
-    () => {
+  const { instancedMesh, constants, names, raycastPositions, count } =
+    useMemo(() => {
       const count = bodies.length;
       const geometry = new THREE.SphereGeometry(0.4, 6, 4);
 
@@ -103,39 +109,39 @@ function NEOInstances({ bodies, timeRef, positionsRef, onSelect }) {
 
       geometry.setAttribute(
         "aElement",
-        new THREE.InstancedBufferAttribute(aArr, 1)
+        new THREE.InstancedBufferAttribute(aArr, 1),
       );
       geometry.setAttribute(
         "eElement",
-        new THREE.InstancedBufferAttribute(eArr, 1)
+        new THREE.InstancedBufferAttribute(eArr, 1),
       );
       geometry.setAttribute(
         "iElement",
-        new THREE.InstancedBufferAttribute(iArr, 1)
+        new THREE.InstancedBufferAttribute(iArr, 1),
       );
       geometry.setAttribute(
         "OmegaElement",
-        new THREE.InstancedBufferAttribute(OmegaArr, 1)
+        new THREE.InstancedBufferAttribute(OmegaArr, 1),
       );
       geometry.setAttribute(
         "omegaElement",
-        new THREE.InstancedBufferAttribute(omegaArr, 1)
+        new THREE.InstancedBufferAttribute(omegaArr, 1),
       );
       geometry.setAttribute(
         "M0Element",
-        new THREE.InstancedBufferAttribute(M0Arr, 1)
+        new THREE.InstancedBufferAttribute(M0Arr, 1),
       );
       geometry.setAttribute(
         "nElement",
-        new THREE.InstancedBufferAttribute(nArr, 1)
+        new THREE.InstancedBufferAttribute(nArr, 1),
       );
       geometry.setAttribute(
         "scaleElement",
-        new THREE.InstancedBufferAttribute(scaleArr, 1)
+        new THREE.InstancedBufferAttribute(scaleArr, 1),
       );
       geometry.setAttribute(
         "colorElement",
-        new THREE.InstancedBufferAttribute(colorArr, 3)
+        new THREE.InstancedBufferAttribute(colorArr, 3),
       );
 
       const material = new THREE.ShaderMaterial({
@@ -164,7 +170,7 @@ function NEOInstances({ bodies, timeRef, positionsRef, onSelect }) {
           sphere.center.set(
             raycastPositions[i * 3],
             raycastPositions[i * 3 + 1],
-            raycastPositions[i * 3 + 2]
+            raycastPositions[i * 3 + 2],
           );
           sphere.center.applyMatrix4(this.matrixWorld);
           sphere.radius = 0.4 * scaleArr[i];
@@ -180,16 +186,13 @@ function NEOInstances({ bodies, timeRef, positionsRef, onSelect }) {
       };
 
       return { instancedMesh: mesh, constants, names, raycastPositions, count };
-    },
-    [bodies]
-  );
+    }, [bodies]);
 
   const tempPosition = useMemo(() => new THREE.Vector3(), []);
 
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const hoveredName = hoveredIndex >= 0 ? names[hoveredIndex] : null;
-  const hoveredConstants =
-    hoveredIndex >= 0 ? constants[hoveredIndex] : null;
+  const hoveredConstants = hoveredIndex >= 0 ? constants[hoveredIndex] : null;
 
   useEffect(() => {
     if (count === 0) return;
@@ -240,13 +243,13 @@ function NEOInstances({ bodies, timeRef, positionsRef, onSelect }) {
           ? new THREE.Vector3(
               pos.x * AU_SCALE,
               pos.y * AU_SCALE,
-              pos.z * AU_SCALE
+              pos.z * AU_SCALE,
             )
           : new THREE.Vector3(
               raycastPositions[id * 3],
               raycastPositions[id * 3 + 1],
-              raycastPositions[id * 3 + 2]
-            )
+              raycastPositions[id * 3 + 2],
+            ),
       );
     }
   };

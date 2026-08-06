@@ -1,17 +1,17 @@
-import { useMemo } from 'react';
-import * as THREE from 'three';
+import { useMemo } from "react";
+import * as THREE from "three";
 
 export function StarField({ count = 25000 }) {
   const starField = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
-    
+
     for (let i = 0; i < count; i++) {
       // Better spherical distribution
       const radius = 2000 + Math.random() * 1000;
       const theta = 2 * Math.PI * Math.random();
       const phi = Math.acos(2 * Math.random() - 1);
-      
+
       positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
       positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
       positions[i * 3 + 2] = radius * Math.cos(phi);
@@ -34,7 +34,7 @@ export function StarField({ count = 25000 }) {
       transparent: true,
       opacity: 1,
       blending: THREE.AdditiveBlending,
-      fog: false
+      fog: false,
     });
   }, []);
 

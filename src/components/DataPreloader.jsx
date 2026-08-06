@@ -19,9 +19,12 @@ const DataPreloader = () => {
     });
 
     // Set up an interval to refresh the data in the background every hour
-    const intervalId = setInterval(() => {
-      queryClient.invalidateQueries({ queryKey: ["riskData"] });
-    }, 1000 * 60 * 60); // Every hour
+    const intervalId = setInterval(
+      () => {
+        queryClient.invalidateQueries({ queryKey: ["riskData"] });
+      },
+      1000 * 60 * 60,
+    ); // Every hour
 
     return () => clearInterval(intervalId);
   }, [queryClient]);

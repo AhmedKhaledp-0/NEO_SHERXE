@@ -42,9 +42,7 @@ export default function RiskLevel() {
             icon={faSpinner}
             className="text-4xl text-dark-primary animate-spin"
           />
-          <p className="text-dark-text/70">
-            Loading data...
-          </p>
+          <p className="text-dark-text/70">Loading data...</p>
         </div>
       </div>
     );
@@ -58,9 +56,7 @@ export default function RiskLevel() {
             icon={faExclamationTriangle}
             className="text-4xl text-dark-danger"
           />
-          <p className="text-dark-text/70">
-            Error: {error.message}
-          </p>
+          <p className="text-dark-text/70">Error: {error.message}</p>
         </div>
       </div>
     );
@@ -87,7 +83,7 @@ export default function RiskLevel() {
               <div
                 key={level}
                 className={`px-4 py-2 rounded-full text-sm font-medium ${getRiskColor(
-                  level
+                  level,
                 )}`}
               >
                 {level}
@@ -156,14 +152,14 @@ export default function RiskLevel() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getRiskColor(
-                              risk_level
+                              risk_level,
                             )}`}
                           >
                             {risk_level.toUpperCase()}
                           </span>
                         </td>
                       </tr>
-                    )
+                    ),
                   )}
                 </tbody>
               </table>

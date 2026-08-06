@@ -86,7 +86,7 @@ function App() {
                 ) : (
                   <button
                     onClick={toggleMenu}
-                  className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/20 text-white hover:bg-white/10 transition-all duration-200 z-50 relative"
+                    className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/20 text-white hover:bg-white/10 transition-all duration-200 z-50 relative"
                   >
                     <FontAwesomeIcon icon={isOpen ? faTimes : faBars} />
                   </button>
@@ -125,8 +125,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-dark-text/90 text-dark-background"
-                               : "hover:bg-dark-text/10"
+                             ? "bg-dark-text/90 text-dark-background"
+                             : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -143,8 +143,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-dark-text/90 text-dark-background"
-                               : "hover:bg-dark-text/10"
+                             ? "bg-dark-text/90 text-dark-background"
+                             : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -161,8 +161,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-dark-text/90 text-dark-background"
-                               : "hover:bg-dark-text/10"
+                             ? "bg-dark-text/90 text-dark-background"
+                             : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -179,8 +179,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-dark-text/90 text-dark-background"
-                               : "hover:bg-dark-text/10"
+                             ? "bg-dark-text/90 text-dark-background"
+                             : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -197,8 +197,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                               ? "bg-dark-text/90 text-dark-background"
-                               : "hover:bg-dark-text/10"
+                             ? "bg-dark-text/90 text-dark-background"
+                             : "hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}

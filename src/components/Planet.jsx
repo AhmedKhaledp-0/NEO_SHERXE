@@ -3,7 +3,11 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Html, useGLTF } from "@react-three/drei";
 import { Detailed } from "@react-three/drei";
-import { precomputeConstants, getBodyPosition, AU_SCALE } from "../utilities/kepler";
+import {
+  precomputeConstants,
+  getBodyPosition,
+  AU_SCALE,
+} from "../utilities/kepler";
 
 const planetConfig = {
   "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6" },
@@ -29,7 +33,7 @@ const PlanetModel = ({ planetId, size, material }) => {
   const { scene } = useGLTF(
     `/models/${planetId.split(" ")[0].toLowerCase()}.glb`,
     false,
-    false
+    false,
   );
 
   return (
@@ -59,10 +63,8 @@ function Planet({
   const meshRef = useRef();
   const isMainPlanet = id >= 1 && id <= 9;
   const [hovered, setHovered] = useState(false);
-  const config =
-    planetConfig[planetId] ||
-    typeConfig[type] ||
-    { size: 0.1, color: "#ffffff" };
+  const config = planetConfig[planetId] ||
+    typeConfig[type] || { size: 0.1, color: "#ffffff" };
 
   const constants = useMemo(
     () =>
@@ -81,7 +83,7 @@ function Planet({
       longitude_of_ascending_node,
       argument_of_perifocus,
       mean_motion,
-    ]
+    ],
   );
 
   const geometries = useMemo(
@@ -90,7 +92,7 @@ function Planet({
       medium: new THREE.SphereGeometry(config.size, 24, 16),
       low: new THREE.SphereGeometry(config.size, 12, 8),
     }),
-    [config.size]
+    [config.size],
   );
 
   const materials = useMemo(
@@ -113,7 +115,7 @@ function Planet({
         opacity: 1,
       }),
     }),
-    [config.color]
+    [config.color],
   );
 
   const tempPosition = useMemo(() => new THREE.Vector3(), []);
@@ -123,7 +125,7 @@ function Planet({
     meshRef.current.position.set(
       tempPosition.x * AU_SCALE,
       tempPosition.y * AU_SCALE,
-      tempPosition.z * AU_SCALE
+      tempPosition.z * AU_SCALE,
     );
     meshRef.current.scale.setScalar(hovered ? 1.1 : 1);
     if (positionsRef.current) {

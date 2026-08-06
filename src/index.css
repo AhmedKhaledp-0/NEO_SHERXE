@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-dark-primary: #9D4EDD;
-  --color-dark-secondary: #2A9DF4;
-  --color-dark-background: #080B1A;
-  --color-dark-surface: #141E3C;
-  --color-dark-text: #E2E8F0;
-  --color-dark-accent: #FF38BC;
-  --color-dark-success: #00B377;
-  --color-dark-warning: #FF9F1C;
-  --color-dark-danger: #E63946;
+  --color-dark-primary: #9d4edd;
+  --color-dark-secondary: #2a9df4;
+  --color-dark-background: #080b1a;
+  --color-dark-surface: #141e3c;
+  --color-dark-text: #e2e8f0;
+  --color-dark-accent: #ff38bc;
+  --color-dark-success: #00b377;
+  --color-dark-warning: #ff9f1c;
+  --color-dark-danger: #e63946;
 
   --spacing-18: 4.5rem;
   --spacing-88: 22rem;
@@ -26,7 +26,8 @@
   }
 
   @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0px);
     }
     50% {
@@ -36,12 +37,12 @@
 }
 
 :root {
-  --color-primary: #9D4EDD;
-  --color-secondary: #2A9DF4;
-  --color-background: #080B1A;
-  --color-surface: #141E3C;
-  --color-text: #E2E8F0;
-  background-color: #080B1A;
+  --color-primary: #9d4edd;
+  --color-secondary: #2a9df4;
+  --color-background: #080b1a;
+  --color-surface: #141e3c;
+  --color-text: #e2e8f0;
+  background-color: #080b1a;
 }
 
 html {

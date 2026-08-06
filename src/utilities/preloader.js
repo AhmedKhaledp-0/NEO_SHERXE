@@ -5,7 +5,7 @@ export const fetchRiskData = async () => {
     .split("T")[0];
 
   const response = await fetch(
-    `https://risk-level-sknw.vercel.app/api/phas/${today}/${tomorrow}`
+    `https://risk-level-sknw.vercel.app/api/phas/${today}/${tomorrow}`,
   );
 
   if (!response.ok) {
@@ -17,8 +17,8 @@ export const fetchRiskData = async () => {
   return data
     .filter((obj) =>
       ["low", "medium", "high", "critical"].includes(
-        obj.risk_level.toLowerCase()
-      )
+        obj.risk_level.toLowerCase(),
+      ),
     )
     .sort((a, b) => {
       const priorityDiff =

@@ -47,7 +47,7 @@ function Orbit({
     const basePoints = 360;
     const numPoints = Math.min(
       Math.ceil(basePoints * (1 + eccentricity * 2)),
-      720
+      720,
     );
     const orbitPoints = [];
 
@@ -108,20 +108,20 @@ function Orbit({
     const lineGeometry = new THREE.BufferGeometry();
     lineGeometry.setAttribute(
       "position",
-      new THREE.BufferAttribute(linePositions, 3)
+      new THREE.BufferAttribute(linePositions, 3),
     );
 
     let tubeGeometry = null;
     if (orbitType === "normal") {
       const curve = new THREE.CatmullRomCurve3(
-        points.map((p) => p.clone().multiplyScalar(AU_SCALE))
+        points.map((p) => p.clone().multiplyScalar(AU_SCALE)),
       );
       tubeGeometry = new THREE.TubeGeometry(
         curve,
         Math.min(points.length, 256),
         0.5,
         4,
-        false
+        false,
       );
     }
 
@@ -131,7 +131,7 @@ function Orbit({
       tailGeometry = new THREE.BufferGeometry();
       tailGeometry.setAttribute(
         "position",
-        new THREE.BufferAttribute(tailPositions, 3)
+        new THREE.BufferAttribute(tailPositions, 3),
       );
       tailGeometry.setDrawRange(0, TAIL_LENGTH);
     }
@@ -158,7 +158,8 @@ function Orbit({
 
     const attr = line.geometry.attributes.position;
     for (let k = 0; k < TAIL_LENGTH; k++) {
-      const idx = (best - (TAIL_LENGTH - 1 - k) + points.length) % points.length;
+      const idx =
+        (best - (TAIL_LENGTH - 1 - k) + points.length) % points.length;
       const p = points[idx];
       attr.setXYZ(k, p.x * AU_SCALE, p.y * AU_SCALE, p.z * AU_SCALE);
     }

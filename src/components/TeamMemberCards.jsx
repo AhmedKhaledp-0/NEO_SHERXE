@@ -4,7 +4,7 @@ import member3 from "../assets/member3.jpg";
 import member4 from "../assets/member4.jpg";
 import member5 from "../assets/member5.jpg";
 import member6 from "../assets/member6.jpg";
-import TeamMember from './TeamMember';
+import TeamMember from "./TeamMember";
 
 const teamMembers = [
   {
@@ -54,11 +54,7 @@ export default function TeamMemberCards() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {teamMembers.map((member, index) => (
-        <TeamMember 
-          key={index} 
-          {...member}
-          photo={member.photo} 
-        />
+        <TeamMember key={index} {...member} photo={member.photo} />
       ))}
     </div>
   );

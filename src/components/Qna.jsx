@@ -28,7 +28,10 @@ const qaData = [
     question: "How is user interaction handled in the 3D scene?",
     answer: (
       <div className="prose">
-        <p>User interaction in the 3D scene is handled through several mechanisms:</p>
+        <p>
+          User interaction in the 3D scene is handled through several
+          mechanisms:
+        </p>
         <ul className="list-disc pl-6 mt-4 space-y-2">
           <li>
             OrbitControls from React Three Fiber allows users to zoom, pan, and
@@ -95,27 +98,27 @@ export default function Qna() {
                   <FontAwesomeIcon
                     icon={openItem === index ? faChevronUp : faChevronDown}
                     className={`transform transition-transform duration-300 text-dark-primary ${
-                      openItem === index ? 'rotate-180' : ''
+                      openItem === index ? "rotate-180" : ""
                     }`}
                   />
                 </button>
-                
+
                 <div
                   className={`overflow-hidden transition-all duration-300 ${
-                    openItem === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                    openItem === index
+                      ? "max-h-[500px] opacity-100"
+                      : "max-h-0 opacity-0"
                   }`}
                 >
                   <div className="p-4 pt-0 text-dark-text/70 prose prose-lg">
-                    {typeof item.answer === 'string' ? (
-                      item.answer.split('\n').map((line, i) => (
+                    {typeof item.answer === "string" ? (
+                      item.answer.split("\n").map((line, i) => (
                         <p key={i} className="mb-4">
                           {line}
                         </p>
                       ))
                     ) : (
-                      <div className="space-y-4">
-                        {item.answer}
-                      </div>
+                      <div className="space-y-4">{item.answer}</div>
                     )}
                   </div>
                 </div>
