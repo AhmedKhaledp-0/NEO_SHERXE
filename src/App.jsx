@@ -13,8 +13,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faTimes,
-  faSun,
-  faMoon,
   faHome,
   faGlobe,
   faExclamationTriangle,
@@ -28,23 +26,6 @@ import DataPreloader from "./components/DataPreloader";
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isDark, setIsDark] = useState(() => {
-    // Initialize from localStorage
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme
-      ? savedTheme === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDark]);
 
   // Prevent scroll when mobile menu is open
   useEffect(() => {
@@ -84,17 +65,6 @@ function App() {
               </span>
 
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setIsDark(!isDark)}
-                  aria-label="theme toggle"
-                    className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/40 text-white hover:bg-white/10 transition-all duration-200 z-50 relative"
-                >
-                  <FontAwesomeIcon
-                    icon={isDark ? faSun : faMoon}
-                    className="text-lg"
-                  />
-                </button>
-
                 {!isMobile ? (
                   <div className="flex items-center space-x-4">
                     <NavLink to="/" end className="nav-link">
@@ -116,7 +86,7 @@ function App() {
                 ) : (
                   <button
                     onClick={toggleMenu}
-                  className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/40 text-white hover:bg-white/10 transition-all duration-200 z-50 relative"
+                  className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/20 text-white hover:bg-white/10 transition-all duration-200 z-50 relative"
                   >
                     <FontAwesomeIcon icon={isOpen ? faTimes : faBars} />
                   </button>

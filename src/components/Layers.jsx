@@ -43,7 +43,7 @@ const LayerButton = ({ active, onClick, icon, label, count }) => (
         className={`w-4 h-4 rounded border-2 transition-colors ${
           active
             ? "border-white bg-white"
-            : "border-white/50"
+            : "border-white/20"
         }`}
       >
         {active && (
@@ -144,22 +144,16 @@ const AnimatedLayers = ({
       aria-label="layer toggle"
     >
       <div
-        className={`bg-black/30 backdrop-blur-md shadow-lg border border-white/50 overflow-hidden ${
+        className={`relative bg-black/30 backdrop-blur-md shadow-lg border border-white/20 overflow-hidden ${
           isOpen ? "w-80 rounded-2xl" : "w-12 h-12 rounded-full"
         }`}
       >
         {isOpen ? (
-          <div className="p-4">
-            <div className="flex justify-between items-center mb-4">
+          <div className="px-4 pt-4 pb-16">
+            <div className="mb-4">
               <h3 className="text-lg font-semibold text-white">
                 Celestial Objects
               </h3>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1 rounded-full border border-white/50 hover:bg-white/10"
-              >
-                <FontAwesomeIcon icon={faTimes} className="text-white" />
-              </button>
             </div>
 
             <div className="space-y-4">
@@ -206,6 +200,15 @@ const AnimatedLayers = ({
               icon={faLayerGroup}
               className="text-xl text-white"
             />
+          </button>
+        )}
+        {isOpen && (
+          <button
+            onClick={() => setIsOpen(false)}
+            aria-label="close panel"
+            className="absolute bottom-2 right-2 w-12 h-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10"
+          >
+            <FontAwesomeIcon icon={faTimes} className="text-white" />
           </button>
         )}
       </div>

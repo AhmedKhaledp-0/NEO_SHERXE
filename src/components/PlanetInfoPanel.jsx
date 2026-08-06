@@ -20,7 +20,7 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
           </h2>
           <button 
             onClick={onClose}
-            className="p-2 text-white hover:bg-white/10 rounded-full border border-white/50 transition-colors"
+            className="p-2 text-white hover:bg-white/10 rounded-full border border-white/20 transition-colors"
           >
             <FontAwesomeIcon icon={faClose} />
           </button>

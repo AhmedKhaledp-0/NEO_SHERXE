@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
@@ -71,31 +71,10 @@
     <link rel="apple-touch-icon" sizes="167x167" href="/logo.svg" />
 
     <!-- Theme Color -->
-    <meta name="theme-color" content="#f3f4f6" id="theme-color" />
+    <meta name="theme-color" content="#080B1A" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        // Update theme color based on app theme
-        const updateThemeColor = () => {
-          const isDark = document.documentElement.classList.contains("dark");
-          document.getElementById("theme-color").content = isDark
-            ? "#080B1A"
-            : "#E8ECF7";
-        };
-
-        // Initial theme check
-        updateThemeColor();
-
-        // Watch for theme changes
-        const observer = new MutationObserver(updateThemeColor);
-        observer.observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ["class"],
-        });
-      });
-    </script>
   </body>
 </html>

@@ -379,7 +379,7 @@ function Orrery() {
   const [showOrbits, setShowOrbits] = useState(true);
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [resetCameraFlag, setResetCameraFlag] = useState(false);
-  const [isDark] = useState(false);
+  const isDark = true;
 
   const [editingDate, setEditingDate] = useState(false);
   const [dateText, setDateText] = useState(() => toReadableDate(new Date()));
@@ -647,7 +647,7 @@ function Orrery() {
                   className={`w-10 h-10 aspect-square flex items-center justify-center rounded-full border transition-all duration-200 ${
                     speed < 0
                       ? "bg-white text-black border-white"
-                      : "text-white border-white/50 hover:bg-white/10"
+                      : "text-white border-white/20 hover:bg-white/10"
                   }`}
                 >
                   <FontAwesomeIcon icon={faBackward} />
@@ -655,7 +655,7 @@ function Orrery() {
                 <button
                   onClick={togglePause}
                   aria-label="toggle pause-play"
-                  className="w-10 h-10 aspect-square flex items-center justify-center rounded-full text-white border border-white/50 hover:bg-white/10 transition-all duration-200"
+                  className="w-10 h-10 aspect-square flex items-center justify-center rounded-full text-white border border-white/20 hover:bg-white/10 transition-all duration-200"
                 >
                   <FontAwesomeIcon icon={paused ? faPlay : faPause} />
                 </button>
@@ -677,7 +677,7 @@ function Orrery() {
                 <button
                   onClick={handleLive}
                   aria-label="return to live time"
-                  className="rounded-full border border-white/50 text-white px-4 py-1.5 text-sm hover:bg-white/10 transition-all duration-200 flex items-center gap-2"
+                  className="rounded-full border border-white/20 text-white px-4 py-1.5 text-sm hover:bg-white/10 transition-all duration-200 flex items-center gap-2"
                 >
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                   Live
