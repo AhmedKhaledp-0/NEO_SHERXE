@@ -8,6 +8,8 @@ function toRadians(degrees) {
 }
 
 const TAIL_LENGTH = 100;
+const FEATURED_TAIL_LENGTH = 36;
+const FEATURED_TAIL_MAX_OPACITY = 0.6;
 
 function Orbit({
   planetId,
@@ -18,12 +20,21 @@ function Orbit({
   semi_major_axis,
   orbitType,
   color,
+  tailColor = "#cccccc",
   positionsRef,
   onOrbitClick,
 }) {
   const [hovered, setHovered] = useState(false);
   const tailLineRef = useRef();
   const tempVec = useMemo(() => new THREE.Vector3(), []);
+
+  const isFeatured = orbitType === "featured";
+  const tailLength = isFeatured ? FEATURED_TAIL_LENGTH : TAIL_LENGTH;
+  const tailMaxOpacity = isFeatured ? FEATURED_TAIL_MAX_OPACITY : 0.45;
+  const tailColorValue = useMemo(
+    () => new THREE.Color(tailColor),
+    [tailColor],
+  );
 
   const argument_of_perifocusRad = toRadians(argument_of_perifocus);
   const inclinationRad = toRadians(inclination);
@@ -126,21 +137,28 @@ function Orbit({
     }
 
     let tailGeometry = null;
-    if (orbitType === "tail") {
-      const tailPositions = new Float32Array(TAIL_LENGTH * 3);
+    if (orbitType === "tail" || orbitType === "featured") {
+      const tailPositions = new Float32Array(tailLength * 3);
       tailGeometry = new THREE.BufferGeometry();
       tailGeometry.setAttribute(
         "position",
         new THREE.BufferAttribute(tailPositions, 3),
       );
-      tailGeometry.setDrawRange(0, TAIL_LENGTH);
+      if (isFeatured) {
+        const tailColors = new Float32Array(tailLength * 3);
+        tailGeometry.setAttribute(
+          "color",
+          new THREE.BufferAttribute(tailColors, 3),
+        );
+      }
+      tailGeometry.setDrawRange(0, tailLength);
     }
 
     return { lineGeometry, tubeGeometry, tailGeometry };
-  }, [points, orbitType]);
+  }, [points, orbitType, tailLength, isFeatured]);
 
   useFrame(() => {
-    if (orbitType !== "tail") return;
+    if (orbitType !== "tail" && orbitType !== "featured") return;
     const line = tailLineRef.current;
     const pos = positionsRef && positionsRef.current[planetId];
     if (!line || !pos) return;
@@ -156,19 +174,32 @@ function Orbit({
       }
     }
 
-    const attr = line.geometry.attributes.position;
-    for (let k = 0; k < TAIL_LENGTH; k++) {
+    const posAttr = line.geometry.attributes.position;
+    const colAttr = line.geometry.attributes.color;
+
+    for (let k = 0; k < tailLength; k++) {
       const idx =
-        (best - (TAIL_LENGTH - 1 - k) + points.length) % points.length;
+        (best - (tailLength - 1 - k) + points.length) % points.length;
       const p = points[idx];
-      attr.setXYZ(k, p.x * AU_SCALE, p.y * AU_SCALE, p.z * AU_SCALE);
+      posAttr.setXYZ(k, p.x * AU_SCALE, p.y * AU_SCALE, p.z * AU_SCALE);
+      if (colAttr) {
+        const fade = ((k + 1) / tailLength) * tailMaxOpacity;
+        colAttr.setXYZ(
+          k,
+          tailColorValue.r * fade,
+          tailColorValue.g * fade,
+          tailColorValue.b * fade,
+        );
+      }
     }
-    attr.needsUpdate = true;
+
+    posAttr.needsUpdate = true;
+    if (colAttr) colAttr.needsUpdate = true;
   });
 
   if (points.length < 4) return null;
 
-  const baseOpacity = orbitType === "normal" ? 0.5 : 0.3;
+  const baseOpacity = orbitType === "normal" ? 0.5 : isFeatured ? 0.1 : 0.3;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -201,6 +232,11 @@ function Orbit({
           depthTest={true}
         />
       </line>
+      {isFeatured && (
+        <line ref={tailLineRef} geometry={tailGeometry}>
+          <lineBasicMaterial vertexColors transparent />
+        </line>
+      )}
       {orbitType === "tail" && (
         <line ref={tailLineRef} geometry={tailGeometry}>
           <lineBasicMaterial

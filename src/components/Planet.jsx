@@ -230,14 +230,15 @@ function Planet({
           position={[config.size * 5, 0, 0]}
           center
         >
-          <span
+          <div
             ref={spanRef}
-            className="neo-label-text text-xs select-none"
+            className="neo-label-text text-xs flex items-center gap-1.5"
             style={{ color: labelColor || "#ffffff" }}
             onClick={handleTagClick}
           >
-            {shortLabelName(planetId)}
-          </span>
+            {isFeatured && <span className="neo-label-marker" aria-hidden />}
+            <span>{shortLabelName(planetId)}</span>
+          </div>
         </Html>
       )}
     </group>

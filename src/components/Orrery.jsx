@@ -107,6 +107,8 @@ const featuredColors = {
   NEAEX: "#ffffff",
 };
 
+const FEATURED_ORBIT_COLOR = "#a3a3a3";
+
 function labelColorFor(body) {
   if (orbitColors[body.planet]) return orbitColors[body.planet];
   if (featuredColors[body.type]) return featuredColors[body.type];
@@ -322,26 +324,43 @@ const Scene = React.memo(function Scene({
         </Fragment>
       ))}
       {extended.map((body) => (
-        <Planet
-          key={body.planet}
-          planetId={body.planet}
-          position={body.position}
-          velocity={body.velocity}
-          eccentricity={body.e}
-          semi_major_axis={body.a}
-          inclination={body.incl}
-          longitude_of_ascending_node={body.Omega}
-          argument_of_perifocus={body.w}
-          mean_motion={body.n}
-          type={body.type}
-          showTags={showTags}
-          id={body.id}
-          positionsRef={positionsRef}
-          timeRef={timeRef}
-          onPlanetClick={handlePlanetClick}
-          labelColor={labelColorFor(body)}
-          selected={selectedId === body.planet}
-        />
+        <Fragment key={body.planet}>
+          <Planet
+            key={body.planet}
+            planetId={body.planet}
+            position={body.position}
+            velocity={body.velocity}
+            eccentricity={body.e}
+            semi_major_axis={body.a}
+            inclination={body.incl}
+            longitude_of_ascending_node={body.Omega}
+            argument_of_perifocus={body.w}
+            mean_motion={body.n}
+            type={body.type}
+            showTags={showTags}
+            id={body.id}
+            positionsRef={positionsRef}
+            timeRef={timeRef}
+            onPlanetClick={handlePlanetClick}
+            labelColor={labelColorFor(body)}
+            selected={selectedId === body.planet}
+          />
+          {showOrbits && (
+            <Orbit
+              planetId={body.planet}
+              argument_of_perifocus={body.w}
+              eccentricity={body.e}
+              inclination={body.incl}
+              longitude_of_ascending_node={body.Omega}
+              semi_major_axis={body.a}
+              orbitType="featured"
+              color={FEATURED_ORBIT_COLOR}
+              tailColor={FEATURED_ORBIT_COLOR}
+              positionsRef={positionsRef}
+              onOrbitClick={handlePlanetClick}
+            />
+          )}
+        </Fragment>
       ))}
       {bulkNEOs.length > 0 && (
         <NEOInstances

@@ -75,6 +75,16 @@ body {
       0 1px 3px rgba(0, 0, 0, 0.9);
   }
 
+  .neo-label-marker {
+    display: inline-block;
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid currentColor;
+    border-radius: 9999px;
+    opacity: 0.7;
+  }
+
   .glass-card {
     backdrop-filter: blur(12px);
     background-color: rgba(255, 255, 255, 0.05);
