@@ -73,7 +73,7 @@ export default function Qna() {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-dark-text">
               Frequently Asked Questions
             </h1>
             <p className="text-xl text-dark-text/70">
@@ -86,7 +86,7 @@ export default function Qna() {
             {qaData.map((item, index) => (
               <div
                 key={index}
-                className="card hover:border-dark-primary/50 transition-all duration-300"
+                className="card hover:border-white/30 transition-all duration-300"
               >
                 <button
                   onClick={() => toggleItem(index)}
@@ -97,7 +97,7 @@ export default function Qna() {
                   </h3>
                   <FontAwesomeIcon
                     icon={openItem === index ? faChevronUp : faChevronDown}
-                    className={`transform transition-transform duration-300 text-dark-primary ${
+                    className={`transform transition-transform duration-300 text-white ${
                       openItem === index ? "rotate-180" : ""
                     }`}
                   />
@@ -106,7 +106,7 @@ export default function Qna() {
                 <div
                   className={`overflow-hidden transition-all duration-300 ${
                     openItem === index
-                      ? "max-h-[500px] opacity-100"
+                      ? "max-h-125 opacity-100"
                       : "max-h-0 opacity-0"
                   }`}
                 >

@@ -40,7 +40,7 @@ export default function RiskLevel() {
         <div className="text-center space-y-4">
           <FontAwesomeIcon
             icon={faSpinner}
-            className="text-4xl text-dark-primary animate-spin"
+            className="text-4xl text-white animate-spin"
           />
           <p className="text-dark-text/70">Loading data...</p>
         </div>
@@ -54,7 +54,7 @@ export default function RiskLevel() {
         <div className="card max-w-lg mx-auto text-center space-y-4">
           <FontAwesomeIcon
             icon={faExclamationTriangle}
-            className="text-4xl text-dark-danger"
+            className="text-4xl text-white"
           />
           <p className="text-dark-text/70">Error: {error.message}</p>
         </div>
@@ -68,7 +68,7 @@ export default function RiskLevel() {
         <div className="max-w-7xl mx-auto space-y-8">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold text-dark-text">
               Near-Earth Objects Risk Assessment
             </h1>
             <p className="text-xl text-dark-text/70 max-w-3xl mx-auto">
@@ -94,8 +94,8 @@ export default function RiskLevel() {
           {/* Data Table */}
           <div className="card overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-dark-primary/10">
-                <thead className="bg-dark-primary/5">
+              <table className="min-w-full divide-y divide-white/10">
+                <thead className="bg-white/5">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-dark-text">
                       Name
@@ -117,7 +117,7 @@ export default function RiskLevel() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-dark-primary/10">
+                <tbody className="divide-y divide-white/10">
                   {objects.map(
                     ({
                       id,
@@ -131,7 +131,7 @@ export default function RiskLevel() {
                     }) => (
                       <tr
                         key={id}
-                        className="hover:bg-dark-primary/5 transition-colors"
+                        className="hover:bg-white/5 transition-colors"
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {name}

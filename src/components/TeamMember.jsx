@@ -18,8 +18,7 @@ export default function TeamMember({
           alt={name}
           className="w-full h-full object-cover object-center"
         />
-        {/* Reduced opacity for light mode, kept darker for dark mode */}
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-surface/30 to-transparent rounded-lg" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/35 to-transparent rounded-lg" />
       </div>
 
       <div className="text-center">
@@ -32,7 +31,7 @@ export default function TeamMember({
               href={linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dark-primary hover:opacity-75 transition-opacity text-xl"
+              className="text-white hover:opacity-75 transition-opacity text-xl"
             >
               <FaLinkedin />
             </a>
@@ -42,7 +41,7 @@ export default function TeamMember({
               href={github}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dark-primary hover:opacity-75 transition-opacity text-xl"
+              className="text-white hover:opacity-75 transition-opacity text-xl"
             >
               <FaGithub />
             </a>
@@ -52,7 +51,7 @@ export default function TeamMember({
               href={behance}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dark-primary hover:opacity-75 transition-opacity text-xl"
+              className="text-white hover:opacity-75 transition-opacity text-xl"
             >
               <FaBehance />
             </a>
@@ -60,7 +59,7 @@ export default function TeamMember({
           {email && (
             <a
               href={`mailto:${email}`}
-              className="text-dark-primary hover:opacity-75 transition-opacity text-xl"
+              className="text-white hover:opacity-75 transition-opacity text-xl"
             >
               <HiMail />
             </a>

@@ -57,10 +57,10 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-dark-background text-dark-text">
-        <nav className="fixed w-full top-0 z-40 bg-gradient-to-b from-black/70 via-black/30 to-transparent">
+        <nav className="fixed w-full top-0 z-40 bg-linear-to-b from-black/70 via-black/30 to-transparent">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
-              <span className="text-xl font-bold bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent z-50 relative">
+              <span className="text-xl font-bold bg-linear-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent z-50 relative">
                 NEO SPHERXE
               </span>
 
@@ -104,15 +104,14 @@ function App() {
             >
               {/* Backdrop: removed extra translate to reduce jitter */}
               <div
-                className="absolute inset-0 bg-gradient-to-br from-dark-background/98 via-dark-background/95 to-dark-primary/10
-                           backdrop-blur-lg"
+                className="absolute inset-0 bg-linear-to-br from-black/98 via-black/95 to-black/90 backdrop-blur-lg"
                 onClick={() => setIsOpen(false)}
               />
 
               {/* Menu Content */}
               <div
                 className={`absolute inset-y-0 left-0 w-full bg-dark-background/95 flex flex-col
-                           transform transition-all duration-300 ease-out h-[100dvh]
+                           transform transition-all duration-300 ease-out h-dvh
                            ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
               >
                 {/* Navigation Links - Full height with better spacing */}

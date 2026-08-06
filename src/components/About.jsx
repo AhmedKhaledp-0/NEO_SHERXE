@@ -83,7 +83,7 @@ export default function About() {
         <div className="max-w-5xl mx-auto space-y-16">
           {/* Title Section */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-dark-text">
               Exploring Space, Protecting Earth
             </h1>
             <div className="card max-w-3xl mx-auto">
@@ -99,17 +99,17 @@ export default function About() {
           <div className="space-y-8">
             <h2 className="text-3xl font-bold mb-12 text-center text-dark-text">
               Our Mission
-              <div className="w-24 h-1 bg-gradient-to-r from-dark-primary to-dark-accent mx-auto mt-4"></div>
+              <div className="w-24 h-1 bg-white mx-auto mt-4"></div>
             </h2>
             {points.map((point) => (
               <div
                 key={point.id}
-                className="card group hover:border-dark-primary"
+                className="card group hover:border-white/30"
               >
                 <div className="flex items-start gap-4">
                   <FontAwesomeIcon
                     icon={point.icon}
-                    className="text-dark-primary mt-1"
+                    className="text-white mt-1"
                   />
                   <div>
                     <h3 className="text-xl font-semibold text-dark-text">
@@ -133,7 +133,7 @@ export default function About() {
                   <div className="flex items-start gap-4">
                     <FontAwesomeIcon
                       icon={faMeteor}
-                      className="text-dark-primary mt-1"
+                      className="text-white mt-1"
                     />
                     <p className="text-dark-text/80">{feature.text}</p>
                   </div>
