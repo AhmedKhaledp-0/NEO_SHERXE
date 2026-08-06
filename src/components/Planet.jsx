@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Html, useGLTF, Billboard } from "@react-three/drei";
-import { Detailed } from "@react-three/drei";
 import {
   precomputeConstants,
   getBodyPosition,
@@ -13,18 +12,18 @@ import { registerLabel, LABEL_PRIORITY, shortLabelName } from "../utilities/labe
 const labelWorldPosition = new THREE.Vector3();
 
 const planetConfig = {
-  "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6" },
-  "Venus Barycenter (299)": { size: 3, color: "#ffd85c" },
-  "Earth-Moon Barycenter (3)": { size: 3, color: "#4f7cee" },
-  "Mars Barycenter (4)": { size: 2.5, color: "#ff6b3e" },
-  "Jupiter Barycenter (5)": { size: 8, color: "#f3d3a3" },
-  "Saturn Barycenter (6)": { size: 7, color: "#f7d98c" },
-  "Uranus Barycenter (7)": { size: 5, color: "#b3e5e5" },
-  "Neptune Barycenter (8)": { size: 5, color: "#4b70dd" },
-  "Pluto Barycenter (9)": { size: 1, color: "#c4b5a6" },
-  "136108 Haumea (2003 EL61)": { size: 1.2, color: "#e0d7c3" },
-  "136472 Makemake (2005 FY9)": { size: 1.2, color: "#d9c9a8" },
-  "136199 Eris (2003 UB313)": { size: 1.4, color: "#d6d6d6" },
+  "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6", rotationPeriod: 1407.6 },
+  "Venus Barycenter (299)": { size: 3, color: "#ffd85c", rotationPeriod: -5832.5 },
+  "Earth-Moon Barycenter (3)": { size: 3, color: "#4f7cee", rotationPeriod: 23.93 },
+  "Mars Barycenter (4)": { size: 2.5, color: "#ff6b3e", rotationPeriod: 24.62 },
+  "Jupiter Barycenter (5)": { size: 8, color: "#f3d3a3", rotationPeriod: 9.93 },
+  "Saturn Barycenter (6)": { size: 7, color: "#f7d98c", rotationPeriod: 10.66 },
+  "Uranus Barycenter (7)": { size: 5, color: "#b3e5e5", rotationPeriod: -17.24 },
+  "Neptune Barycenter (8)": { size: 5, color: "#4b70dd", rotationPeriod: 16.11 },
+  "Pluto Barycenter (9)": { size: 1, color: "#c4b5a6", rotationPeriod: -153.29 },
+  "136108 Haumea (2003 EL61)": { size: 1.2, color: "#e0d7c3", rotationPeriod: 3.92 },
+  "136472 Makemake (2005 FY9)": { size: 1.2, color: "#d9c9a8", rotationPeriod: 22.83 },
+  "136199 Eris (2003 UB313)": { size: 1.4, color: "#d6d6d6", rotationPeriod: 25.9 },
 };
 
 const typeConfig = {
@@ -32,17 +31,38 @@ const typeConfig = {
   NEAEX: { size: 1.4, color: "#80d8ff" },
 };
 
-const PlanetModel = ({ planetId, size, material }) => {
+const saturnRingNames = new Set(["RingsTop", "RingsBottom"]);
+
+const PlanetModel = ({ planetId, size, material, inclination = 0, part = "body" }) => {
   const { scene } = useGLTF(
     `/models/${planetId.split(" ")[0].toLowerCase()}.glb`,
     false,
     false,
   );
 
+  const modelScene = useMemo(() => {
+    const clone = scene.clone(true);
+    if (planetId !== "Saturn Barycenter (6)") {
+      return clone;
+    }
+
+    clone.traverse((object) => {
+      if (!object.isMesh) return;
+      const isRing = saturnRingNames.has(object.name);
+      if (part === "rings") {
+        object.visible = isRing;
+      } else if (part === "body") {
+        object.visible = !isRing;
+      }
+    });
+    return clone;
+  }, [scene, planetId, part]);
+
   return (
     <primitive
-      object={scene}
+      object={modelScene}
       scale={[size / 500, size / 500, size / 500]}
+      rotation={[Math.PI / 2, 0, THREE.MathUtils.degToRad(inclination)]}
       material={material}
     />
   );
@@ -64,13 +84,21 @@ function Planet({
   onPlanetClick,
   labelColor,
   selected,
+  setHoveredId,
 }) {
   const meshRef = useRef();
+  const spinRef = useRef();
   const spanRef = useRef();
   const isMainPlanet = id >= 1 && id <= 9;
   const [hovered, setHovered] = useState(false);
   const config = planetConfig[planetId] ||
     typeConfig[type] || { size: 0.1, color: "#ffffff" };
+  // Rotation speed: radians per millisecond (2π / period-in-ms)
+  const rotationSpeed = useMemo(() => {
+    const period = config.rotationPeriod;
+    if (!period) return 0;
+    return (2 * Math.PI) / (period * 3600 * 1000); // hours → ms
+  }, [config.rotationPeriod]);
   const isFeatured = type === "PHAEX" || type === "NEAEX";
   const labelPriority = isFeatured
     ? LABEL_PRIORITY.FEATURED
@@ -182,11 +210,14 @@ function Planet({
       tempPosition.y * AU_SCALE,
       tempPosition.z * AU_SCALE,
     );
-    meshRef.current.scale.setScalar(hovered ? 1.1 : 1);
     if (positionsRef.current) {
       const slot = positionsRef.current[planetId];
       if (!slot) positionsRef.current[planetId] = new THREE.Vector3();
       positionsRef.current[planetId].copy(tempPosition);
+    }
+    // Self-rotation (spin around local z-axis, which is the pole after the 90° correction)
+    if (spinRef.current && rotationSpeed) {
+      spinRef.current.rotation.z = timeRef.current.getTime() * rotationSpeed;
     }
   });
 
@@ -203,35 +234,56 @@ function Planet({
     }
   };
 
+  const handlePointerOver = () => {
+    setHovered(true);
+    if (setHoveredId) setHoveredId(planetId);
+  };
+  const handlePointerOut = () => {
+    setHovered(false);
+    if (setHoveredId) {
+      setHoveredId((current) => (current === planetId ? null : current));
+    }
+  };
+
   return (
     <group
       ref={meshRef}
       onClick={handlePlanetClick}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
     >
       {isMainPlanet ? (
-        <Detailed distances={[0, 100, 200, 500]}>
-          <Suspense
-            fallback={
-              <mesh
-                geometry={geometries.medium}
-                material={hovered ? materials.hover : materials.standard}
+        <group>
+          <group ref={spinRef}>
+            <Suspense
+              fallback={
+                <mesh
+                  geometry={geometries.high}
+                  material={hovered ? materials.hover : materials.standard}
+                />
+              }
+            >
+              <PlanetModel
+                planetId={planetId}
+                size={config.size}
+                material={materials.standard}
+                inclination={inclination}
+                part="body"
               />
-            }
-          >
-            <PlanetModel
-              planetId={planetId}
-              size={config.size}
-              material={materials.standard}
-            />
-          </Suspense>
-          <mesh
-            geometry={geometries.medium}
-            material={hovered ? materials.hover : materials.standard}
-          />
-          <mesh geometry={geometries.low} material={materials.standard} />
-        </Detailed>
+            </Suspense>
+          </group>
+          {planetId === "Saturn Barycenter (6)" && (
+            <Suspense fallback={null}>
+              <PlanetModel
+                planetId={planetId}
+                size={config.size}
+                material={materials.standard}
+                inclination={inclination}
+                part="rings"
+              />
+            </Suspense>
+          )}
+        </group>
       ) : isFeatured ? (
         <Billboard>
           <mesh
@@ -246,7 +298,7 @@ function Planet({
           scale={config.size * 0.2}
         />
       )}
-      {(showTags || selected) && (
+      {showTags && (
         <Html
           className="select-none"
           position={[config.size * 5, 0, 0]}
@@ -257,6 +309,13 @@ function Planet({
             className="neo-label-text text-xs select-none"
             style={{ color: labelColor || "#ffffff" }}
             onClick={handleTagClick}
+            onPointerOver={() => setHoveredId && setHoveredId(planetId)}
+            onPointerOut={() =>
+              setHoveredId &&
+              setHoveredId((current) =>
+                current === planetId ? null : current,
+              )
+            }
           >
             {shortLabelName(planetId)}
           </span>

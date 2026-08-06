@@ -12,9 +12,9 @@ import vertexShader from "../shaders/neos.vert.glsl?raw";
 import fragmentShader from "../shaders/neos.frag.glsl?raw";
 import { registerLabel, LABEL_PRIORITY, shortLabelName } from "../utilities/labelManager";
 
-const NEO_COLOR = "#7fd4ff";
+const NEO_COLOR = "#aae6ff";
 
-const NEO_OPACITY = 0.5;
+const NEO_OPACITY = 0.85;
 
 const DAY_MS = 86400000;
 const EPOCH_MS = EPOCH.getTime();
@@ -88,7 +88,7 @@ function NEOInstances({ bodies, timeRef, positionsRef, onSelect, selectedId }) {
   const { instancedMesh, constants, names, raycastPositions, count } =
     useMemo(() => {
       const count = bodies.length;
-      const geometry = new THREE.SphereGeometry(0.4, 6, 4);
+      const geometry = new THREE.PlaneGeometry(0.8, 0.8);
 
       const aArr = new Float32Array(count);
       const eArr = new Float32Array(count);
@@ -173,6 +173,7 @@ function NEOInstances({ bodies, timeRef, positionsRef, onSelect, selectedId }) {
         fragmentShader,
         transparent: true,
         depthWrite: false,
+        blending: THREE.AdditiveBlending,
       });
 
       const mesh = new THREE.InstancedMesh(geometry, material, count);

@@ -5,7 +5,7 @@ export const LABEL_CONFIG = {
   fadeEnd: 16000,
   minScale: 0.85,
   hoverScale: 1.05,
-  collisionPadding: 10,
+  collisionPadding: 18,
   collisionHysteresis: 6,
   passIntervalMs: 100,
 };
