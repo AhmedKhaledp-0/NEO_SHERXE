@@ -34,6 +34,8 @@ const sceneColors = {
   pointLight: 4,
 };
 
+const DEFAULT_CAMERA_POSITION = [0, -795, 667];
+
 const HOUR_MS = 3600 * 1000;
 const DAY_MS = 24 * HOUR_MS;
 const WEEK_MS = 7 * DAY_MS;
@@ -184,7 +186,7 @@ const Scene = React.memo(function Scene({
     const startTarget = controlsRef.current
       ? controlsRef.current.target.clone()
       : new THREE.Vector3();
-    const defaultPosition = new THREE.Vector3(0, -900, 500);
+    const defaultPosition = new THREE.Vector3(...DEFAULT_CAMERA_POSITION);
     const defaultTarget = new THREE.Vector3(0, 0, 0);
 
     const duration = 1500;
@@ -581,7 +583,7 @@ function Orrery() {
             fov: 45,
             near: 0.1,
             far: 100000000,
-            position: [0, -900, 500],
+            position: DEFAULT_CAMERA_POSITION,
           }}
           gl={{
             antialias: true,
