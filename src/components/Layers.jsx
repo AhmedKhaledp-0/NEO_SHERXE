@@ -10,7 +10,6 @@ import {
   faExclamationTriangle,
   faTag,
   faDrawPolygon,
-  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 const LayerButton = ({ active, onClick, icon, label, count }) => (
@@ -59,8 +58,6 @@ const LayerButton = ({ active, onClick, icon, label, count }) => (
 );
 
 const AnimatedLayers = ({
-  showDwarfPlanets,
-  setShowDwarfPlanets,
   showPHAs,
   setShowPHAs,
   showNEAs,
@@ -83,13 +80,6 @@ const AnimatedLayers = ({
       active: true,
       disabled: true,
       count: 8,
-    },
-    {
-      label: "Dwarf Planets",
-      icon: faCircle,
-      active: showDwarfPlanets,
-      toggle: setShowDwarfPlanets,
-      count: 5,
     },
     {
       label: "Potentially Hazardous",

@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import * as THREE from "three";
 
-export function StarField({ count = 25000 }) {
+export function StarField({ count = 200000 }) {
   const starField = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
       // Better spherical distribution
-      const radius = 2000 + Math.random() * 1000;
+      const radius = 2000 + Math.random() * 18000;
       const theta = 2 * Math.PI * Math.random();
       const phi = Math.acos(2 * Math.random() - 1);
 

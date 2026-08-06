@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
 export const LABEL_CONFIG = {
-  fadeStart: 1600,
-  fadeEnd: 3600,
+  fadeStart: 2500,
+  fadeEnd: 16000,
   minScale: 0.85,
   hoverScale: 1.05,
   collisionPadding: 10,

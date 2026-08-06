@@ -247,7 +247,7 @@ const Scene = React.memo(function Scene({
     const extended = [];
     const bulkNEOs = [];
     for (const body of visibleBodies) {
-      if (body.type === "majorBody" || body.type === "dwarfPlanet") {
+      if (body.type === "majorBody") {
         majorAndDwarf.push(body);
       } else if (body.type === "PHAEX" || body.type === "NEAEX") {
         extended.push(body);
@@ -260,11 +260,16 @@ const Scene = React.memo(function Scene({
 
   return (
     <>
-      <StarField count={3000} />
+      <StarField count={10000} />
 
-      <fog attach="fog" args={["#000000", 3000, 5000]} />
+      <fog attach="fog" args={["#000000", 12000, 80000]} />
 
-      <OrbitControls ref={controlsRef} args={[camera, gl.domElement]} />
+      <OrbitControls
+        ref={controlsRef}
+        args={[camera, gl.domElement]}
+        minDistance={10}
+        maxDistance={25000}
+      />
 
       <ambientLight intensity={colors.ambientLight} />
       <pointLight
@@ -307,20 +312,6 @@ const Scene = React.memo(function Scene({
               longitude_of_ascending_node={body.Omega}
               semi_major_axis={body.a}
               orbitType="normal"
-              color={orbitColors[body.planet] || "white"}
-              positionsRef={positionsRef}
-              onOrbitClick={handlePlanetClick}
-            />
-          )}
-          {showOrbits && body.type === "dwarfPlanet" && (
-            <Orbit
-              planetId={body.planet}
-              argument_of_perifocus={body.w}
-              eccentricity={body.e}
-              inclination={body.incl}
-              longitude_of_ascending_node={body.Omega}
-              semi_major_axis={body.a}
-              orbitType="tail"
               color={orbitColors[body.planet] || "white"}
               positionsRef={positionsRef}
               onOrbitClick={handlePlanetClick}
@@ -371,7 +362,6 @@ function Orrery() {
   const [time, setTime] = useState(new Date());
   const [speed, setSpeed] = useState(1);
   const [paused, setPaused] = useState(false);
-  const [showDwarfPlanets, setShowDwarfPlanets] = useState(true);
   const [showPHAs, setShowPHAs] = useState(false);
   const [showNEAs, setShowNEAs] = useState(false);
   const [showPHAsEX, setShowPHAsEX] = useState(true);
@@ -488,13 +478,6 @@ function Orrery() {
           planet: body.vectors.targetname,
           type: "majorBody",
         })),
-        ...combinedCelestialData.dwarfPlanets.map((body) => ({
-          ...body.vectors,
-          ...body.elements,
-          id: body.body_id,
-          planet: body.vectors.targetname,
-          type: "dwarfPlanet",
-        })),
         ...combinedCelestialData.PHAs.map((body) => ({
           ...body.vectors,
           ...body.elements,
@@ -540,7 +523,6 @@ function Orrery() {
       celestialBodiesData.filter(
         (body) =>
           body.type === "majorBody" ||
-          (body.type === "dwarfPlanet" && showDwarfPlanets) ||
           (body.type === "PHA" && showPHAs) ||
           (body.type === "NEA" && showNEAs) ||
           (body.type === "PHAEX" && showPHAsEX) ||
@@ -548,7 +530,6 @@ function Orrery() {
       ),
     [
       celestialBodiesData,
-      showDwarfPlanets,
       showPHAs,
       showNEAs,
       showPHAsEX,
@@ -701,8 +682,6 @@ function Orrery() {
 
         <div className="pointer-events-auto">
           <AnimatedLayers
-            showDwarfPlanets={showDwarfPlanets}
-            setShowDwarfPlanets={setShowDwarfPlanets}
             showPHAs={showPHAs}
             setShowPHAs={setShowPHAs}
             showNEAs={showNEAs}
