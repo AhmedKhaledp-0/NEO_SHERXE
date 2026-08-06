@@ -8,8 +8,8 @@ function toRadians(degrees) {
 }
 
 const TAIL_LENGTH = 100;
-const FEATURED_TAIL_LENGTH = 36;
-const FEATURED_TAIL_MAX_OPACITY = 0.6;
+const FEATURED_TAIL_LENGTH = 200;
+const FEATURED_TAIL_MAX_OPACITY = 0.9;
 
 function Orbit({
   planetId,
