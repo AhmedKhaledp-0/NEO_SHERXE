@@ -6,6 +6,7 @@ export const LABEL_CONFIG = {
   minScale: 0.85,
   hoverScale: 1.05,
   collisionPadding: 10,
+  collisionHysteresis: 6,
   passIntervalMs: 100,
 };
 
@@ -17,6 +18,7 @@ export const LABEL_PRIORITY = {
 };
 
 const entries = new Map();
+const visibilityState = new Map();
 
 const cameraPosition = new THREE.Vector3();
 const projected = new THREE.Vector3();
@@ -25,6 +27,7 @@ export function registerLabel(entry) {
   entries.set(entry.id, entry);
   return () => {
     entries.delete(entry.id);
+    visibilityState.delete(entry.id);
   };
 }
 
@@ -59,6 +62,7 @@ export function runLabelPass(camera, gl, size, options = {}) {
   const fadeStart = options.fadeStart ?? LABEL_CONFIG.fadeStart;
   const fadeEnd = options.fadeEnd ?? LABEL_CONFIG.fadeEnd;
   const padding = options.collisionPadding ?? LABEL_CONFIG.collisionPadding;
+  const hysteresis = options.collisionHysteresis ?? LABEL_CONFIG.collisionHysteresis;
 
   camera.getWorldPosition(cameraPosition);
   const offscreenMargin = 40;
@@ -75,6 +79,7 @@ export function runLabelPass(camera, gl, size, options = {}) {
     projected.copy(position).project(camera);
 
     if (projected.z > 1 || projected.z < -1) {
+      visibilityState.set(entry.id, false);
       applyState(el, 0, LABEL_CONFIG.minScale, false);
       continue;
     }
@@ -88,6 +93,7 @@ export function runLabelPass(camera, gl, size, options = {}) {
       sy < -offscreenMargin ||
       sy > size.height + offscreenMargin
     ) {
+      visibilityState.set(entry.id, false);
       applyState(el, 0, LABEL_CONFIG.minScale, false);
       continue;
     }
@@ -104,6 +110,7 @@ export function runLabelPass(camera, gl, size, options = {}) {
       force: entry.force ? entry.force() : false,
       hovered: entry.isHovered ? entry.isHovered() : false,
       interactive: entry.interactive !== false,
+      wasVisible: visibilityState.get(entry.id) ?? false,
     });
   }
 
@@ -120,12 +127,15 @@ export function runLabelPass(camera, gl, size, options = {}) {
 
     let intersects = false;
     if (!candidate.force) {
+      const collisionPadding = candidate.wasVisible
+        ? Math.max(padding - hysteresis, 0)
+        : padding + hysteresis;
       for (const box of accepted) {
         if (
-          candidate.box.x < box.x + box.w + padding &&
-          candidate.box.x + candidate.box.w + padding > box.x &&
-          candidate.box.y < box.y + box.h + padding &&
-          candidate.box.y + candidate.box.h + padding > box.y
+          candidate.box.x < box.x + box.w + collisionPadding &&
+          candidate.box.x + candidate.box.w + collisionPadding > box.x &&
+          candidate.box.y < box.y + box.h + collisionPadding &&
+          candidate.box.y + candidate.box.h + collisionPadding > box.y
         ) {
           intersects = true;
           break;
@@ -134,6 +144,7 @@ export function runLabelPass(camera, gl, size, options = {}) {
     }
 
     if (intersects || opacity <= 0.01) {
+      visibilityState.set(candidate.id, false);
       applyState(candidate.el, 0, LABEL_CONFIG.minScale, false);
       continue;
     }
@@ -143,6 +154,7 @@ export function runLabelPass(camera, gl, size, options = {}) {
       ? LABEL_CONFIG.hoverScale
       : LABEL_CONFIG.minScale +
         (1 - LABEL_CONFIG.minScale) * opacity;
+    visibilityState.set(candidate.id, true);
     applyState(candidate.el, opacity, scale, candidate.interactive);
   }
 }
