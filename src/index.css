@@ -87,30 +87,20 @@ body {
 
   .nav-link {
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    transition: all 0.3s;
-    position: relative;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
   }
 
   .nav-link:hover {
-    color: #7B3FF3;
+    border-color: white;
     background-color: transparent;
   }
 
   .nav-link.active {
-    color: #7B3FF3;
-    background-color: transparent;
-  }
-
-  .nav-link.active:after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 10%;
-    width: 80%;
-    height: 2px;
-    background-color: currentColor;
-    border-radius: 2px;
+    background-color: white;
+    color: black;
+    border-color: white;
   }
 
   .card {

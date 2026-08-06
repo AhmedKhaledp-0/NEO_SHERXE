@@ -76,7 +76,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text">
-        <nav className="fixed w-full top-0 z-40 glass-card">
+        <nav className="fixed w-full top-0 z-40 bg-gradient-to-b from-black/70 via-black/30 to-transparent">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
               <span className="text-xl font-bold bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent bg-clip-text text-transparent z-50 relative">
@@ -87,11 +87,11 @@ function App() {
                 <button
                   onClick={() => setIsDark(!isDark)}
                   aria-label="theme toggle"
-                  className="p-2 w-6 h-6 aspect-square flex justify-center items-center rounded-full hover:bg-light-primary/10 dark:hover:bg-dark-primary/10 z-50 relative"
+                    className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/40 text-white hover:bg-white/10 transition-all duration-200 z-50 relative"
                 >
                   <FontAwesomeIcon
                     icon={isDark ? faSun : faMoon}
-                    className="text-lg text-light-primary dark:text-dark-primary"
+                    className="text-lg"
                   />
                 </button>
 
@@ -116,7 +116,7 @@ function App() {
                 ) : (
                   <button
                     onClick={toggleMenu}
-                    className="p-2  w-6 h-6 aspect-square flex justify-center items-center text-light-primary dark:text-dark-primary z-50 relative"
+                  className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/40 text-white hover:bg-white/10 transition-all duration-200 z-50 relative"
                   >
                     <FontAwesomeIcon icon={isOpen ? faTimes : faBars} />
                   </button>
@@ -157,8 +157,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
-                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
+                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
+                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -175,8 +175,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
-                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
+                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
+                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -193,8 +193,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
-                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
+                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
+                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -211,8 +211,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
-                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
+                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
+                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -229,8 +229,8 @@ function App() {
                         `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
                          ${
                            isActive
-                             ? "bg-gradient-to-r from-light-primary/20 to-light-accent/20 dark:from-dark-primary/20 dark:to-dark-accent/20 text-light-primary dark:text-dark-primary"
-                             : "hover:bg-light-primary/10 dark:hover:bg-dark-primary/10"
+                               ? "bg-light-text/90 dark:bg-dark-text/90 text-light-background dark:text-dark-background"
+                               : "hover:bg-light-text/10 dark:hover:bg-dark-text/10"
                          }`
                       }
                       onClick={() => setIsOpen(false)}

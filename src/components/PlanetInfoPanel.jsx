@@ -11,36 +11,36 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-x-0 top-20 mx-auto z-[1000] w-[95%] md:w-96 md:right-4 md:left-auto bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-lg shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+    <div className="fixed inset-x-0 top-20 mx-auto z-[1000] w-[95%] md:w-96 md:right-4 md:left-auto bg-black/30 backdrop-blur-md rounded-lg shadow-xl overflow-hidden border border-white/20 text-white">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-6">
+      <div className="border-b border-white/20 p-6">
         <div className="flex justify-between items-start mb-4">
           <h2 className="text-2xl font-bold text-white">
             {planet.targetname.split(" ")[0]}
           </h2>
           <button 
             onClick={onClose}
-            className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
+            className="p-2 text-white hover:bg-white/10 rounded-full border border-white/50 transition-colors"
           >
             <FontAwesomeIcon icon={faClose} />
           </button>
         </div>
-        <p className="text-white/80 text-sm">
+        <p className="text-white/70 text-sm">
           {planet.type || 'Celestial Body'} • ID: {planet.id || 'N/A'}
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white/50 dark:bg-gray-800/50">
-        <div className="flex border-b border-gray-200 dark:border-gray-700">
+      <div>
+        <div className="flex border-b border-white/20">
           {['Overview', 'Orbital', 'Position'].map((tab, index) => (
             <button
               key={tab}
               onClick={() => setActiveTab(index)}
               className={`flex-1 py-3 px-4 text-sm font-medium transition-colors
                 ${activeTab === index 
-                  ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-500' 
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                  ? 'text-white border-b-2 border-white' 
+                  : 'text-white/50 hover:text-white'
                 }`}
             >
               <FontAwesomeIcon 
@@ -117,8 +117,8 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
 
 const DataSection = ({ icon, title, items }) => (
   <div className="space-y-3">
-    <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-      <FontAwesomeIcon icon={icon} className="text-indigo-500 dark:text-indigo-400" />
+    <div className="flex items-center gap-2 text-white">
+      <FontAwesomeIcon icon={icon} className="text-white" />
       <span className="font-semibold">{title}</span>
     </div>
     <div className="space-y-2 pl-6">
@@ -130,24 +130,24 @@ const DataSection = ({ icon, title, items }) => (
 );
 
 const InfoRow = ({ label, value }) => (
-  <div className="flex justify-between items-center px-1 py-1 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded transition-colors">
-    <span className="text-gray-600 dark:text-gray-400">{label}</span>
-    <span className="font-medium text-gray-800 dark:text-gray-200">{value}</span>
+  <div className="flex justify-between items-center px-1 py-1 hover:bg-white/10 rounded transition-colors">
+    <span className="text-white/60">{label}</span>
+    <span className="font-medium text-white">{value}</span>
   </div>
 );
 
 const VectorDisplay = ({ title, x, y, z, precision = 6 }) => (
   <div className="space-y-2">
-    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{title}</span>
-    <div className="grid grid-cols-3 gap-2 bg-gray-50 dark:bg-gray-700/50 p-3 rounded">
+    <span className="text-sm font-medium text-white">{title}</span>
+    <div className="grid grid-cols-3 gap-2 bg-white/10 p-3 rounded">
       {[
         { label: 'X', value: x },
         { label: 'Y', value: y },
         { label: 'Z', value: z }
       ].map(({ label, value }) => (
         <div key={label} className="text-center">
-          <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>
-          <p className="font-medium text-gray-800 dark:text-gray-200">
+          <span className="text-xs text-white/50">{label}</span>
+          <p className="font-medium text-white">
             {typeof value === 'number' ? value.toFixed(precision) : 'N/A'}
           </p>
         </div>

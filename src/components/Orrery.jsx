@@ -12,6 +12,7 @@ import {
   faPlay,
   faSpinner,
   faExclamationTriangle,
+  faBackward,
 } from "@fortawesome/free-solid-svg-icons";
 import Planet from "./Planet";
 import NEOInstances from "./NEOInstances";
@@ -35,6 +36,72 @@ const sceneColors = {
     pointLight: 4,
   },
 };
+
+const HOUR_MS = 3600 * 1000;
+const DAY_MS = 24 * HOUR_MS;
+const WEEK_MS = 7 * DAY_MS;
+const MONTH_MS = 30 * DAY_MS;
+
+const TIME_WARP_PRESETS = [
+  ["1x", 1],
+  ...[...Array(23)].map((_, i) => [
+    `${i + 1}h/s`,
+    ((i + 1) * HOUR_MS) / 1000,
+  ]),
+  ...[...Array(6)].map((_, i) => [
+    `${i + 1}d/s`,
+    ((i + 1) * DAY_MS) / 1000,
+  ]),
+  ...[...Array(3)].map((_, i) => [
+    `${i + 1}w/s`,
+    ((i + 1) * WEEK_MS) / 1000,
+  ]),
+  ...[...Array(6)].map((_, i) => [
+    `${i + 1}m/s`,
+    ((i + 1) * MONTH_MS) / 1000,
+  ]),
+];
+
+const SLIDER_MAX = TIME_WARP_PRESETS.length - 1;
+
+function presetIndexForSpeed(speed) {
+  const magnitude = Math.abs(speed);
+  let best = 0;
+  let bestDist = Infinity;
+  for (let i = 0; i < TIME_WARP_PRESETS.length; i++) {
+    const dist =
+      Math.abs(TIME_WARP_PRESETS[i][1] - magnitude) / TIME_WARP_PRESETS[i][1];
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = i;
+    }
+  }
+  return best;
+}
+
+function speedToSlider(speed) {
+  return presetIndexForSpeed(speed);
+}
+
+function formatSpeed(speed) {
+  const sign = speed < 0 ? "-" : "";
+  const magnitude = Math.abs(speed);
+  const preset = TIME_WARP_PRESETS.find(
+    ([, m]) => Math.abs(magnitude - m) / m < 0.001
+  );
+  if (preset) return `${sign}${preset[0]}`;
+  return `${sign}${Math.round(magnitude)}x`;
+}
+
+function toReadableDate(date) {
+  return date.toLocaleString([], {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
 
 const orbitColors = {
   "Mercury Barycenter (199)": "gold",
@@ -314,9 +381,18 @@ function Orrery() {
   const [resetCameraFlag, setResetCameraFlag] = useState(false);
   const [isDark] = useState(false);
 
+  const [editingDate, setEditingDate] = useState(false);
+  const [dateText, setDateText] = useState(() => toReadableDate(new Date()));
+
   const simTimeRef = useRef(new Date());
   const lastUpdateTime = useRef(performance.now());
   const frameId = useRef();
+
+  useEffect(() => {
+    if (!editingDate) {
+      setDateText(toReadableDate(time));
+    }
+  }, [time, editingDate]);
 
   const handlePlanetSelect = useCallback((planet) => {
     if (!planet) {
@@ -368,20 +444,35 @@ function Orrery() {
   }, [speed, paused]);
 
   const handleSpeedChange = (event) => {
-    const newSpeed = parseFloat(event.target.value);
-    setSpeed(newSpeed);
+    const index = Math.round(parseFloat(event.target.value));
+    const presetSpeed = TIME_WARP_PRESETS[index][1];
+    setSpeed((prev) => (prev < 0 ? -presetSpeed : presetSpeed));
+  };
+
+  const toggleReverse = () => {
+    setSpeed((prev) => (prev < 0 ? Math.abs(prev) : -Math.abs(prev)));
   };
 
   const handleDateChange = (event) => {
+    setDateText(event.target.value);
     const newDate = event.target.value
       ? new Date(event.target.value)
       : new Date();
-    simTimeRef.current = newDate;
-    setTime(newDate);
+    if (!Number.isNaN(newDate.getTime())) {
+      simTimeRef.current = newDate;
+      setTime(newDate);
+    }
   };
 
   const togglePause = () => {
     setPaused((prev) => !prev);
+  };
+
+  const handleLive = () => {
+    const now = new Date();
+    simTimeRef.current = now;
+    setTime(now);
+    setPaused(false);
   };
 
   useEffect(() => {
@@ -545,38 +636,67 @@ function Orrery() {
       </div>
 
       <div className="pointer-events-none fixed inset-0 z-20">
-        <div className="fixed bottom-12 left-1/2 transform -translate-x-1/2 pointer-events-auto">
-          <div className="glass-card p-4 flex flex-col md:flex-row items-center gap-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-lg">
-            <div className="flex items-center gap-4">
-              <input
-                type="range"
-                min="0.1"
-                max="900000"
-                step="90"
-                value={speed}
-                onChange={handleSpeedChange}
-                className="w-48 md:w-64"
-              />
-              <span className="text-sm text-light-text dark:text-dark-text whitespace-nowrap">
-                {speed === 1 ? "1x (Real-time)" : `${speed}x`}
-              </span>
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 pointer-events-auto">
+          <div className="flex flex-col items-center gap-2 px-6 py-4">
+            <div className="grid grid-cols-[auto_1fr_auto] items-center w-full gap-4">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={toggleReverse}
+                  aria-label="reverse time"
+                  title={speed < 0 ? "Play forward" : "Rewind"}
+                  className={`w-10 h-10 aspect-square flex items-center justify-center rounded-full border transition-all duration-200 ${
+                    speed < 0
+                      ? "bg-white text-black border-white"
+                      : "text-white border-white/50 hover:bg-white/10"
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faBackward} />
+                </button>
+                <button
+                  onClick={togglePause}
+                  aria-label="toggle pause-play"
+                  className="w-10 h-10 aspect-square flex items-center justify-center rounded-full text-white border border-white/50 hover:bg-white/10 transition-all duration-200"
+                >
+                  <FontAwesomeIcon icon={paused ? faPlay : faPause} />
+                </button>
+              </div>
+
+              <div className="flex justify-center">
+                <input
+                  type="text"
+                  value={dateText}
+                  onFocus={() => setEditingDate(true)}
+                  onBlur={() => setEditingDate(false)}
+                  onChange={handleDateChange}
+                  placeholder="Enter date, e.g. Aug 6, 2026"
+                  className="bg-transparent text-white border-b border-transparent focus:border-white focus:outline-none px-1 py-1 text-sm w-52 text-center placeholder-white/40"
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={handleLive}
+                  aria-label="return to live time"
+                  className="rounded-full border border-white/50 text-white px-4 py-1.5 text-sm hover:bg-white/10 transition-all duration-200 flex items-center gap-2"
+                >
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                  Live
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <input
-                type="datetime-local"
-                value={time.toISOString().slice(0, 16)}
-                onChange={handleDateChange}
-                className="bg-transparent border border-light-primary/20 dark:border-dark-primary/20 rounded px-2 py-1 text-sm"
-              />
-              <button
-                onClick={togglePause}
-                aria-label="toggle pause-play"
-                className="btn-primary flex justify-center w-10 h-10  aspect-square items-center "
-              >
-                <FontAwesomeIcon icon={paused ? faPlay : faPause} />
-              </button>
-            </div>
+            <input
+              type="range"
+              min="0"
+              max={SLIDER_MAX}
+              step="1"
+              value={speedToSlider(speed)}
+              onChange={handleSpeedChange}
+              className="w-64 md:w-80 accent-white"
+            />
+            <span className="text-white text-sm font-medium tracking-wide whitespace-nowrap">
+              {formatSpeed(speed)}
+            </span>
           </div>
         </div>
 
