@@ -183,7 +183,7 @@ function Orbit({
       const p = points[idx];
       posAttr.setXYZ(k, p.x * AU_SCALE, p.y * AU_SCALE, p.z * AU_SCALE);
       if (colAttr) {
-        const fade = ((k + 1) / tailLength) * tailMaxOpacity;
+        const fade = (k / (tailLength - 1)) * tailMaxOpacity;
         colAttr.setXYZ(
           k,
           tailColorValue.r * fade,

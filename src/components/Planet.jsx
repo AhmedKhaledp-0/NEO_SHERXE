@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { Html, useGLTF } from "@react-three/drei";
+import { Html, useGLTF, Billboard } from "@react-three/drei";
 import { Detailed } from "@react-three/drei";
 import {
   precomputeConstants,
@@ -126,6 +126,11 @@ function Planet({
     ],
   );
 
+  const ringGeometry = useMemo(
+    () => new THREE.RingGeometry(config.size * 0.7, config.size * 0.85, 6),
+    [config.size],
+  );
+
   const geometries = useMemo(
     () => ({
       high: new THREE.SphereGeometry(config.size, 48, 24),
@@ -151,6 +156,16 @@ function Planet({
         metalness: 0.5,
         emissive: new THREE.Color(config.color).multiplyScalar(0.2),
         side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 1,
+      }),
+      ring: new THREE.MeshBasicMaterial({
+        color: "#d1d5db",
+        transparent: true,
+        opacity: 0.9,
+      }),
+      ringHover: new THREE.MeshBasicMaterial({
+        color: "#ffffff",
         transparent: true,
         opacity: 1,
       }),
@@ -217,6 +232,13 @@ function Planet({
           />
           <mesh geometry={geometries.low} material={materials.standard} />
         </Detailed>
+      ) : isFeatured ? (
+        <Billboard>
+          <mesh
+            geometry={ringGeometry}
+            material={hovered ? materials.ringHover : materials.ring}
+          />
+        </Billboard>
       ) : (
         <mesh
           geometry={geometries.low}
@@ -230,15 +252,14 @@ function Planet({
           position={[config.size * 5, 0, 0]}
           center
         >
-          <div
+          <span
             ref={spanRef}
-            className="neo-label-text text-xs flex items-center gap-1.5"
+            className="neo-label-text text-xs select-none"
             style={{ color: labelColor || "#ffffff" }}
             onClick={handleTagClick}
           >
-            {isFeatured && <span className="neo-label-marker" aria-hidden />}
-            <span>{shortLabelName(planetId)}</span>
-          </div>
+            {shortLabelName(planetId)}
+          </span>
         </Html>
       )}
     </group>
