@@ -25,6 +25,7 @@ import AnimatedLayers from "./Layers";
 import PlanetInfoPanel from "./PlanetInfoPanel";
 import Orbit from "./Orbit";
 import { StarField } from "./StarField";
+import LabelManager from "./LabelManager";
 
 const sceneColors = {
   background: "#000000",
@@ -99,6 +100,17 @@ const orbitColors = {
   "Pluto Barycenter (9)": "beige",
 };
 
+const featuredColors = {
+  PHAEX: "#ffffff",
+  NEAEX: "#ffffff",
+};
+
+function labelColorFor(body) {
+  if (orbitColors[body.planet]) return orbitColors[body.planet];
+  if (featuredColors[body.type]) return featuredColors[body.type];
+  return "#ffffff";
+}
+
 const Scene = React.memo(function Scene({
   visibleBodies,
   timeRef,
@@ -106,6 +118,7 @@ const Scene = React.memo(function Scene({
   showOrbits,
   onPlanetSelect,
   resetCamera,
+  selectedId,
 }) {
   const { camera, gl } = useThree();
   const controlsRef = useRef();
@@ -282,6 +295,8 @@ const Scene = React.memo(function Scene({
             positionsRef={positionsRef}
             timeRef={timeRef}
             onPlanetClick={handlePlanetClick}
+            labelColor={labelColorFor(body)}
+            selected={selectedId === body.planet}
           />
           {showOrbits && (
             <Orbit
@@ -331,6 +346,8 @@ const Scene = React.memo(function Scene({
           positionsRef={positionsRef}
           timeRef={timeRef}
           onPlanetClick={handlePlanetClick}
+          labelColor={labelColorFor(body)}
+          selected={selectedId === body.planet}
         />
       ))}
       {bulkNEOs.length > 0 && (
@@ -339,8 +356,10 @@ const Scene = React.memo(function Scene({
           timeRef={timeRef}
           positionsRef={positionsRef}
           onSelect={handleNEOSelect}
+          selectedId={selectedId}
         />
       )}
+      <LabelManager />
     </>
   );
 });
@@ -609,6 +628,7 @@ function Orrery() {
               showOrbits={showOrbits}
               onPlanetSelect={handlePlanetSelect}
               resetCamera={resetCameraFlag}
+              selectedId={selectedPlanet ? selectedPlanet.planet : null}
             />
           </Suspense>
         </Canvas>

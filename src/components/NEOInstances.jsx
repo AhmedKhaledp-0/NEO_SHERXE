@@ -10,6 +10,7 @@ import {
 } from "../utilities/kepler";
 import vertexShader from "../shaders/neos.vert.glsl?raw";
 import fragmentShader from "../shaders/neos.frag.glsl?raw";
+import { registerLabel, LABEL_PRIORITY, shortLabelName } from "../utilities/labelManager";
 
 const NEO_COLOR = "#7fd4ff";
 
@@ -26,9 +27,11 @@ function TrackingLabel({
   constants,
   timeRef,
   positionsRef,
-  offset = 0.8,
+  offset = 1.8,
+  selected = false,
 }) {
   const groupRef = useRef();
+  const spanRef = useRef();
   const tempPosition = useMemo(() => new THREE.Vector3(), []);
 
   useFrame(() => {
@@ -40,31 +43,48 @@ function TrackingLabel({
     }
     if (groupRef.current) {
       groupRef.current.position.set(
-        tempPosition.x * AU_SCALE,
-        tempPosition.y * AU_SCALE + offset,
+        tempPosition.x * AU_SCALE + offset,
+        tempPosition.y * AU_SCALE,
         tempPosition.z * AU_SCALE,
       );
     }
   });
 
+  useEffect(() => {
+    const unregister = registerLabel({
+      id: `neo-${name}`,
+      el: () => spanRef.current,
+      getPosition: () => {
+        const group = groupRef.current;
+        if (!group) return null;
+        group.updateWorldMatrix(true, false);
+        return group.getWorldPosition(tempPosition);
+      },
+      priority: () =>
+        selected ? LABEL_PRIORITY.SELECTED : LABEL_PRIORITY.HOVERED,
+      force: () => selected,
+      isHovered: () => !selected,
+      interactive: false,
+    });
+    return unregister;
+  }, [name, selected, tempPosition]);
+
   return (
     <group ref={groupRef}>
-      <Html
-        className="select-none"
-        center
-        style={{
-          pointerEvents: "none",
-        }}
-      >
-        <span className="px-2 py-1 bg-black/60 text-white text-xs whitespace-nowrap backdrop-blur-sm">
-          {name.split("Barycenter")[0]}
+      <Html className="select-none" center>
+        <span
+          ref={spanRef}
+          className="neo-label-text text-xs select-none"
+          style={{ color: "#ffffff" }}
+        >
+          {shortLabelName(name)}
         </span>
       </Html>
     </group>
   );
 }
 
-function NEOInstances({ bodies, timeRef, positionsRef, onSelect }) {
+function NEOInstances({ bodies, timeRef, positionsRef, onSelect, selectedId }) {
   const { instancedMesh, constants, names, raycastPositions, count } =
     useMemo(() => {
       const count = bodies.length;
@@ -270,6 +290,22 @@ function NEOInstances({ bodies, timeRef, positionsRef, onSelect }) {
           positionsRef={positionsRef}
         />
       )}
+      {selectedId &&
+        selectedId !== hoveredName &&
+        (() => {
+          const selectedIndex = names.indexOf(selectedId);
+          if (selectedIndex < 0) return null;
+          return (
+            <TrackingLabel
+              key={`selected-${names[selectedIndex]}`}
+              name={names[selectedIndex]}
+              constants={constants[selectedIndex]}
+              timeRef={timeRef}
+              positionsRef={positionsRef}
+              selected
+            />
+          );
+        })()}
     </>
   );
 }

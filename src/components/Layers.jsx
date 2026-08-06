@@ -110,14 +110,14 @@ const AnimatedLayers = ({
       icon: faStarOfLife,
       active: showPHAsEX,
       toggle: setShowPHAsEX,
-      count: 20,
+      count: 10,
     },
     {
       label: "Extended NEAs",
       icon: faStarOfLife,
       active: showNEAsEX,
       toggle: setShowNEAsEX,
-      count: 20,
+      count: 10,
     },
   ];
 

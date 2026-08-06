@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, Suspense } from "react";
+import React, { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Html, useGLTF } from "@react-three/drei";
@@ -8,6 +8,9 @@ import {
   getBodyPosition,
   AU_SCALE,
 } from "../utilities/kepler";
+import { registerLabel, LABEL_PRIORITY, shortLabelName } from "../utilities/labelManager";
+
+const labelWorldPosition = new THREE.Vector3();
 
 const planetConfig = {
   "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6" },
@@ -59,12 +62,49 @@ function Planet({
   positionsRef,
   timeRef,
   onPlanetClick,
+  labelColor,
+  selected,
 }) {
   const meshRef = useRef();
+  const spanRef = useRef();
   const isMainPlanet = id >= 1 && id <= 9;
   const [hovered, setHovered] = useState(false);
   const config = planetConfig[planetId] ||
     typeConfig[type] || { size: 0.1, color: "#ffffff" };
+  const isFeatured = type === "PHAEX" || type === "NEAEX";
+  const labelPriority = isFeatured
+    ? LABEL_PRIORITY.FEATURED
+    : LABEL_PRIORITY.PLANET;
+  const labelOffset = config.size * 5;
+
+  const stateRef = useRef({ hovered: false, selected: false });
+  stateRef.current.hovered = hovered;
+  stateRef.current.selected = !!selected;
+
+  useEffect(() => {
+    const unregister = registerLabel({
+      id: `planet-${planetId}`,
+      el: () => spanRef.current,
+      getPosition: () => {
+        const group = meshRef.current;
+        if (!group) return null;
+        group.updateWorldMatrix(true, false);
+        const position = group.getWorldPosition(labelWorldPosition);
+        position.x += labelOffset;
+        return position;
+      },
+      priority: () =>
+        stateRef.current.selected
+          ? LABEL_PRIORITY.SELECTED
+          : stateRef.current.hovered
+            ? LABEL_PRIORITY.HOVERED
+            : labelPriority,
+      force: () => stateRef.current.selected,
+      isHovered: () => stateRef.current.hovered,
+      interactive: true,
+    });
+    return unregister;
+  }, [planetId, labelPriority, labelOffset]);
 
   const constants = useMemo(
     () =>
@@ -184,23 +224,19 @@ function Planet({
           scale={config.size * 0.2}
         />
       )}
-      {showTags && (
+      {(showTags || selected) && (
         <Html
           className="select-none"
-          position={[0, config.size * 1.5, 0]}
+          position={[config.size * 5, 0, 0]}
           center
-          style={{
-            opacity: hovered ? 1 : 0.8,
-            transition: "transform 0.2s, opacity 0.2s",
-            transform: `scale(${hovered ? 1.1 : 1})`,
-            pointerEvents: "auto",
-          }}
         >
           <span
-            className="px-2 py-1  bg-black/50 text-white text-xs whitespace-nowrap backdrop-blur-sm hover:bg-black/70"
+            ref={spanRef}
+            className="neo-label-text text-xs select-none"
+            style={{ color: labelColor || "#ffffff" }}
             onClick={handleTagClick}
           >
-            {planetId.split("Barycenter")[0]}
+            {shortLabelName(planetId)}
           </span>
         </Html>
       )}

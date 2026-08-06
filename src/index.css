@@ -58,6 +58,23 @@ body {
 }
 
 @layer components {
+  .neo-label-text {
+    display: inline-block;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    cursor: pointer;
+    opacity: 0;
+    will-change: opacity, transform;
+    transition:
+      opacity 300ms ease,
+      transform 300ms ease;
+    text-shadow:
+      0 0 8px rgba(0, 0, 0, 0.95),
+      0 1px 3px rgba(0, 0, 0, 0.9);
+  }
+
   .glass-card {
     backdrop-filter: blur(12px);
     background-color: rgba(255, 255, 255, 0.05);
