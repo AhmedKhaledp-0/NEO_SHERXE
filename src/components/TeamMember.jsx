@@ -11,7 +11,7 @@ export default function TeamMember({
   email,
 }) {
   return (
-    <div className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500 flex flex-col h-full">
+    <div className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500 flex flex-col h-full cursor-pointer">
       <div className="relative w-full aspect-square mb-8 overflow-hidden border border-white/10 grayscale group-hover:grayscale-0 transition-all duration-500">
         <img
           src={photo}

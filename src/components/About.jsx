@@ -101,7 +101,7 @@ export default function About() {
               {points.map((point) => (
                 <div
                   key={point.id}
-                  className="bg-black p-8 md:p-12 group hover:bg-white/5 transition-colors duration-500"
+                  className="bg-black p-8 md:p-12 group hover:bg-white/5 transition-colors duration-500 cursor-pointer"
                 >
                   <div className="flex flex-col md:flex-row items-start gap-8">
                     <div className="shrink-0 w-16 h-16 flex items-center justify-center border border-white/20 text-white group-hover:bg-white group-hover:text-black transition-colors duration-500">
@@ -130,7 +130,7 @@ export default function About() {
               {features.map((feature) => (
                 <div
                   key={feature.id}
-                  className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500"
+                  className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500 cursor-pointer"
                 >
                   <div className="flex items-start gap-4">
                     <FontAwesomeIcon
