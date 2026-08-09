@@ -60,7 +60,7 @@ function App() {
         <nav className="fixed w-full top-0 z-40 bg-linear-to-b from-black/70 via-black/30 to-transparent">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
-              <span className="text-xl font-bold bg-linear-to-r from-dark-primary to-dark-accent bg-clip-text text-transparent z-50 relative">
+              <span className="text-xl font-bold text-white tracking-widest z-50 relative">
                 NEO SPHERXE
               </span>
 
