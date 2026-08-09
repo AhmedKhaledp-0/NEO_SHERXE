@@ -56,8 +56,8 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-dark-background text-dark-text">
-        <nav className="fixed w-full top-0 z-40 bg-linear-to-b from-black/70 via-black/30 to-transparent">
+      <div className="min-h-screen bg-black text-white">
+        <nav className="fixed w-full top-0 z-40 bg-black/50 backdrop-blur-md border-b border-white/5">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
               <span className="text-xl font-bold text-white tracking-widest z-50 relative">
@@ -110,22 +110,32 @@ function App() {
 
               {/* Menu Content */}
               <div
-                className={`absolute inset-y-0 left-0 w-full bg-dark-background/95 flex flex-col
+                className={`absolute inset-y-0 left-0 w-full bg-black/95 flex flex-col
                            transform transition-all duration-300 ease-out h-dvh
                            ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
               >
+                {/* Close Button Header */}
+                <div className="w-full h-16 container mx-auto px-4 flex items-center justify-end shrink-0 pt-4">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/20 text-white hover:bg-white/10 transition-all duration-200"
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
+                  </button>
+                </div>
+
                 {/* Navigation Links - Full height with better spacing */}
-                <div className="flex-1 flex flex-col justify-center py-16">
+                <div className="flex-1 flex flex-col justify-center py-8">
                   <div className="px-6 space-y-6">
                     <NavLink
                       to="/"
                       end
                       className={({ isActive }) =>
-                        `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
+                        `flex items-center px-6 py-4 rounded-xl transition-all duration-300 tracking-widest uppercase text-sm font-bold
                          ${
                            isActive
-                             ? "bg-dark-text/90 text-dark-background"
-                             : "hover:bg-dark-text/10"
+                             ? "bg-white text-black"
+                             : "text-white/50 hover:bg-white/10 hover:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -139,11 +149,11 @@ function App() {
                     <NavLink
                       to="/live"
                       className={({ isActive }) =>
-                        `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
+                        `flex items-center px-6 py-4 rounded-xl transition-all duration-300 tracking-widest uppercase text-sm font-bold
                          ${
                            isActive
-                             ? "bg-dark-text/90 text-dark-background"
-                             : "hover:bg-dark-text/10"
+                             ? "bg-white text-black"
+                             : "text-white/50 hover:bg-white/10 hover:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -157,11 +167,11 @@ function App() {
                     <NavLink
                       to="/riskLevel"
                       className={({ isActive }) =>
-                        `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
+                        `flex items-center px-6 py-4 rounded-xl transition-all duration-300 tracking-widest uppercase text-sm font-bold
                          ${
                            isActive
-                             ? "bg-dark-text/90 text-dark-background"
-                             : "hover:bg-dark-text/10"
+                             ? "bg-white text-black"
+                             : "text-white/50 hover:bg-white/10 hover:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -175,11 +185,11 @@ function App() {
                     <NavLink
                       to="/about"
                       className={({ isActive }) =>
-                        `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
+                        `flex items-center px-6 py-4 rounded-xl transition-all duration-300 tracking-widest uppercase text-sm font-bold
                          ${
                            isActive
-                             ? "bg-dark-text/90 text-dark-background"
-                             : "hover:bg-dark-text/10"
+                             ? "bg-white text-black"
+                             : "text-white/50 hover:bg-white/10 hover:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -193,11 +203,11 @@ function App() {
                     <NavLink
                       to="/qna"
                       className={({ isActive }) =>
-                        `flex items-center px-6 py-4 rounded-2xl transition-all duration-300
+                        `flex items-center px-6 py-4 rounded-xl transition-all duration-300 tracking-widest uppercase text-sm font-bold
                          ${
                            isActive
-                             ? "bg-dark-text/90 text-dark-background"
-                             : "hover:bg-dark-text/10"
+                             ? "bg-white text-black"
+                             : "text-white/50 hover:bg-white/10 hover:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
