@@ -91,7 +91,7 @@ function App() {
                 ) : (
                   <button
                     onClick={toggleMenu}
-                    className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/20 text-white hover:bg-white/10 transition-all duration-200 z-50 relative"
+                    className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/20 text-white hover:bg-white/10 active:bg-white/10 transition-all duration-200 z-50 relative"
                   >
                     <FontAwesomeIcon icon={isOpen ? faTimes : faBars} />
                   </button>
@@ -124,7 +124,7 @@ function App() {
                 <div className="w-full h-16 container mx-auto px-4 flex items-center justify-end shrink-0 pt-4">
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/20 text-white hover:bg-white/10 transition-all duration-200"
+                    className="w-9 h-9 aspect-square flex justify-center items-center rounded-full border border-white/20 text-white hover:bg-white/10 active:bg-white/10 transition-all duration-200"
                   >
                     <FontAwesomeIcon icon={faTimes} />
                   </button>
@@ -141,7 +141,7 @@ function App() {
                          ${
                            isActive
                              ? "bg-white text-black"
-                             : "text-white/50 hover:bg-white/10 hover:text-white"
+                             : "text-white/50 hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -159,7 +159,7 @@ function App() {
                          ${
                            isActive
                              ? "bg-white text-black"
-                             : "text-white/50 hover:bg-white/10 hover:text-white"
+                             : "text-white/50 hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -177,7 +177,7 @@ function App() {
                          ${
                            isActive
                              ? "bg-white text-black"
-                             : "text-white/50 hover:bg-white/10 hover:text-white"
+                             : "text-white/50 hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -195,7 +195,7 @@ function App() {
                          ${
                            isActive
                              ? "bg-white text-black"
-                             : "text-white/50 hover:bg-white/10 hover:text-white"
+                             : "text-white/50 hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -213,7 +213,7 @@ function App() {
                          ${
                            isActive
                              ? "bg-white text-black"
-                             : "text-white/50 hover:bg-white/10 hover:text-white"
+                             : "text-white/50 hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -231,7 +231,7 @@ function App() {
                          ${
                            isActive
                              ? "bg-white text-black"
-                             : "text-white/50 hover:bg-white/10 hover:text-white"
+                             : "text-white/50 hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                          }`
                       }
                       onClick={() => setIsOpen(false)}

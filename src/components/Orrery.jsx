@@ -734,7 +734,7 @@ function Orrery() {
                   className={`w-8 h-8 aspect-square flex items-center justify-center rounded-full border transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 ${
                     speed < 0
                       ? "bg-white/15 text-white border-white/10"
-                      : "text-zinc-400 border-white/10 hover:text-white hover:bg-white/5"
+                      : "text-zinc-400 border-white/10 hover:text-white active:text-white hover:bg-white/5 active:bg-white/5"
                   }`}
                 >
                   <FontAwesomeIcon icon={faBackward} />
@@ -742,7 +742,7 @@ function Orrery() {
                 <button
                   onClick={togglePause}
                   aria-label="toggle pause-play"
-                  className="w-8 h-8 aspect-square flex items-center justify-center rounded-full text-zinc-400 border border-white/10 hover:text-white hover:bg-white/5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40"
+                  className="w-8 h-8 aspect-square flex items-center justify-center rounded-full text-zinc-400 border border-white/10 hover:text-white active:text-white hover:bg-white/5 active:bg-white/5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40"
                 >
                   <FontAwesomeIcon icon={paused ? faPlay : faPause} />
                 </button>
@@ -764,7 +764,7 @@ function Orrery() {
                 <button
                   onClick={handleLive}
                   aria-label="return to live time"
-                  className="rounded-full border border-white/10 text-zinc-300 px-3 py-1 text-xs hover:text-white hover:bg-white/5 transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40"
+                  className="rounded-full border border-white/10 text-zinc-300 px-3 py-1 text-xs hover:text-white active:text-white hover:bg-white/5 active:bg-white/5 transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                   Live
@@ -822,7 +822,7 @@ function Orrery() {
                 </div>
                 <button
                   onClick={handleResetCamera}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10 hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                 >
                   <FontAwesomeIcon
                     icon={faChevronLeft}
@@ -863,7 +863,7 @@ function Orrery() {
 
               <button
                 onClick={() => setInfoOpen((current) => !current)}
-                className="mt-2 text-xs text-zinc-400 underline decoration-white/20 underline-offset-4 hover:text-white"
+                className="mt-2 text-xs text-zinc-400 underline decoration-white/20 underline-offset-4 hover:text-white active:text-white"
                 aria-label={
                   infoOpen ? "Hide more details" : "Show more details"
                 }
@@ -911,13 +911,13 @@ function Orrery() {
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     <button
                       onClick={() => setInfoOpen(false)}
-                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-left text-zinc-300 transition-colors hover:bg-white/10 hover:text-white"
+                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-left text-zinc-300 transition-colors hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                     >
                       Hide details
                     </button>
                     <button
                       onClick={handleResetCamera}
-                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-left text-zinc-300 transition-colors hover:bg-white/10 hover:text-white"
+                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-left text-zinc-300 transition-colors hover:bg-white/10 active:bg-white/10 hover:text-white active:text-white"
                     >
                       Return to solar system
                     </button>

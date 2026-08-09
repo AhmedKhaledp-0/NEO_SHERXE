@@ -29,7 +29,7 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
           </h2>
           <button
             onClick={onClose}
-            className="p-2 text-white hover:bg-white/10 rounded-full border border-white/20 transition-colors"
+            className="p-2 text-white hover:bg-white/10 active:bg-white/10 rounded-full border border-white/20 transition-colors"
           >
             <FontAwesomeIcon icon={faClose} />
           </button>
@@ -50,7 +50,7 @@ const PlanetInfoPanel = ({ planet, onClose }) => {
                 ${
                   activeTab === index
                     ? "text-white border-b-2 border-white"
-                    : "text-white/50 hover:text-white"
+                    : "text-white/50 hover:text-white active:text-white"
                 }`}
             >
               <FontAwesomeIcon
@@ -160,7 +160,7 @@ const DataSection = ({ icon, title, items }) => (
 );
 
 const InfoRow = ({ label, value }) => (
-  <div className="flex justify-between items-center px-1 py-1 hover:bg-white/10 rounded transition-colors">
+  <div className="flex justify-between items-center px-1 py-1 hover:bg-white/10 active:bg-white/10 rounded transition-colors">
     <span className="text-white/60">{label}</span>
     <span className="font-medium text-white">{value}</span>
   </div>

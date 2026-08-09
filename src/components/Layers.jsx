@@ -14,7 +14,7 @@ import {
 
 const LayerButton = ({ active, onClick, icon, label, count }) => (
   <motion.div
-    className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-white/10 transition-all"
+    className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-white/10 active:bg-white/10 transition-all"
     whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
     onClick={onClick}
@@ -191,7 +191,7 @@ const AnimatedLayers = ({
           <button
             onClick={() => setIsOpen(false)}
             aria-label="close panel"
-            className="absolute bottom-2 right-2 w-12 h-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10"
+            className="absolute bottom-2 right-2 w-12 h-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10 active:bg-white/10"
           >
             <FontAwesomeIcon icon={faTimes} className="text-white" />
           </button>

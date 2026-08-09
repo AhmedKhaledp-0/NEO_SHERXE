@@ -109,7 +109,7 @@ export default function RiskLevel() {
               }) => (
                 <div
                   key={id}
-                  className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500 flex flex-col"
+                  className="bg-black p-8 group hover:bg-white/5 active:bg-white/5 transition-colors duration-500 flex flex-col"
                 >
                   <div className="flex flex-col gap-4 mb-8">
                     <div className="self-start">

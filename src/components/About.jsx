@@ -101,10 +101,10 @@ export default function About() {
               {points.map((point) => (
                 <div
                   key={point.id}
-                  className="bg-black p-8 md:p-12 group hover:bg-white/5 transition-colors duration-500 cursor-pointer"
+                  className="bg-black p-8 md:p-12 group hover:bg-white/5 active:bg-white/5 transition-colors duration-500 cursor-pointer"
                 >
                   <div className="flex flex-col md:flex-row items-start gap-8">
-                    <div className="shrink-0 w-16 h-16 flex items-center justify-center border border-white/20 text-white group-hover:bg-white group-hover:text-black transition-colors duration-500">
+                    <div className="shrink-0 w-16 h-16 flex items-center justify-center border border-white/20 text-white group-hover:bg-white group-active:bg-white group-hover:text-black group-active:text-black transition-colors duration-500">
                       <FontAwesomeIcon icon={point.icon} className="text-2xl" />
                     </div>
                     <div>
@@ -130,7 +130,7 @@ export default function About() {
               {features.map((feature) => (
                 <div
                   key={feature.id}
-                  className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500 cursor-pointer"
+                  className="bg-black p-8 group hover:bg-white/5 active:bg-white/5 transition-colors duration-500 cursor-pointer"
                 >
                   <div className="flex items-start gap-4">
                     <FontAwesomeIcon
@@ -150,7 +150,7 @@ export default function About() {
           <div className="text-center">
             <button
               onClick={() => navigate("/live")}
-              className="inline-flex items-center justify-center gap-4 px-10 py-5 border border-white/20 bg-transparent text-white font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-black transition-all duration-300"
+              className="inline-flex items-center justify-center gap-4 px-10 py-5 border border-white/20 bg-transparent text-white font-bold uppercase tracking-widest text-sm hover:bg-white active:bg-white hover:text-black active:text-black transition-all duration-300"
             >
               <FontAwesomeIcon icon={faRocket} />
               <span>Start Exploring</span>

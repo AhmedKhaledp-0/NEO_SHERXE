@@ -37,7 +37,7 @@ export default function Live() {
             </p>
             <button
               onClick={() => setShowInfo(false)}
-              className="text-xs font-bold uppercase tracking-widest text-white hover:text-white/70 transition-colors"
+              className="text-xs font-bold uppercase tracking-widest text-white hover:text-white/70 active:text-white/70 transition-colors"
             >
               Got it
             </button>
@@ -48,14 +48,14 @@ export default function Live() {
       {/* Controls */}
       <div className="absolute top-24 right-4 md:right-8 z-30 flex flex-col gap-2">
         <button
-          className="bg-black border border-white/20 w-12 h-12 flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors duration-300"
+          className="bg-black border border-white/20 w-12 h-12 flex items-center justify-center text-white hover:bg-white active:bg-white hover:text-black active:text-black transition-colors duration-300"
           onClick={toggleFullscreen}
           title="Toggle fullscreen"
         >
           <FontAwesomeIcon icon={faExpand} />
         </button>
         <button
-          className="bg-black border border-white/20 w-12 h-12 flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors duration-300"
+          className="bg-black border border-white/20 w-12 h-12 flex items-center justify-center text-white hover:bg-white active:bg-white hover:text-black active:text-black transition-colors duration-300"
           onClick={() => setShowInfo(!showInfo)}
           title="Toggle info"
         >
@@ -72,13 +72,13 @@ export default function Live() {
       <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-30">
         <div className="bg-black border border-white/20 px-6 py-3 flex items-center gap-6 shadow-2xl">
           <button
-            className="text-white/60 hover:text-white transition-colors duration-300"
+            className="text-white/60 hover:text-white active:text-white transition-colors duration-300"
             title="Share view"
           >
             <FontAwesomeIcon icon={faShare} />
           </button>
           <button
-            className="text-white/60 hover:text-white transition-colors duration-300"
+            className="text-white/60 hover:text-white active:text-white transition-colors duration-300"
             title="Download data"
           >
             <FontAwesomeIcon icon={faDownload} />

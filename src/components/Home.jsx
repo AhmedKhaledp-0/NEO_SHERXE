@@ -34,14 +34,14 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
             <button
               onClick={() => navigate("/live")}
-              className="px-10 py-5 bg-white text-black font-medium tracking-widest uppercase text-sm border border-white transition-all hover:bg-transparent hover:text-white"
+              className="px-10 py-5 bg-white text-black font-medium tracking-widest uppercase text-sm border border-white transition-all hover:bg-transparent active:bg-transparent hover:text-white active:text-white"
             >
               Enter Live View
             </button>
 
             <button
               onClick={() => navigate("/riskLevel")}
-              className="px-10 py-5 bg-transparent border border-white/20 text-white font-medium tracking-widest uppercase text-sm transition-all hover:border-white"
+              className="px-10 py-5 bg-transparent border border-white/20 text-white font-medium tracking-widest uppercase text-sm transition-all hover:border-white active:border-white"
             >
               Risk Assessment
             </button>
@@ -65,7 +65,7 @@ export default function Home() {
               <div>
                 <FontAwesomeIcon
                   icon={faRocket}
-                  className="text-2xl mb-8 text-white/50 group-hover:text-white transition-colors"
+                  className="text-2xl mb-8 text-white/50 group-hover:text-white group-active:text-white transition-colors"
                 />
                 <h3 className="text-2xl font-medium mb-4 tracking-tight text-white">
                   Interactive Orrery
@@ -77,7 +77,7 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="mt-12 flex items-center gap-4 text-xs tracking-widest uppercase font-bold cursor-pointer text-white/70 group-hover:text-white transition-colors"
+                className="mt-12 flex items-center gap-4 text-xs tracking-widest uppercase font-bold cursor-pointer text-white/70 group-hover:text-white group-active:text-white transition-colors"
                 onClick={() => navigate("/live")}
               >
                 Access System{" "}
@@ -93,7 +93,7 @@ export default function Home() {
               <div>
                 <FontAwesomeIcon
                   icon={faShieldHalved}
-                  className="text-2xl mb-8 text-white/50 group-hover:text-white transition-colors"
+                  className="text-2xl mb-8 text-white/50 group-hover:text-white group-active:text-white transition-colors"
                 />
                 <h3 className="text-2xl font-medium mb-4 tracking-tight text-white">
                   Risk Analysis
@@ -104,7 +104,7 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="mt-12 flex items-center gap-4 text-xs tracking-widest uppercase font-bold cursor-pointer text-white/70 group-hover:text-white transition-colors"
+                className="mt-12 flex items-center gap-4 text-xs tracking-widest uppercase font-bold cursor-pointer text-white/70 group-hover:text-white group-active:text-white transition-colors"
                 onClick={() => navigate("/riskLevel")}
               >
                 View Assessment{" "}
@@ -120,18 +120,18 @@ export default function Home() {
               <div>
                 <FontAwesomeIcon
                   icon={faSatellite}
-                  className="text-2xl mb-8 text-white/50 group-hover:text-white transition-colors"
+                  className="text-2xl mb-8 text-white/50 group-hover:text-white group-active:text-white transition-colors"
                 />
                 <h3 className="text-2xl font-medium mb-4 tracking-tight text-white">
                   Live Telemetry
                 </h3>
                 <p className="font-light leading-relaxed text-white/40">
-                  Access up-to-the-minute data sourced directly from NASA&apos;s JPL
-                  and advanced global astronomical observatories.
+                  Access up-to-the-minute data sourced directly from NASA&apos;s
+                  JPL and advanced global astronomical observatories.
                 </p>
               </div>
               <div
-                className="mt-12 flex items-center gap-4 text-xs tracking-widest uppercase font-bold cursor-pointer text-white/70 group-hover:text-white transition-colors"
+                className="mt-12 flex items-center gap-4 text-xs tracking-widest uppercase font-bold cursor-pointer text-white/70 group-hover:text-white group-active:text-white transition-colors"
                 onClick={() => navigate("/qna")}
               >
                 Read Documentation{" "}
@@ -156,7 +156,7 @@ export default function Home() {
             </p>
             <button
               onClick={() => navigate("/live")}
-              className="px-12 py-5 bg-white text-black font-bold tracking-widest uppercase text-sm border border-white transition-all hover:bg-black hover:text-white"
+              className="px-12 py-5 bg-white text-black font-bold tracking-widest uppercase text-sm border border-white transition-all hover:bg-black active:bg-black hover:text-white active:text-white"
             >
               Launch Explorer
             </button>
@@ -174,15 +174,21 @@ export default function Home() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-8 md:gap-12 text-xs font-bold tracking-widest uppercase text-white/40">
-            <Link to="/about" className="hover:text-white transition-colors">
+            <Link
+              to="/about"
+              className="hover:text-white active:text-white transition-colors"
+            >
               About
             </Link>
-            <Link to="/live" className="hover:text-white transition-colors">
+            <Link
+              to="/live"
+              className="hover:text-white active:text-white transition-colors"
+            >
               Live View
             </Link>
             <Link
               to="/riskLevel"
-              className="hover:text-white transition-colors"
+              className="hover:text-white active:text-white transition-colors"
             >
               Risk Level
             </Link>
@@ -190,7 +196,7 @@ export default function Home() {
               href="https://github.com/AhmedKhaledp-0/NEO_SHERXE/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-white transition-colors flex items-center gap-2"
+              className="hover:text-white active:text-white transition-colors flex items-center gap-2"
             >
               <FontAwesomeIcon icon={faGithub} className="text-sm" /> GitHub
             </a>

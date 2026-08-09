@@ -695,7 +695,8 @@ export default function Education() {
                 {/* Model 1 */}
                 <div className="flex flex-col justify-center">
                   <p className="mb-4">
-                    Orbital period <InlineMath math="T" /> (Kepler&apos;s Third Law):
+                    Orbital period <InlineMath math="T" /> (Kepler&apos;s Third
+                    Law):
                   </p>
                   <div className="text-white bg-white/5 p-6 rounded border border-white/5 flex items-center justify-center">
                     <BlockMath math="T = 2\pi \sqrt{\frac{a^3}{\mu}}" />
@@ -921,8 +922,8 @@ export default function Education() {
                   </h3>
                   <p className="text-sm text-white/50 mb-8 font-light leading-relaxed">
                     Inclination is the vertical tilt of the orbital plane
-                    relative to Earth&apos;s equator. 0° orbits directly over the
-                    equator, while 90° creates a polar orbit over the poles.
+                    relative to Earth&apos;s equator. 0° orbits directly over
+                    the equator, while 90° creates a polar orbit over the poles.
                   </p>
                 </div>
                 <svg viewBox="-100 -100 200 200" className="w-full h-48 mb-8">
@@ -1222,9 +1223,9 @@ export default function Education() {
                     True Anomaly <InlineMath math="(\nu)" />
                   </h3>
                   <p className="text-sm text-white/50 mb-8 font-light leading-relaxed">
-                    True Anomaly is the satellite&apos;s real-time position along the
-                    orbital path, measured as an angle from the periapsis. It
-                    sweeps around the ellipse over time.
+                    True Anomaly is the satellite&apos;s real-time position
+                    along the orbital path, measured as an angle from the
+                    periapsis. It sweeps around the ellipse over time.
                   </p>
                 </div>
                 <svg viewBox="-100 -100 200 200" className="w-full h-48 mb-8">

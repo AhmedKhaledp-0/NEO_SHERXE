@@ -103,7 +103,7 @@ export default function Qna() {
             {qaData.map((item, index) => (
               <div
                 key={index}
-                className="bg-black group hover:bg-white/5 transition-colors duration-500"
+                className="bg-black group hover:bg-white/5 active:bg-white/5 transition-colors duration-500"
               >
                 <button
                   onClick={() => toggleItem(index)}
@@ -112,7 +112,7 @@ export default function Qna() {
                   <h3 className="text-lg md:text-xl font-bold uppercase tracking-[0.1em] text-white pr-8">
                     {item.question}
                   </h3>
-                  <div className="shrink-0 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center border border-white/20 text-white group-hover:bg-white group-hover:text-black transition-colors duration-500">
+                  <div className="shrink-0 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center border border-white/20 text-white group-hover:bg-white group-active:bg-white group-hover:text-black group-active:text-black transition-colors duration-500">
                     <FontAwesomeIcon
                       icon={faChevronDown}
                       className={`text-xl transform transition-transform duration-500 ${
