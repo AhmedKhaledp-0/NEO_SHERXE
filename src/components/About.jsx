@@ -102,10 +102,7 @@ export default function About() {
               <div className="w-24 h-1 bg-white mx-auto mt-4"></div>
             </h2>
             {points.map((point) => (
-              <div
-                key={point.id}
-                className="card group hover:border-white/30"
-              >
+              <div key={point.id} className="card group hover:border-white/30">
                 <div className="flex items-start gap-4">
                   <FontAwesomeIcon
                     icon={point.icon}

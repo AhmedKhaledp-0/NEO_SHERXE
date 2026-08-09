@@ -130,9 +130,7 @@ const CAMERA_PITCH_DEG = -10;
 const CAMERA_PITCH_Z = Math.tan(THREE.MathUtils.degToRad(-CAMERA_PITCH_DEG));
 
 function easeInOutCubic(t) {
-  return t < 0.5
-    ? 4 * t * t * t
-    : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 // Pre-allocated vectors so the hot loop produces zero garbage
@@ -304,14 +302,8 @@ function CameraTracker({
       const defTgt = new THREE.Vector3(0, 0, 0);
 
       camera.position.lerpVectors(fromPos.current, defPos, e);
-      camera.up.lerpVectors(
-        new THREE.Vector3(0, 0, 1),
-        savedUp.current,
-        e,
-      );
-      camera.lookAt(
-        defTgt.clone().lerp(fromTarget.current, 1 - e),
-      );
+      camera.up.lerpVectors(new THREE.Vector3(0, 0, 1), savedUp.current, e);
+      camera.lookAt(defTgt.clone().lerp(fromTarget.current, 1 - e));
 
       if (ctl) {
         ctl.target.lerpVectors(fromTarget.current, defTgt, e);
@@ -676,13 +668,7 @@ function Orrery() {
           (body.type === "PHAEX" && showPHAsEX) ||
           (body.type === "NEAEX" && showNEAsEX),
       ),
-    [
-      processedBodies,
-      showPHAs,
-      showNEAs,
-      showPHAsEX,
-      showNEAsEX,
-    ],
+    [processedBodies, showPHAs, showNEAs, showPHAsEX, showNEAsEX],
   );
 
   return (
@@ -830,33 +816,57 @@ function Orrery() {
                     {shortLabelName(selectedPlanet.planet)}
                   </div>
                   <div className="mt-1 text-xs text-zinc-400">
-                    {selectedPlanet.type || "N/A"} • ID {selectedPlanet.id || "N/A"}
+                    {selectedPlanet.type || "N/A"} • ID{" "}
+                    {selectedPlanet.id || "N/A"}
                   </div>
                 </div>
                 <button
                   onClick={handleResetCamera}
                   className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-200 transition-colors hover:bg-white/10 hover:text-white"
                 >
-                  <FontAwesomeIcon icon={faChevronLeft} className="text-[10px]" />
+                  <FontAwesomeIcon
+                    icon={faChevronLeft}
+                    className="text-[10px]"
+                  />
                   <span>Back</span>
                 </button>
               </div>
 
               <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm text-zinc-200 sm:grid-cols-4">
-                <PlainStat label="a" value={formatMaybe(selectedPlanet.a, 3, " AU")} />
+                <PlainStat
+                  label="a"
+                  value={formatMaybe(selectedPlanet.a, 3, " AU")}
+                />
                 <PlainStat label="e" value={formatMaybe(selectedPlanet.e, 6)} />
-                <PlainStat label="i" value={formatMaybe(selectedPlanet.incl, 2, "°")} />
-                <PlainStat label="P" value={selectedPlanet.P ? formatMaybe(selectedPlanet.P, 2, " y") : "N/A"} />
+                <PlainStat
+                  label="i"
+                  value={formatMaybe(selectedPlanet.incl, 2, "°")}
+                />
+                <PlainStat
+                  label="P"
+                  value={
+                    selectedPlanet.P
+                      ? formatMaybe(selectedPlanet.P, 2, " y")
+                      : "N/A"
+                  }
+                />
               </div>
 
               <div className="mt-3 text-xs text-zinc-400">
-                Live position: {formatMaybe(positionsRef.current[selectedPlanet.planet]?.x, 4)} / {formatMaybe(positionsRef.current[selectedPlanet.planet]?.y, 4)} / {formatMaybe(positionsRef.current[selectedPlanet.planet]?.z, 4)}
+                Live position:{" "}
+                {formatMaybe(positionsRef.current[selectedPlanet.planet]?.x, 4)}{" "}
+                /{" "}
+                {formatMaybe(positionsRef.current[selectedPlanet.planet]?.y, 4)}{" "}
+                /{" "}
+                {formatMaybe(positionsRef.current[selectedPlanet.planet]?.z, 4)}
               </div>
 
               <button
                 onClick={() => setInfoOpen((current) => !current)}
                 className="mt-2 text-xs text-zinc-400 underline decoration-white/20 underline-offset-4 hover:text-white"
-                aria-label={infoOpen ? "Hide more details" : "Show more details"}
+                aria-label={
+                  infoOpen ? "Hide more details" : "Show more details"
+                }
               >
                 {infoOpen ? "Hide more details" : "Show more details"}
               </button>
@@ -864,12 +874,39 @@ function Orrery() {
               {infoOpen && (
                 <div className="mt-3 space-y-3 border-t border-white/10 pt-3 text-xs text-zinc-300">
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                    <MiniText label="X" value={formatMaybe(positionsRef.current[selectedPlanet.planet]?.x, 6)} />
-                    <MiniText label="Y" value={formatMaybe(positionsRef.current[selectedPlanet.planet]?.y, 6)} />
-                    <MiniText label="Z" value={formatMaybe(positionsRef.current[selectedPlanet.planet]?.z, 6)} />
-                    <MiniText label="Ω" value={formatMaybe(selectedPlanet.Omega, 2, "°")} />
-                    <MiniText label="ω" value={formatMaybe(selectedPlanet.w, 2, "°")} />
-                    <MiniText label="M" value={formatMaybe(selectedPlanet.M, 2, "°")} />
+                    <MiniText
+                      label="X"
+                      value={formatMaybe(
+                        positionsRef.current[selectedPlanet.planet]?.x,
+                        6,
+                      )}
+                    />
+                    <MiniText
+                      label="Y"
+                      value={formatMaybe(
+                        positionsRef.current[selectedPlanet.planet]?.y,
+                        6,
+                      )}
+                    />
+                    <MiniText
+                      label="Z"
+                      value={formatMaybe(
+                        positionsRef.current[selectedPlanet.planet]?.z,
+                        6,
+                      )}
+                    />
+                    <MiniText
+                      label="Ω"
+                      value={formatMaybe(selectedPlanet.Omega, 2, "°")}
+                    />
+                    <MiniText
+                      label="ω"
+                      value={formatMaybe(selectedPlanet.w, 2, "°")}
+                    />
+                    <MiniText
+                      label="M"
+                      value={formatMaybe(selectedPlanet.M, 2, "°")}
+                    />
                   </div>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     <button
@@ -907,7 +944,9 @@ const PlainStat = ({ label, value }) => (
 
 const MiniText = ({ label, value }) => (
   <div className="rounded-lg bg-white/5 px-3 py-2">
-    <div className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">{label}</div>
+    <div className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">
+      {label}
+    </div>
     <div className="mt-1 text-white">{value}</div>
   </div>
 );

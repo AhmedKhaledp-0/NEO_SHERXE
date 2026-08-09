@@ -52,7 +52,10 @@ export function shortLabelName(targetname) {
   if (beforeBarycenter !== targetname) return beforeBarycenter.trim();
   const properName = /^\d+\s+([^()]*)\(/.exec(targetname);
   if (properName && properName[1].trim()) {
-    return properName[1].trim().replace(/^[''`]+|[''`]+$/g, "").trim();
+    return properName[1]
+      .trim()
+      .replace(/^[''`]+|[''`]+$/g, "")
+      .trim();
   }
   const leadingNumber = /^\d+/.exec(targetname);
   return leadingNumber ? leadingNumber[0] : targetname;
@@ -62,7 +65,8 @@ export function runLabelPass(camera, gl, size, options = {}) {
   const fadeStart = options.fadeStart ?? LABEL_CONFIG.fadeStart;
   const fadeEnd = options.fadeEnd ?? LABEL_CONFIG.fadeEnd;
   const padding = options.collisionPadding ?? LABEL_CONFIG.collisionPadding;
-  const hysteresis = options.collisionHysteresis ?? LABEL_CONFIG.collisionHysteresis;
+  const hysteresis =
+    options.collisionHysteresis ?? LABEL_CONFIG.collisionHysteresis;
 
   camera.getWorldPosition(cameraPosition);
   const offscreenMargin = 40;
@@ -120,9 +124,7 @@ export function runLabelPass(camera, gl, size, options = {}) {
 
   for (const candidate of candidates) {
     const boosted = candidate.force || candidate.hovered;
-    const fade = clamp01(
-      (fadeEnd - candidate.dist) / (fadeEnd - fadeStart),
-    );
+    const fade = clamp01((fadeEnd - candidate.dist) / (fadeEnd - fadeStart));
     const opacity = boosted ? Math.max(fade, 0.95) : fade;
 
     let intersects = false;
@@ -152,8 +154,7 @@ export function runLabelPass(camera, gl, size, options = {}) {
     accepted.push(candidate.box);
     const scale = boosted
       ? LABEL_CONFIG.hoverScale
-      : LABEL_CONFIG.minScale +
-        (1 - LABEL_CONFIG.minScale) * opacity;
+      : LABEL_CONFIG.minScale + (1 - LABEL_CONFIG.minScale) * opacity;
     visibilityState.set(candidate.id, true);
     applyState(candidate.el, opacity, scale, candidate.interactive);
   }

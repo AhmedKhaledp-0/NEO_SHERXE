@@ -7,23 +7,63 @@ import {
   getBodyPosition,
   AU_SCALE,
 } from "../utilities/kepler";
-import { registerLabel, LABEL_PRIORITY, shortLabelName } from "../utilities/labelManager";
+import {
+  registerLabel,
+  LABEL_PRIORITY,
+  shortLabelName,
+} from "../utilities/labelManager";
 
 const labelWorldPosition = new THREE.Vector3();
 
 const planetConfig = {
-  "Mercury Barycenter (199)": { size: 2, color: "#c4b5a6", rotationPeriod: 1407.6 },
-  "Venus Barycenter (299)": { size: 3, color: "#ffd85c", rotationPeriod: -5832.5 },
-  "Earth-Moon Barycenter (3)": { size: 3, color: "#4f7cee", rotationPeriod: 23.93 },
+  "Mercury Barycenter (199)": {
+    size: 2,
+    color: "#c4b5a6",
+    rotationPeriod: 1407.6,
+  },
+  "Venus Barycenter (299)": {
+    size: 3,
+    color: "#ffd85c",
+    rotationPeriod: -5832.5,
+  },
+  "Earth-Moon Barycenter (3)": {
+    size: 3,
+    color: "#4f7cee",
+    rotationPeriod: 23.93,
+  },
   "Mars Barycenter (4)": { size: 2.5, color: "#ff6b3e", rotationPeriod: 24.62 },
   "Jupiter Barycenter (5)": { size: 8, color: "#f3d3a3", rotationPeriod: 9.93 },
   "Saturn Barycenter (6)": { size: 7, color: "#f7d98c", rotationPeriod: 10.66 },
-  "Uranus Barycenter (7)": { size: 5, color: "#b3e5e5", rotationPeriod: -17.24 },
-  "Neptune Barycenter (8)": { size: 5, color: "#4b70dd", rotationPeriod: 16.11 },
-  "Pluto Barycenter (9)": { size: 1, color: "#c4b5a6", rotationPeriod: -153.29 },
-  "136108 Haumea (2003 EL61)": { size: 1.2, color: "#e0d7c3", rotationPeriod: 3.92 },
-  "136472 Makemake (2005 FY9)": { size: 1.2, color: "#d9c9a8", rotationPeriod: 22.83 },
-  "136199 Eris (2003 UB313)": { size: 1.4, color: "#d6d6d6", rotationPeriod: 25.9 },
+  "Uranus Barycenter (7)": {
+    size: 5,
+    color: "#b3e5e5",
+    rotationPeriod: -17.24,
+  },
+  "Neptune Barycenter (8)": {
+    size: 5,
+    color: "#4b70dd",
+    rotationPeriod: 16.11,
+  },
+  "Pluto Barycenter (9)": {
+    size: 1,
+    color: "#c4b5a6",
+    rotationPeriod: -153.29,
+  },
+  "136108 Haumea (2003 EL61)": {
+    size: 1.2,
+    color: "#e0d7c3",
+    rotationPeriod: 3.92,
+  },
+  "136472 Makemake (2005 FY9)": {
+    size: 1.2,
+    color: "#d9c9a8",
+    rotationPeriod: 22.83,
+  },
+  "136199 Eris (2003 UB313)": {
+    size: 1.4,
+    color: "#d6d6d6",
+    rotationPeriod: 25.9,
+  },
 };
 
 const typeConfig = {
@@ -33,7 +73,13 @@ const typeConfig = {
 
 const saturnRingNames = new Set(["RingsTop", "RingsBottom"]);
 
-const PlanetModel = ({ planetId, size, material, inclination = 0, part = "body" }) => {
+const PlanetModel = ({
+  planetId,
+  size,
+  material,
+  inclination = 0,
+  part = "body",
+}) => {
   const { scene } = useGLTF(
     `/models/${planetId.split(" ")[0].toLowerCase()}.glb`,
     false,
@@ -299,11 +345,7 @@ function Planet({
         />
       )}
       {showTags && (
-        <Html
-          className="select-none"
-          position={[config.size * 5, 0, 0]}
-          center
-        >
+        <Html className="select-none" position={[config.size * 5, 0, 0]} center>
           <span
             ref={spanRef}
             className="neo-label-text text-xs select-none"
@@ -312,9 +354,7 @@ function Planet({
             onPointerOver={() => setHoveredId && setHoveredId(planetId)}
             onPointerOut={() =>
               setHoveredId &&
-              setHoveredId((current) =>
-                current === planetId ? null : current,
-              )
+              setHoveredId((current) => (current === planetId ? null : current))
             }
           >
             {shortLabelName(planetId)}

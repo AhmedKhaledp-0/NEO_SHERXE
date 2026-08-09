@@ -31,10 +31,7 @@ function Orbit({
   const isFeatured = orbitType === "featured";
   const tailLength = isFeatured ? FEATURED_TAIL_LENGTH : TAIL_LENGTH;
   const tailMaxOpacity = isFeatured ? FEATURED_TAIL_MAX_OPACITY : 0.45;
-  const tailColorValue = useMemo(
-    () => new THREE.Color(tailColor),
-    [tailColor],
-  );
+  const tailColorValue = useMemo(() => new THREE.Color(tailColor), [tailColor]);
 
   const argument_of_perifocusRad = toRadians(argument_of_perifocus);
   const inclinationRad = toRadians(inclination);
@@ -178,8 +175,7 @@ function Orbit({
     const colAttr = line.geometry.attributes.color;
 
     for (let k = 0; k < tailLength; k++) {
-      const idx =
-        (best - (tailLength - 1 - k) + points.length) % points.length;
+      const idx = (best - (tailLength - 1 - k) + points.length) % points.length;
       const p = points[idx];
       posAttr.setXYZ(k, p.x * AU_SCALE, p.y * AU_SCALE, p.z * AU_SCALE);
       if (colAttr) {

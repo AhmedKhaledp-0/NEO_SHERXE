@@ -10,7 +10,11 @@ import {
 } from "../utilities/kepler";
 import vertexShader from "../shaders/neos.vert.glsl?raw";
 import fragmentShader from "../shaders/neos.frag.glsl?raw";
-import { registerLabel, LABEL_PRIORITY, shortLabelName } from "../utilities/labelManager";
+import {
+  registerLabel,
+  LABEL_PRIORITY,
+  shortLabelName,
+} from "../utilities/labelManager";
 
 const NEO_COLOR = "#aae6ff";
 
