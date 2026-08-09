@@ -111,17 +111,19 @@ export default function RiskLevel() {
                   key={id}
                   className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500 flex flex-col"
                 >
-                  <div className="flex justify-between items-start mb-8">
-                    <h3 className="text-2xl font-bold uppercase tracking-widest text-white group-hover:text-white transition-colors duration-300">
+                  <div className="flex flex-col gap-4 mb-8">
+                    <div className="self-start">
+                      <span
+                        className={`inline-flex items-center px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] border ${getRiskColor(
+                          risk_level,
+                        )}`}
+                      >
+                        {risk_level}
+                      </span>
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest text-white transition-colors duration-300 break-words">
                       {name}
                     </h3>
-                    <span
-                      className={`inline-flex items-center px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] border ${getRiskColor(
-                        risk_level,
-                      )}`}
-                    >
-                      {risk_level}
-                    </span>
                   </div>
 
                   <div className="space-y-4 font-mono text-sm mt-auto">
