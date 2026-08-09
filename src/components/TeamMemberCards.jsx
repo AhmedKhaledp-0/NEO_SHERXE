@@ -1,9 +1,9 @@
-import member1 from "../assets/member1.jpg";
-import member2 from "../assets/member2.jpg";
-import member3 from "../assets/member3.jpg";
-import member4 from "../assets/member4.jpg";
-import member5 from "../assets/member5.jpg";
-import member6 from "../assets/member6.jpg";
+import member1 from "../assets/member1.webp";
+import member2 from "../assets/member2.webp";
+import member3 from "../assets/member3.webp";
+import member4 from "../assets/member4.webp";
+import member5 from "../assets/member5.webp";
+import member6 from "../assets/member6.webp";
 import TeamMember from "./TeamMember";
 
 const teamMembers = [
