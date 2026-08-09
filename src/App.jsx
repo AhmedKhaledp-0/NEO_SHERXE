@@ -57,7 +57,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-black text-white">
-        <nav className="fixed w-full top-0 z-40 bg-black/50 backdrop-blur-md border-b border-white/5">
+        <nav className="fixed w-full top-0 z-40 bg-linear-to-b from-black via-black/80 to-transparent pb-8">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
               <span className="text-xl font-bold text-white tracking-widest z-50 relative">
