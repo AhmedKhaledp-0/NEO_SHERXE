@@ -9,7 +9,6 @@
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{js,jsx,css,md}\"",
     "preview": "vite preview",
-    "prepare": "husky",
     "format:check": "prettier --check \"src/**/*.{js,jsx,css,md}\""
   },
   "dependencies": {
