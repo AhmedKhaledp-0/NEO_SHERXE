@@ -113,6 +113,7 @@ function App() {
                 className={`absolute inset-y-0 left-0 w-full bg-black/95 flex flex-col
                            transform transition-all duration-300 ease-out h-dvh
                            ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+                onClick={() => setIsOpen(false)}
               >
                 {/* Close Button Header */}
                 <div className="w-full h-16 container mx-auto px-4 flex items-center justify-end shrink-0 pt-4">
