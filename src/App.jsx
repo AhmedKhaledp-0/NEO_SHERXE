@@ -9,6 +9,7 @@ import "./index.css";
 import Home from "./components/Home";
 import About from "./components/About";
 import Qna from "./components/Qna";
+import Education from "./components/Education";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -18,6 +19,7 @@ import {
   faExclamationTriangle,
   faInfoCircle,
   faQuestionCircle,
+  faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import Orrery from "./components/Orrery";
 import RiskLevel from "./components/RiskLevel";
@@ -78,6 +80,9 @@ function App() {
                     </NavLink>
                     <NavLink to="/about" className="nav-link">
                       About
+                    </NavLink>
+                    <NavLink to="/education" className="nav-link">
+                      Education
                     </NavLink>
                     <NavLink to="/qna" className="nav-link">
                       Q&A
@@ -202,6 +207,24 @@ function App() {
                     </NavLink>
 
                     <NavLink
+                      to="/education"
+                      className={({ isActive }) =>
+                        `flex items-center px-6 py-4 rounded-xl transition-all duration-300 tracking-widest uppercase text-sm font-bold
+                         ${
+                           isActive
+                             ? "bg-white text-black"
+                             : "text-white/50 hover:bg-white/10 hover:text-white"
+                         }`
+                      }
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <div className="w-8 h-8 flex items-center justify-center mr-4">
+                        <FontAwesomeIcon icon={faBookOpen} />
+                      </div>
+                      <span className="text-lg font-medium">Education</span>
+                    </NavLink>
+
+                    <NavLink
                       to="/qna"
                       className={({ isActive }) =>
                         `flex items-center px-6 py-4 rounded-xl transition-all duration-300 tracking-widest uppercase text-sm font-bold
@@ -232,6 +255,7 @@ function App() {
             <Route path="/live" element={<Orrery />} />
             <Route path="/riskLevel" element={<RiskLevel />} />
             <Route path="/about" element={<About />} />
+            <Route path="/education" element={<Education />} />
             <Route path="/qna" element={<Qna />} />
           </Routes>
         </main>

@@ -75,7 +75,7 @@ export default function About() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-black pt-32 px-4 pb-24 selection:bg-white selection:text-black">
+    <div className="min-h-screen bg-black pt-16 px-4 pb-24 selection:bg-white selection:text-black">
       <div className="container mx-auto">
         <div className="max-w-5xl mx-auto space-y-24">
           {/* Title Section */}

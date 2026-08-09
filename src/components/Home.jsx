@@ -20,7 +20,7 @@ export default function Home() {
 
       <div className="relative z-10 pt-24 pb-16">
         {/* Hero Section */}
-        <section className="container mx-auto px-6 pt-16 pb-24 lg:pt-32 lg:pb-40 flex flex-col items-center justify-center min-h-[80vh]">
+        <section className="container mx-auto px-6 pt-16 pb-24 lg:pt-16 lg:pb-40 flex flex-col items-center justify-center min-h-[80vh]">
           <h1 className="text-6xl md:text-[7rem] font-medium text-center tracking-tighter mb-8 leading-none">
             <span className="block text-white mb-2">MONITOR THE</span>
             <span className="block text-white/50">COSMIC FRONTIER</span>
@@ -126,7 +126,7 @@ export default function Home() {
                   Live Telemetry
                 </h3>
                 <p className="font-light leading-relaxed text-white/40">
-                  Access up-to-the-minute data sourced directly from NASA's JPL
+                  Access up-to-the-minute data sourced directly from NASA&apos;s JPL
                   and advanced global astronomical observatories.
                 </p>
               </div>
