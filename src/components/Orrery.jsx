@@ -672,7 +672,7 @@ function Orrery() {
   );
 
   return (
-    <div className="relative w-full h-[100vh-80px] bg-dark-background mt-0">
+    <div className="relative w-full h-[100vh-80px] bg-black mt-0">
       <div className="absolute inset-0 z-10">
         <Canvas
           dpr={[1, 2]}
@@ -698,7 +698,7 @@ function Orrery() {
             powerPreference: "high-performance",
           }}
           style={{
-            background: "#030712",
+            background: "#000000",
             height: "100vh",
             position: "fixed",
             top: 0,
