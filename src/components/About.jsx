@@ -77,17 +77,16 @@ export default function About() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-dark-background">
-      {/* Hero Section */}
-      <div className="container mx-auto px-4 py-24">
-        <div className="max-w-5xl mx-auto space-y-16">
+    <div className="min-h-screen bg-black pt-32 px-4 pb-24 selection:bg-white selection:text-black">
+      <div className="container mx-auto">
+        <div className="max-w-5xl mx-auto space-y-24">
           {/* Title Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-dark-text">
-              Exploring Space, Protecting Earth
+          <div className="text-center space-y-6">
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-[0.2em] text-white">
+              About Us
             </h1>
-            <div className="card max-w-3xl mx-auto">
-              <p className="text-xl text-dark-text/80">
+            <div className="max-w-3xl mx-auto border border-white/10 bg-white/5 p-8">
+              <p className="text-sm md:text-base font-medium uppercase tracking-[0.2em] text-white/70 leading-relaxed">
                 Neo Sherxe is a team dedicated to exploring space, focusing on
                 potential threats to Earth like asteroids and other celestial
                 bodies.
@@ -96,43 +95,53 @@ export default function About() {
           </div>
 
           {/* Key Points Section */}
-          <div className="space-y-8">
-            <h2 className="text-3xl font-bold mb-12 text-center text-dark-text">
+          <div className="space-y-12">
+            <h2 className="text-2xl font-black text-center uppercase tracking-[0.2em] text-white">
               Our Mission
-              <div className="w-24 h-1 bg-white mx-auto mt-4"></div>
             </h2>
-            {points.map((point) => (
-              <div key={point.id} className="card group hover:border-white/30">
-                <div className="flex items-start gap-4">
-                  <FontAwesomeIcon
-                    icon={point.icon}
-                    className="text-white mt-1"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold text-dark-text">
-                      {point.title}
-                    </h3>
-                    <p className="text-lg text-dark-text/80">{point.text}</p>
+            <div className="grid grid-cols-1 gap-px bg-white/10 border border-white/10">
+              {points.map((point) => (
+                <div
+                  key={point.id}
+                  className="bg-black p-8 md:p-12 group hover:bg-white/5 transition-colors duration-500"
+                >
+                  <div className="flex flex-col md:flex-row items-start gap-8">
+                    <div className="shrink-0 w-16 h-16 flex items-center justify-center border border-white/20 text-white group-hover:bg-white group-hover:text-black transition-colors duration-500">
+                      <FontAwesomeIcon icon={point.icon} className="text-2xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold uppercase tracking-[0.1em] text-white mb-4">
+                        {point.title}
+                      </h3>
+                      <p className="font-mono text-sm leading-relaxed text-white/60">
+                        {point.text}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* Features Section */}
-          <div>
-            <h2 className="text-3xl font-bold mb-8 text-dark-text">
+          <div className="space-y-12">
+            <h2 className="text-2xl font-black text-center uppercase tracking-[0.2em] text-white">
               Key Features
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
               {features.map((feature) => (
-                <div key={feature.id} className="card group">
+                <div
+                  key={feature.id}
+                  className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500"
+                >
                   <div className="flex items-start gap-4">
                     <FontAwesomeIcon
                       icon={faMeteor}
-                      className="text-white mt-1"
+                      className="text-white/30 mt-1"
                     />
-                    <p className="text-dark-text/80">{feature.text}</p>
+                    <p className="font-mono text-sm leading-relaxed text-white/60">
+                      {feature.text}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -143,7 +152,7 @@ export default function About() {
           <div className="text-center">
             <button
               onClick={() => navigate("/live")}
-              className="btn-primary inline-flex items-center justify-center gap-3"
+              className="inline-flex items-center justify-center gap-4 px-10 py-5 border border-white/20 bg-transparent text-white font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-black transition-all duration-300"
             >
               <FontAwesomeIcon icon={faRocket} />
               <span>Start Exploring</span>
@@ -152,8 +161,8 @@ export default function About() {
           </div>
 
           {/* Team Section */}
-          <div>
-            <h2 className="text-3xl font-bold mb-12 text-center text-dark-text">
+          <div className="space-y-12">
+            <h2 className="text-2xl font-black text-center uppercase tracking-[0.2em] text-white">
               Meet Our Team
             </h2>
             <TeamMemberCards />

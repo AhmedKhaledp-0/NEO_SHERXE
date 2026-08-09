@@ -11,27 +11,31 @@ export default function TeamMember({
   email,
 }) {
   return (
-    <div className="card group hover:scale-105 transition-all duration-300">
-      <div className="relative w-full h-64 mb-4 overflow-hidden rounded-lg">
+    <div className="bg-black p-8 group hover:bg-white/5 transition-colors duration-500 flex flex-col h-full">
+      <div className="relative w-full aspect-square mb-8 overflow-hidden border border-white/10 grayscale group-hover:grayscale-0 transition-all duration-500">
         <img
           src={photo}
           alt={name}
           className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/35 to-transparent rounded-lg" />
+        <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors duration-500" />
       </div>
 
-      <div className="text-center">
-        <h3 className="text-xl font-bold text-dark-text mb-2">{name}</h3>
-        <p className="text-dark-text/70 mb-4">{role}</p>
+      <div className="text-center flex-1 flex flex-col">
+        <h3 className="text-lg font-bold uppercase tracking-widest text-white mb-2">
+          {name}
+        </h3>
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-8">
+          {role}
+        </p>
 
-        <div className="flex justify-center space-x-4">
+        <div className="flex justify-center gap-6 mt-auto">
           {linkedin && (
             <a
               href={linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:opacity-75 transition-opacity text-xl"
+              className="text-white/40 hover:text-white transition-colors duration-300 text-xl"
             >
               <FaLinkedin />
             </a>
@@ -41,7 +45,7 @@ export default function TeamMember({
               href={github}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:opacity-75 transition-opacity text-xl"
+              className="text-white/40 hover:text-white transition-colors duration-300 text-xl"
             >
               <FaGithub />
             </a>
@@ -51,7 +55,7 @@ export default function TeamMember({
               href={behance}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:opacity-75 transition-opacity text-xl"
+              className="text-white/40 hover:text-white transition-colors duration-300 text-xl"
             >
               <FaBehance />
             </a>
@@ -59,7 +63,7 @@ export default function TeamMember({
           {email && (
             <a
               href={`mailto:${email}`}
-              className="text-white hover:opacity-75 transition-opacity text-xl"
+              className="text-white/40 hover:text-white transition-colors duration-300 text-xl"
             >
               <HiMail />
             </a>

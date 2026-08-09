@@ -52,7 +52,7 @@ const teamMembers = [
 
 export default function TeamMemberCards() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
       {teamMembers.map((member, index) => (
         <TeamMember key={index} {...member} photo={member.photo} />
       ))}
