@@ -16,60 +16,66 @@ const points = [
     id: 1,
     icon: faExclamationTriangle,
     title: "Earth's Close Encounters",
-    text: "How often do you hear about an asteroid that is so close to the Earth that it may hit the Earth ??",
+    text: "Earth is constantly surrounded by celestial bodies, yet we rarely hear about asteroids until they make a dangerously close approach. Monitoring these near-Earth encounters is critical for our planetary defense and ongoing survival.",
   },
   {
     id: 2,
     icon: faGlobe,
     title: "Space Agency Monitoring",
-    text: "These asteroids and comets are regularly monitored by space agencies using advanced astronomical tools to predict their paths and assess any potential danger. However, for the general public, understanding or tracking these celestial bodies can seem out of reach due to the complex technology involved.",
+    text: "Space agencies continuously monitor these threats using advanced astronomical tools to predict paths and assess danger. However, for the general public, tracking these complex celestial mechanics often feels inaccessible due to the highly technical data involved.",
   },
   {
     id: 3,
     icon: faUserAstronaut,
     title: "Interactive Experience",
-    text: "So what about creating an interactive orrery web app that enables people to explore, learn, and keep an eye on NEOs.",
+    text: "We bridge this gap by offering a fully interactive, browser-based orrery. This platform empowers everyday people to actively explore our solar system, learn about orbital dynamics, and keep a watchful eye on approaching near-Earth objects.",
   },
   {
     id: 4,
     icon: faRocket,
     title: "Welcome to NEO Spherex",
-    text: "Welcome! Let me introduce you to NEO spherex, your personal gateway to tracking and exploring Near-Earth Objects in real-time.",
+    text: "Welcome to NEO Spherex, your personal astronomical gateway. We provide a highly intuitive interface designed specifically for tracking, analyzing, and exploring potentially hazardous Near-Earth Objects in real-time, right from the comfort of your own device.",
   },
   {
     id: 5,
     icon: faDatabase,
     title: "Powered by NASA",
-    text: "We use the NASA resources and APIs to create an interactive web app designed to provide users with real-time access to information about Near-Earth Objects (NEOs), including asteroids and comets that orbit near our plane and their risk level.",
+    text: "Powered directly by live NASA APIs, our application delivers accurate, up-to-the-minute data. Users can access comprehensive statistics on asteroids and comets sharing our orbital plane, complete with real-time trajectory modeling and detailed threat risk assessments.",
   },
 ];
 
 const features = [
   {
     id: 1,
-    text: " At the heart of NEO spherex is our interactive 3D map, where you can visualize the solar system and orbits of asteroids and comets near Earth. You can zoom in, pan around, and click on any object to learn more about it.",
+    text: "At the core of NEO Spherex lies our interactive 3D map. Visualize the solar system, track asteroid orbits near Earth, and click any celestial body to uncover detailed, real-time data.",
   },
   {
     id: 2,
-    text: " clickable checkbox to limit the objects that appear on the scene to allow users to customize their view ",
+    text: "Customize your viewing experience with dynamic filtering. Toggle specific categories on or off to focus entirely on the exact near-Earth objects that matter most to your research.",
   },
   {
     id: 3,
-    text: " User interface controls to limit the number of NEOS, NECs, or PHAs to display in the orrery.",
+    text: "Take full command of the orrery interface. Precisely limit the rendering count of NEOs, NECs, and PHAs to maintain optimal performance while analyzing critical planetary data.",
   },
   {
     id: 4,
-    text: " Time controller so a user can control the simulation process",
+    text: "Travel through time with our simulation controller. Fast-forward or rewind orbital mechanics to predict future approaches and observe historical trajectories of potentially hazardous objects.",
   },
   {
     id: 5,
-    text: " Labels for planets, NEOs and a toggle to turn them on and off",
+    text: "Navigate the cosmos clearly using our interactive labeling system. Instantly toggle identification tags for planets and NEOs to maintain a clean, readable viewport during deep space exploration.",
   },
-  { id: 6, text: " Colored orbital trajectories of the celestial bodies" },
-  { id: 7, text: " Color visualization of risk level for NEO" },
+  {
+    id: 6,
+    text: "Visualize complex orbital paths through color-coded trajectories. Instantly differentiate between stable planetary orbits and erratic comet paths to quickly grasp the layout of our inner solar system.",
+  },
+  {
+    id: 7,
+    text: "Assess threats instantly with color-coded risk visualization. Our integrated hazard system highlights near-Earth objects based on their potential danger, allowing for rapid identification of critical approach vectors.",
+  },
   {
     id: 8,
-    text: " Output the data of object to an excel and enable to download it ",
+    text: "Export critical data seamlessly for external analysis. Download comprehensive datasets of selected celestial bodies directly to Excel spreadsheets for advanced astronomical research and detailed offline tracking.",
   },
 ];
 
