@@ -661,14 +661,14 @@ export default function Education() {
             {/* Right Column: Visualizations */}
             <div className="w-full lg:w-2/3 flex flex-col">
               {/* 3D Orbital View */}
-              <div className="bg-black border border-white/10 p-8 flex flex-col flex-1 h-full">
-                <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-white/10 pb-4 gap-4">
+              <div className="bg-black border border-white/10 p-6 lg:p-8 flex flex-col lg:flex-1 h-full">
+                <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 lg:mb-8 border-b border-white/10 pb-4 gap-4">
                   <h3 className="text-xl font-medium tracking-tight text-white uppercase">
                     3D Orbital Projection
                   </h3>
                 </div>
 
-                <div className="w-full flex-1 min-h-[500px] relative bg-black overflow-hidden flex items-center justify-center">
+                <div className="w-full h-[350px] lg:h-auto lg:flex-1 relative bg-black overflow-hidden flex items-center justify-center">
                   <Canvas camera={{ fov: 45 }}>
                     <Scene3D
                       orbitPoints={orbitPoints}
