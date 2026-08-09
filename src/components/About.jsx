@@ -16,66 +16,58 @@ const points = [
     id: 1,
     icon: faExclamationTriangle,
     title: "Earth's Close Encounters",
-    text: "Monitor dangerous asteroid encounters and close planetary approaches before they hit Earth.",
+    text: "Track and monitor dangerous asteroid encounters before they hit Earth.",
   },
   {
     id: 2,
     icon: faGlobe,
     title: "Space Agency Monitoring",
-    text: "Making complex agency-level space tracking accessible and understandable to everyone.",
+    text: "Making complex agency-level space tracking technology accessible to the public.",
   },
   {
     id: 3,
     icon: faUserAstronaut,
     title: "Interactive Experience",
-    text: "An interactive 3D orrery allowing anyone to explore, learn, and track NEOs.",
+    text: "An interactive web orrery allowing people to explore and track NEOs.",
   },
   {
     id: 4,
     icon: faRocket,
     title: "Welcome to NEO Spherex",
-    text: "Your personal gateway for exploring potentially hazardous Near-Earth Objects in real-time.",
+    text: "Your personal gateway for exploring Near-Earth Objects in real-time.",
   },
   {
     id: 5,
     icon: faDatabase,
     title: "Powered by NASA",
-    text: "Powered by live NASA APIs for highly accurate, up-to-the-minute celestial data and risk assessments.",
+    text: "Powered by NASA resources and APIs for accurate celestial data and risk levels.",
   },
 ];
 
 const features = [
   {
     id: 1,
-    text: "Interactive 3D map to visualize orbits. Zoom, pan, and click objects for details.",
+    text: "Interactive 3D map to visualize the solar system. Zoom, pan, and click objects.",
   },
   {
     id: 2,
-    text: "Dynamic filtering to toggle specific object categories and customize your viewport.",
+    text: "Dynamic filtering to toggle specific celestial categories and customize your viewport.",
   },
   {
     id: 3,
-    text: "Interface controls to precisely limit rendering counts of NEOs, NECs, and PHAs.",
+    text: "Time controller allowing users to easily fast-forward or rewind orbital simulations.",
   },
   {
     id: 4,
-    text: "Time controller to easily fast-forward or rewind orbital simulations.",
-  },
-  {
-    id: 5,
     text: "Toggleable identification labels for all rendered planets and near-Earth objects.",
   },
   {
+    id: 5,
+    text: "Colored orbital trajectories to clearly visualize the paths of celestial bodies.",
+  },
+  {
     id: 6,
-    text: "Color-coded orbital trajectories to instantly differentiate between orbits and paths.",
-  },
-  {
-    id: 7,
-    text: "Visual risk level indicators highlighting potential danger of approaching objects.",
-  },
-  {
-    id: 8,
-    text: "Seamlessly export and download comprehensive object datasets directly to Excel.",
+    text: "Visual risk level indicators highlighting the potential danger of approaching objects.",
   },
 ];
 
