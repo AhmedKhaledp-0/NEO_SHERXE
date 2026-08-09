@@ -24,6 +24,7 @@ import {
 import Orrery from "./components/Orrery";
 import RiskLevel from "./components/RiskLevel";
 import DataPreloader from "./components/DataPreloader";
+import NotFound from "./components/NotFound";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -257,6 +258,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/education" element={<Education />} />
             <Route path="/qna" element={<Qna />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       </div>
