@@ -168,9 +168,9 @@ export default function Home() {
       <footer className="py-16 relative z-10">
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 border-t border-white/10 pt-16">
           <div className="flex items-center gap-4">
-            <span className="font-bold text-sm tracking-[0.3em] uppercase">
+            <Link to="/" className="font-bold text-sm tracking-[0.3em] uppercase">
               NEO SPHERXE
-            </span>
+            </Link>
           </div>
 
           <div className="flex flex-wrap justify-center gap-8 md:gap-12 text-xs font-bold tracking-widest uppercase text-white/40">

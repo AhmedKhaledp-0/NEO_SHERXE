@@ -63,9 +63,13 @@ function App() {
         <nav className="fixed w-full top-0 z-40 bg-linear-to-b from-black via-black/80 to-transparent pb-8">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
-              <span className="text-xl font-bold text-white tracking-widest z-50 relative">
+              <NavLink
+                to="/"
+                end
+                className="text-xl font-bold text-white tracking-widest z-50 relative"
+              >
                 NEO SPHERXE
-              </span>
+              </NavLink>
 
               <div className="flex items-center gap-4">
                 {!isMobile ? (
